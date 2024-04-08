@@ -7,6 +7,7 @@
 %lex
 
 %options case-insensitive
+%x string
 
 %%
 
@@ -95,11 +96,11 @@
 "'" return "COMILLASIMPLE";
 
 /* TIPOS DE DATOS */
--?([0-9]+)([0-9]+)*\.([0-9]+)([0-9]+)* return "DOUBLE";
--?([0-9]+)([0-9]+)* return "NUM";
+"-"?([0-9]+)([0-9]+)*\.([0-9]+)([0-9]+)* return "DOUBLE";
+"-"?([0-9]+)([0-9]+)* return "NUM";
 "true" return "BOOLEANO";
 "false" return "BOOLEANO";
-'[^'\r\n]*' return "CARACTER"
+\'[^'\r\n]*\' return "CARACTER";
 // \"[^\"]*\" return "STRING";
 ["]						{ string = ''; this.begin("string"); }
 <string>[^"\\]+			{ string += yytext; }
@@ -126,4 +127,4 @@
 
 %%
 
-inicio : ;
+inicio : EOF {return 0};

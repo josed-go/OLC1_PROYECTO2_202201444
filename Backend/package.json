@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
-    "jison": "jison analizador\\analizador.jison >> analizador\\analizador.js"
+    "jison": "jison analizador/analizador.jison && move analizador.js analizador"
   },
   "keywords": [],
   "author": "",
