@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon build/index.js",
-    "jison": "jison src/analizador/analizador.jison && move analizador.js src/analizador",
+    "jison": "jison src/analizador/analizador.jison && move analizador.js build/src/analizador",
     "build" : "tsc -w",
     "server": "node build/index.js"
   },

@@ -72,83 +72,74 @@
   }
 */
 var analizador = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,6],$V1=[1,7],$V2=[5,9,26],$V3=[12,14,15],$V4=[1,23],$V5=[1,18],$V6=[1,19],$V7=[1,20],$V8=[1,21],$V9=[1,22],$Va=[1,27],$Vb=[1,28],$Vc=[1,29],$Vd=[1,30],$Ve=[5,9,14,17,18,19,20,26,27],$Vf=[5,9,14,17,18,26,27];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,6],$V1=[1,7],$V2=[5,9,28],$V3=[12,14,15],$V4=[1,25],$V5=[1,19],$V6=[1,18],$V7=[1,20],$V8=[1,21],$V9=[1,22],$Va=[1,23],$Vb=[1,24],$Vc=[1,29],$Vd=[1,30],$Ve=[1,31],$Vf=[1,32],$Vg=[5,9,14,17,18,19,20,22,28,29],$Vh=[5,9,14,17,18,22,28,29];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"inicio":3,"instrucciones":4,"EOF":5,"sentencias":6,"declaracion":7,"imprimir":8,"TIPO":9,"l_id":10,"fin_declaracion":11,"COMA":12,"ID":13,"PYC":14,"IGUAL":15,"expresion":16,"MAS":17,"MENOS":18,"MUL":19,"DIV":20,"NUM":21,"DOUBLE":22,"CADENA":23,"CARACTER":24,"BOOLEANO":25,"COUT":26,"DMENOR":27,"final_imp":28,"ENDL":29,"$accept":0,"$end":1},
-terminals_: {2:"error",5:"EOF",9:"TIPO",12:"COMA",13:"ID",14:"PYC",15:"IGUAL",17:"MAS",18:"MENOS",19:"MUL",20:"DIV",21:"NUM",22:"DOUBLE",23:"CADENA",24:"CARACTER",25:"BOOLEANO",26:"COUT",27:"DMENOR",29:"ENDL"},
-productions_: [0,[3,2],[4,2],[4,1],[6,1],[6,1],[7,3],[10,3],[10,1],[11,1],[11,2],[16,3],[16,3],[16,3],[16,3],[16,1],[16,1],[16,1],[16,1],[16,1],[16,1],[8,4],[28,3],[28,1]],
+symbols_: {"error":2,"inicio":3,"instrucciones":4,"EOF":5,"sentencias":6,"declaracion":7,"imprimir":8,"TIPO":9,"l_id":10,"fin_declaracion":11,"COMA":12,"ID":13,"PYC":14,"IGUAL":15,"expresion":16,"MAS":17,"MENOS":18,"MUL":19,"DIV":20,"PARIN":21,"PARFIN":22,"NUM":23,"DOUBLE":24,"CADENA":25,"CARACTER":26,"BOOLEANO":27,"COUT":28,"DMENOR":29,"final_imp":30,"ENDL":31,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"EOF",9:"TIPO",12:"COMA",13:"ID",14:"PYC",15:"IGUAL",17:"MAS",18:"MENOS",19:"MUL",20:"DIV",21:"PARIN",22:"PARFIN",23:"NUM",24:"DOUBLE",25:"CADENA",26:"CARACTER",27:"BOOLEANO",28:"COUT",29:"DMENOR",31:"ENDL"},
+productions_: [0,[3,2],[4,2],[4,1],[6,1],[6,1],[7,3],[10,3],[10,1],[11,1],[11,2],[16,3],[16,3],[16,3],[16,3],[16,3],[16,2],[16,1],[16,1],[16,1],[16,1],[16,1],[16,1],[8,4],[30,3],[30,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
- this.$ = new nodoAST("RAIZ", "RAIZ", this.$first_line, _$[$0-1].last_column);
-                            this.$.addHijos($$[$0-1]);
-                            return this.$ 
+ return $$[$0-1] 
 break;
 case 2:
- $$[$0-1].addHijos($$[$0]);
-                                            this.$ = $$[$0-1] 
+ $$[$0-1].push($$[$0]); this.$ = $$[$0-1] 
 break;
-case 3:
- this.$ = new nodoAST("Sentencias", "Sentencias", this._$.first_line, _$[$0].last_column);
-                                this.$.addHijos($$[$0]); 
+case 3: case 8:
+ this.$ = [$$[$0]] 
 break;
-case 4: case 5:
+case 4: case 5: case 9: case 10: case 25:
  this.$ = $$[$0] 
 break;
-case 6:
- this.$ = new nodoAST("declaracion", "declaracion", this._$.first_line, _$[$0-2].last_column) ;
-                        this.$.addHijos(new nodoAST("TIPO", $$[$0-2], this._$.first_line, _$[$0-2].last_column), $$[$0-1], $$[$0]) 
+case 6: case 13: case 14:
+  
 break;
 case 7:
- $$[$0-2].addHijos($$[$0-1], new nodoAST("COMA", $$[$0-1], this._$.first_line, _$[$0-1].last_column), new nodoAST("ID", $$[$0], this._$.first_line, _$[$0].last_column)); this.$ = $$[$0-2] 
+ $$[$0-2].push($$[$0]); this.$ = $$[$0-2] 
 break;
-case 8:
- this.$ = new nodoAST("l_id", "l_id", this._$.first_line, _$[$0].last_column); 
-        this.$.addHijos(new nodoAST("ID", $$[$0], this._$.first_line, _$[$0].last_column))  
+case 11:
+ this.$ = new Aritmeticas.default(Aritmeticas.Operadores.SUMA, _$[$0-2].first_line, _$[$0-2].first_column, $$[$0-2], $$[$0-1]) 
 break;
-case 9:
- this.$ = new nodoAST("fin_declaracion", "fin_declaracion", this._$.first_line, _$[$0].last_column) ;
-                        this.$.addHijos(new nodoAST("PYC", $$[$0], this._$.first_line, _$[$0].last_column)) 
-break;
-case 10:
- this.$ = new nodoAST("fin_declaracion", "fin_declaracion", this._$.first_line, _$[$0-1].last_column) ;
-                        this.$.addHijos(new nodoAST("IGUAL", $$[$0-1], this._$.first_line, _$[$0-1].last_column), $$[$0]) 
-break;
-case 11: case 12: case 13: case 14:
- this.$ = new nodoAST("expresion", "expresion", this._$.first_line, _$[$0-1].last_column);
-                                        this.$.addHijos($$[$0-2], new nodoAST("Operador", $$[$0-1], this._$.first_line, _$[$0-1].last_column), $$[$0]) 
+case 12:
+ this.$ = new Aritmeticas.default(Aritmeticas.Operadores.RESTA, _$[$0-2].first_line, _$[$0-2].first_column, $$[$0-2], $$[$0-1]) 
 break;
 case 15:
- this.$ = new nodoAST("expresion", "expresion", this._$.first_line, _$[$0].last_column);
-                                        this.$.addHijos(new nodoAST("NUM", $$[$0], this._$.first_line, _$[$0].last_column)) 
+ this.$ = $$[$0-1] 
 break;
 case 16:
- this.$ = new nodoAST("expresion", "expresion", this._$.first_line, _$[$0].last_column);
-                                        this.$.addHijos(new nodoAST("DOUBLE", $$[$0], this._$.first_line, _$[$0].last_column)) 
+ this.$ = new Aritmeticas.default(Aritmeticas.Operadores.NEGACION, _$[$0-1].first_line, _$[$0-1].first_column, $$[$0]) 
 break;
 case 17:
- this.$ = new nodoAST("expresion", "expresion", this._$.first_line, _$[$0].last_column);
-                                        this.$.addHijos(new nodoAST("CADENA", $$[$0], this._$.first_line, _$[$0].last_column)) 
+ this.$ = new Datos.defualt(new Tipo.default(Tipo.tipoD.INT), $$[$0], _$[$0].first_line, _$[$0].first_column) 
 break;
 case 18:
- this.$ = new nodoAST("expresion", "expresion", this._$.first_line, _$[$0].last_column);
-                                        this.$.addHijos(new nodoAST("CARACTER", $$[$0], this._$.first_line, _$[$0].last_column)) 
+ this.$ = new Datos.defualt(new Tipo.default(Tipo.tipoD.DOUBLE), $$[$0], _$[$0].first_line, _$[$0].first_column) 
 break;
 case 19:
- this.$ = new nodoAST("expresion", "expresion", this._$.first_line, _$[$0].last_column);
-                                        this.$.addHijos(new nodoAST("BOOLEANO", $$[$0], this._$.first_line, _$[$0].last_column)) 
+ this.$ = new Datos.default(new Tipo.default(Tipo.tipoD.CADENA), $$[$0], _$[$0].first_line, _$[$0].first_column) 
 break;
 case 20:
- this.$ = new nodoAST("expresion", "expresion", this._$.first_line, _$[$0].last_column);
-                                        this.$.addHijos(new nodoAST("ID", $$[$0], this._$.first_line, _$[$0].last_column)) 
+ this.$ = new Datos.default(new Tipo.default(Tipo.tipoD.CHAR), $$[$0], _$[$0].first_line, _$[$0].first_column) 
+break;
+case 21:
+ this.$ = new Datos.default(new Tipo.default(Tipo.tipoD.BOOL), $$[$0], _$[$0].first_line, _$[$0].first_column) 
+break;
+case 22:
+ 
+break;
+case 23:
+ this.$ = new Cout.default($$[$0-1], _$[$0-3].first_line, _$[$0-3].first_column) 
+break;
+case 24:
+ this.$ = $$[$0-2] 
 break;
 }
 },
-table: [{3:1,4:2,6:3,7:4,8:5,9:$V0,26:$V1},{1:[3]},{5:[1,8],6:9,7:4,8:5,9:$V0,26:$V1},o($V2,[2,3]),o($V2,[2,4]),o($V2,[2,5]),{10:10,13:[1,11]},{27:[1,12]},{1:[2,1]},o($V2,[2,2]),{11:13,12:[1,14],14:[1,15],15:[1,16]},o($V3,[2,8]),{13:$V4,16:17,21:$V5,22:$V6,23:$V7,24:$V8,25:$V9},o($V2,[2,6]),{13:[1,24]},o($V2,[2,9]),{13:$V4,16:25,21:$V5,22:$V6,23:$V7,24:$V8,25:$V9},{14:[1,32],17:$Va,18:$Vb,19:$Vc,20:$Vd,27:[1,31],28:26},o($Ve,[2,15]),o($Ve,[2,16]),o($Ve,[2,17]),o($Ve,[2,18]),o($Ve,[2,19]),o($Ve,[2,20]),o($V3,[2,7]),o($V2,[2,10],{17:$Va,18:$Vb,19:$Vc,20:$Vd}),o($V2,[2,21]),{13:$V4,16:33,21:$V5,22:$V6,23:$V7,24:$V8,25:$V9},{13:$V4,16:34,21:$V5,22:$V6,23:$V7,24:$V8,25:$V9},{13:$V4,16:35,21:$V5,22:$V6,23:$V7,24:$V8,25:$V9},{13:$V4,16:36,21:$V5,22:$V6,23:$V7,24:$V8,25:$V9},{29:[1,37]},o($V2,[2,23]),o($Vf,[2,11],{19:$Vc,20:$Vd}),o($Vf,[2,12],{19:$Vc,20:$Vd}),o($Ve,[2,13]),o($Ve,[2,14]),{14:[1,38]},o($V2,[2,22])],
+table: [{3:1,4:2,6:3,7:4,8:5,9:$V0,28:$V1},{1:[3]},{5:[1,8],6:9,7:4,8:5,9:$V0,28:$V1},o($V2,[2,3]),o($V2,[2,4]),o($V2,[2,5]),{10:10,13:[1,11]},{29:[1,12]},{1:[2,1]},o($V2,[2,2]),{11:13,12:[1,14],14:[1,15],15:[1,16]},o($V3,[2,8]),{13:$V4,16:17,18:$V5,21:$V6,23:$V7,24:$V8,25:$V9,26:$Va,27:$Vb},o($V2,[2,6]),{13:[1,26]},o($V2,[2,9]),{13:$V4,16:27,18:$V5,21:$V6,23:$V7,24:$V8,25:$V9,26:$Va,27:$Vb},{14:[1,34],17:$Vc,18:$Vd,19:$Ve,20:$Vf,29:[1,33],30:28},{13:$V4,16:35,18:$V5,21:$V6,23:$V7,24:$V8,25:$V9,26:$Va,27:$Vb},{13:$V4,16:36,18:$V5,21:$V6,23:$V7,24:$V8,25:$V9,26:$Va,27:$Vb},o($Vg,[2,17]),o($Vg,[2,18]),o($Vg,[2,19]),o($Vg,[2,20]),o($Vg,[2,21]),o($Vg,[2,22]),o($V3,[2,7]),o($V2,[2,10],{17:$Vc,18:$Vd,19:$Ve,20:$Vf}),o($V2,[2,23]),{13:$V4,16:37,18:$V5,21:$V6,23:$V7,24:$V8,25:$V9,26:$Va,27:$Vb},{13:$V4,16:38,18:$V5,21:$V6,23:$V7,24:$V8,25:$V9,26:$Va,27:$Vb},{13:$V4,16:39,18:$V5,21:$V6,23:$V7,24:$V8,25:$V9,26:$Va,27:$Vb},{13:$V4,16:40,18:$V5,21:$V6,23:$V7,24:$V8,25:$V9,26:$Va,27:$Vb},{31:[1,41]},o($V2,[2,25]),{17:$Vc,18:$Vd,19:$Ve,20:$Vf,22:[1,42]},o($Vg,[2,16]),o($Vh,[2,11],{19:$Ve,20:$Vf}),o($Vh,[2,12],{19:$Ve,20:$Vf}),o($Vg,[2,13]),o($Vg,[2,14]),{14:[1,43]},o($Vg,[2,15]),o($V2,[2,24])],
 defaultActions: {8:[2,1]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
@@ -297,32 +288,10 @@ parse: function parse(input) {
     return true;
 }};
 
+    const Tipo = require('./simbolo/tipo')
+    const Datos = require('./expresiones/nativo')
+    const Aritmeticas = require('./expresiones/aritmeticas')
     var string = ''
-
-    const nodoAST = (etiqueta, valor, fila, columna) => {
-        this.etiqueta = etiqueta
-        this.valor = valor
-        this.fila = fila
-        this.columna = columna
-        this.hijos = []
-
-        this.addHijos = addHijos
-        this.getHijo = getHijo
-
-        const addHijos = () =>  {
-            for (var i = 0; i < arguments.length; i++) {
-                this.hijos.push(arguments[i]);
-                if (arguments[i]!== null){
-                    arguments[i].padre = this;
-                }
-            }
-        }
-
-        const getHijos = (pos) => {
-            if(pos > this.hijos.length - 1 ) return null
-            return this.hijos[pos]
-        }
-    };
 
 /* generated by jison-lex 0.3.4 */
 var lexer = (function(){
@@ -812,14 +781,11 @@ case 78:
 break;
 case 79:return 5;
 break;
-case 80:console.log('Error lexico: '+yy_.yytext+' | Linea: '+yy_.yylloc.first_line+' | Columna: '+yy_.yylloc.first_column);
-    // Error_L.getInstance().insertar(new Error_N("Lexico", "El caracter \""+yy_.yytext+"\" no pertenece al lenguaje"), yy_.yylloc.first_line, yy_.yylloc.first_column );
-    indexController.lista_errores.push(new Error_N("Lexico", "El caracter \""+yy_.yytext+"\" no pertenece al lenguaje"), yy_.yylloc.first_line, yy_.yylloc.first_column );
-    return null;
+case 80:console.log('Error lexico: '+yy_.yytext+' | Linea: '+yy_.yylloc.first_line+' | Columna: '+yy_.yylloc.first_column); 
 break;
 }
 },
-rules: [/^(?:\s+)/i,/^(?:\/\/.*)/i,/^(?:[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])/i,/^(?:new\b)/i,/^(?:if\b)/i,/^(?:else\b)/i,/^(?:switch\b)/i,/^(?:case\b)/i,/^(?:default\b)/i,/^(?:while\b)/i,/^(?:for\b)/i,/^(?:do\b)/i,/^(?:break\b)/i,/^(?:continue\b)/i,/^(?:return\b)/i,/^(?:void\b)/i,/^(?:cout\b)/i,/^(?:endl\b)/i,/^(?:tolower\b)/i,/^(?:toupper\b)/i,/^(?:ROUND\b)/i,/^(?:length\b)/i,/^(?:typeof\b)/i,/^(?:tostring\b)/i,/^(?:c_str\b)/i,/^(?:execute\b)/i,/^(?:double\b)/i,/^(?:string\b)/i,/^(?:int\b)/i,/^(?:bool\b)/i,/^(?:char\b)/i,/^(?:string\b)/i,/^(?:<<)/i,/^(?:std\b)/i,/^(?:\+)/i,/^(?:-)/i,/^(?:\*)/i,/^(?:\/)/i,/^(?:pow\b)/i,/^(?:%)/i,/^(?:==)/i,/^(?:!=)/i,/^(?:=)/i,/^(?:!)/i,/^(?:<=)/i,/^(?:>=)/i,/^(?:<)/i,/^(?:>)/i,/^(?:\?)/i,/^(?::)/i,/^(?:\|\|)/i,/^(?:&&)/i,/^(?:\()/i,/^(?:\))/i,/^(?:\{)/i,/^(?:\})/i,/^(?:;)/i,/^(?:\[)/i,/^(?:\])/i,/^(?:,)/i,/^(?:")/i,/^(?:')/i,/^(?:-?([0-9]+)([0-9]+)*\.([0-9]+)([0-9]+)*)/i,/^(?:-?([0-9]+)([0-9]+)*)/i,/^(?:true\b)/i,/^(?:false\b)/i,/^(?:'[^'\r\n]*')/i,/^(?:["])/i,/^(?:[^"\\]+)/i,/^(?:\\")/i,/^(?:\\n)/i,/^(?:\s)/i,/^(?:\\t)/i,/^(?:\\\\)/i,/^(?:\\\\')/i,/^(?:\\r)/i,/^(?:["])/i,/^(?:([a-zA-Z])[a-zA-Z0-9_]*)/i,/^(?:[\ \f\t\n\r])/i,/^(?:$)/i,/^(?:.)/i],
+rules: [/^(?:\s+)/i,/^(?:\/\/.*)/i,/^(?:[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])/i,/^(?:new\b)/i,/^(?:if\b)/i,/^(?:else\b)/i,/^(?:switch\b)/i,/^(?:case\b)/i,/^(?:default\b)/i,/^(?:while\b)/i,/^(?:for\b)/i,/^(?:do\b)/i,/^(?:break\b)/i,/^(?:continue\b)/i,/^(?:return\b)/i,/^(?:void\b)/i,/^(?:cout\b)/i,/^(?:endl\b)/i,/^(?:tolower\b)/i,/^(?:toupper\b)/i,/^(?:ROUND\b)/i,/^(?:length\b)/i,/^(?:typeof\b)/i,/^(?:tostring\b)/i,/^(?:c_str\b)/i,/^(?:execute\b)/i,/^(?:double\b)/i,/^(?:string\b)/i,/^(?:int\b)/i,/^(?:bool\b)/i,/^(?:char\b)/i,/^(?:string\b)/i,/^(?:<<)/i,/^(?:std\b)/i,/^(?:\+)/i,/^(?:-)/i,/^(?:\*)/i,/^(?:\/)/i,/^(?:pow\b)/i,/^(?:%)/i,/^(?:==)/i,/^(?:!=)/i,/^(?:=)/i,/^(?:!)/i,/^(?:<=)/i,/^(?:>=)/i,/^(?:<)/i,/^(?:>)/i,/^(?:\?)/i,/^(?::)/i,/^(?:\|\|)/i,/^(?:&&)/i,/^(?:\()/i,/^(?:\))/i,/^(?:\{)/i,/^(?:\})/i,/^(?:;)/i,/^(?:\[)/i,/^(?:\])/i,/^(?:,)/i,/^(?:")/i,/^(?:')/i,/^(?:([0-9]+)([0-9]+)*\.([0-9]+)([0-9]+)*)/i,/^(?:([0-9]+)([0-9]+)*)/i,/^(?:true\b)/i,/^(?:false\b)/i,/^(?:'[^'\r\n]*')/i,/^(?:["])/i,/^(?:[^"\\]+)/i,/^(?:\\")/i,/^(?:\\n)/i,/^(?:\s)/i,/^(?:\\t)/i,/^(?:\\\\)/i,/^(?:\\\\')/i,/^(?:\\r)/i,/^(?:["])/i,/^(?:([a-zA-Z])[a-zA-Z0-9_]*)/i,/^(?:[\ \f\t\n\r])/i,/^(?:$)/i,/^(?:.)/i],
 conditions: {"string":{"rules":[68,69,70,71,72,73,74,75,76],"inclusive":false},"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,77,78,79,80],"inclusive":true}}
 });
 return lexer;

@@ -1,5 +1,12 @@
 %{
+    const Tipo = require('./simbolo/tipo')
+    const Datos = require('./expresiones/nativo')
+    const Aritmeticas = require('./expresiones/aritmeticas')
+    const Cout = require('./instrucciones/cout')
+    const Declaracion = require('./instrucciones/declaracion')
+    const AccesoVar = require('./expresiones/acceso.var')
     var string = ''
+
 %}
 
 // LEXICO
@@ -44,12 +51,11 @@
 "execute" return "EXECUTE";
 
 /* TIPOS DE DATOS */
-"double" return "TIPO";
-"string" return "TIPO";
-"int" return "TIPO";
-"bool" return "TIPO";
-"char" return "TIPO";
-"string" return "TIPO";
+"double" return "DOUBLE";
+"string" return "STRING";
+"int" return "INT";
+"bool" return "BOOL";
+"char" return "CHAR";
 
 
 /* OTROS */
@@ -97,8 +103,8 @@
 "'" return "COMILLASIMPLE";
 
 /* TIPOS DE DATOS */
-"-"?([0-9]+)([0-9]+)*\.([0-9]+)([0-9]+)* return "DOUBLE";
-"-"?([0-9]+)([0-9]+)* return "NUM";
+([0-9]+)([0-9]+)*\.([0-9]+)([0-9]+)* return "DOUBLE";
+([0-9]+)([0-9]+)* return "NUM";
 "true" return "BOOLEANO";
 "false" return "BOOLEANO";
 \'[^'\r\n]*\' return "CARACTER";
@@ -120,109 +126,76 @@
 
 <<EOF>> return 'EOF';
 
-. {console.log('Error lexico: '+yytext+' | Linea: '+yylloc.first_line+' | Columna: '+yylloc.first_column);
-    // Error_L.getInstance().insertar(new Error_N("Lexico", "El caracter \""+yytext+"\" no pertenece al lenguaje"), yylloc.first_line, yylloc.first_column );
-    indexController.lista_errores.push(new Error_N("Lexico", "El caracter \""+yytext+"\" no pertenece al lenguaje"), yylloc.first_line, yylloc.first_column );
-    return null;}
+. {console.log('Error lexico: '+yytext+' | Linea: '+yylloc.first_line+' | Columna: '+yylloc.first_column); }
 
 /lex
 
 // SINTACTICO
 
-%{
-    const nodoAST = (etiqueta, valor, fila, columna) => {
-        this.etiqueta = etiqueta
-        this.valor = valor
-        this.fila = fila
-        this.columna = columna
-        this.hijos = []
-
-        this.addHijos = addHijos
-        this.getHijo = getHijo
-
-        const addHijos = () =>  {
-            for (var i = 0; i < arguments.length; i++) {
-                this.hijos.push(arguments[i]);
-                if (arguments[i]!== null){
-                    arguments[i].padre = this;
-                }
-            }
-        }
-
-        const getHijos = (pos) => {
-            if(pos > this.hijos.length - 1 ) return null
-            return this.hijos[pos]
-        }
-    };
-
-%}
-
 %left 'IGUALIGUAL' 'DIF' 'MENORIGUAL' 'MAYORIGUAL' 'MENOR' 'MAYOR'
 %left 'OR' 'AND'
 %left 'MAS' 'MENOS'
 %left 'DIV' 'MUL'
+%right 'UMENOS'
 
 %start inicio
 
 %%
 
-inicio : instrucciones EOF { $$ = new nodoAST("RAIZ", "RAIZ", this.$first_line, @1.last_column);
-                            $$.addHijos($1);
-                            return $$ }
+inicio : instrucciones EOF { return $1 }
 ;
 
-instrucciones : instrucciones sentencias { $1.addHijos($2);
-                                            $$ = $1 }
-                | sentencias { $$ = new nodoAST("Sentencias", "Sentencias", this._$.first_line, @1.last_column);
-                                $$.addHijos($1); }
+instrucciones : instrucciones sentencias { $1.push($2); $$ = $1 }
+                | sentencias { $$ = [$1] }
 ;
 
 sentencias : declaracion { $$ = $1 }
             | imprimir { $$ = $1 }
 ;
 
-declaracion : TIPO l_id fin_declaracion { $$ = new nodoAST("declaracion", "declaracion", this._$.first_line, @1.last_column) ;
-                        $$.addHijos(new nodoAST("TIPO", $1, this._$.first_line, @1.last_column), $2, $3) }
+declaracion : tipos l_id fin_declaracion { $$ = new Declaracion.default($1, @1.first_line, @1.first_column, $2, $3) }
 ;
 
-l_id : l_id COMA ID { $1.addHijos($2, new nodoAST("COMA", $2, this._$.first_line, @2.last_column), new nodoAST("ID", $3, this._$.first_line, @3.last_column)); $$ = $1 }
-    | ID { $$ = new nodoAST("l_id", "l_id", this._$.first_line, @1.last_column); 
-        $$.addHijos(new nodoAST("ID", $1, this._$.first_line, @1.last_column))  }
+l_id : l_id COMA ID { $1.push($3); $$ = $1 }
+    | ID { $$ = [$1] }
 ;
 
-fin_declaracion : PYC { $$ = new nodoAST("fin_declaracion", "fin_declaracion", this._$.first_line, @1.last_column) ;
-                        $$.addHijos(new nodoAST("PYC", $1, this._$.first_line, @1.last_column)) }
-                | IGUAL expresion { $$ = new nodoAST("fin_declaracion", "fin_declaracion", this._$.first_line, @1.last_column) ;
-                        $$.addHijos(new nodoAST("IGUAL", $1, this._$.first_line, @1.last_column), $2) }
+fin_declaracion : PYC { $$ = $1 }
+                | IGUAL expresion PYC{ $$ = $2 }
 ;
 
-expresion : expresion MAS expresion { $$ = new nodoAST("expresion", "expresion", this._$.first_line, @2.last_column);
-                                        $$.addHijos($1, new nodoAST("Operador", $2, this._$.first_line, @2.last_column), $3) }
-        | expresion MENOS expresion { $$ = new nodoAST("expresion", "expresion", this._$.first_line, @2.last_column);
-                                        $$.addHijos($1, new nodoAST("Operador", $2, this._$.first_line, @2.last_column), $3) }
-        | expresion MUL expresion { $$ = new nodoAST("expresion", "expresion", this._$.first_line, @2.last_column);
-                                        $$.addHijos($1, new nodoAST("Operador", $2, this._$.first_line, @2.last_column), $3) }
-        | expresion DIV expresion { $$ = new nodoAST("expresion", "expresion", this._$.first_line, @2.last_column);
-                                        $$.addHijos($1, new nodoAST("Operador", $2, this._$.first_line, @2.last_column), $3) }
+imprimir : COUT DMENOR expresion final_imp { 
+    if($4 == 0) {
+        $$ = new Cout.default($3, @1.first_line, @1.first_column, "")
+    }else if($4 == 1) {
+        $$ = new Cout.default($3, @1.first_line, @1.first_column, "\n")
+    }
+    }
+;
+
+final_imp : DMENOR ENDL PYC { $$ = 1 }
+            | PYC { $$ = 0 }
+;
+
+expresion : expresion MAS expresion { $$ = new Aritmeticas.default(Aritmeticas.Operadores.SUMA, @1.first_line, @1.first_column, $1, $3) }
+        | expresion MENOS expresion { $$ = new Aritmeticas.default(Aritmeticas.Operadores.RESTA, @1.first_line, @1.first_column, $1, $3) }
+        | expresion MUL expresion {  }
+        | expresion DIV expresion {  }
         | PARIN expresion PARFIN { $$ = $2 }
-        | NUM { $$ = new nodoAST("expresion", "expresion", this._$.first_line, @1.last_column);
-                                        $$.addHijos(new nodoAST("NUM", $1, this._$.first_line, @1.last_column)) }
-        | DOUBLE { $$ = new nodoAST("expresion", "expresion", this._$.first_line, @1.last_column);
-                                        $$.addHijos(new nodoAST("DOUBLE", $1, this._$.first_line, @1.last_column)) }
-        | CADENA { $$ = new nodoAST("expresion", "expresion", this._$.first_line, @1.last_column);
-                                        $$.addHijos(new nodoAST("CADENA", $1, this._$.first_line, @1.last_column)) }
-        | CARACTER { $$ = new nodoAST("expresion", "expresion", this._$.first_line, @1.last_column);
-                                        $$.addHijos(new nodoAST("CARACTER", $1, this._$.first_line, @1.last_column)) }
-        | BOOLEANO { $$ = new nodoAST("expresion", "expresion", this._$.first_line, @1.last_column);
-                                        $$.addHijos(new nodoAST("BOOLEANO", $1, this._$.first_line, @1.last_column)) }
-        | ID { $$ = new nodoAST("expresion", "expresion", this._$.first_line, @1.last_column);
-                                        $$.addHijos(new nodoAST("ID", $1, this._$.first_line, @1.last_column)) }
-;
-imprimir : COUT DMENOR expresion final_imp
+        | MENOS expresion %prec UMENOS { $$ = new Aritmeticas.default(Aritmeticas.Operadores.NEGACION, @1.first_line, @1.first_column, $2) }
+        | NUM { $$ = new Datos.default(new Tipo.default(Tipo.tipoD.INT), $1, @1.first_line, @1.first_column) }
+        | DOUBLE { $$ = new Datos.default(new Tipo.default(Tipo.tipoD.DOUBLE), $1, @1.first_line, @1.first_column) }
+        | CADENA { $$ = new Datos.default(new Tipo.default(Tipo.tipoD.CADENA), $1, @1.first_line, @1.first_column) }
+        | CARACTER { $$ = new Datos.default(new Tipo.default(Tipo.tipoD.CHAR), $1, @1.first_line, @1.first_column) }
+        | BOOLEANO { $$ = new Datos.default(new Tipo.default(Tipo.tipoD.BOOL), $1, @1.first_line, @1.first_column) }
+        | ID { $$ = new AccesoVar.default($1, @1.first_line, @1.first_column) }
 ;
 
-final_imp : DMENOR ENDL PYC
-            | PYC
+tipos : STD DOSPUNTOS DOSPUNTOS STRING { $$ = new Tipo.default(Tipo.tipoD.CADENA) } 
+        | INT { $$ = new Tipo.default(Tipo.tipoD.INT) } 
+        | DOUBLE { $$ = new Tipo.default(Tipo.tipoD.DOUBLE) } 
+        | BOOL { $$ = new Tipo.default(Tipo.tipoD.BOOL) } 
+        | CHAR { $$ = new Tipo.default(Tipo.tipoD.CHAR) } 
 ;
 
 // expresion : NUM

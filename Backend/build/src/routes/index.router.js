@@ -10,6 +10,7 @@ class router {
     config() {
         this.router.get('/', index_controller_1.indexController.prueba);
         this.router.post('/post', index_controller_1.indexController.probarPost);
+        this.router.post('/analizar', index_controller_1.indexController.analizar);
     }
 }
 const indexRouter = new router();

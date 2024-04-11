@@ -10,6 +10,7 @@ class router {
     config(): void {
         this.router.get('/', indexController.prueba)
         this.router.post('/post', indexController.probarPost)
+        this.router.post('/analizar', indexController.analizar)
     }
 }
 
