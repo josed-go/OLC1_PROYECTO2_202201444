@@ -35,6 +35,9 @@ export default class FuncionesN extends Instruccion {
             
             case Operadores.LENGTH:
                 return this.longitud(unico)
+            
+            case Operadores.TYPEOF:
+                return this.tipo()
             default:
                 break;
         }
@@ -64,11 +67,35 @@ export default class FuncionesN extends Instruccion {
                 return new Errores('Semantico', 'No se puede hacer redondear ese tipo de dato', this.linea, this.columna )
         }
     }
+
+    tipo() {
+        let tipo = this.valor1?.tipoD.getTipo()
+        switch (tipo) {
+            case tipoD.CADENA:
+                this.tipoD = new Tipo(tipoD.CADENA)
+                return "string"
+            case tipoD.INT:
+                this.tipoD = new Tipo(tipoD.CADENA)
+                return "int"
+            case tipoD.DOUBLE:
+                this.tipoD = new Tipo(tipoD.CADENA)
+                return "double"
+            case tipoD.BOOL:
+                this.tipoD = new Tipo(tipoD.CADENA)
+                return "bool"
+            case tipoD.CHAR:
+                this.tipoD = new Tipo(tipoD.CADENA)
+                return "char"
+            default:
+                return new Errores('Semantico', 'No se puede retornar ese tipo de dato', this.linea, this.columna )
+        }
+    }
 }
 
 export enum Operadores {
     LOWER,
     UPPER,
     ROUND,
-    LENGTH
+    LENGTH,
+    TYPEOF
 }

@@ -195,8 +195,11 @@ final_imp : DMENOR ENDL PYC { $$ = 1 }
 asignacion : ID IGUAL expresion PYC { $$ = new Asignacion.default($1, $3, @1.first_line, @1.first_column) }
 ;
 
-incre_decre : ID MAS MAS PYC { $$ = new IncreDecre.default($1, @1.first_line, @1.first_column, "mas") }
-            | ID MENOS MENOS PYC { $$ = new IncreDecre.default($1, @1.first_line, @1.first_column, "menos") }
+incre_decre : ID accion PYC { new IncreDecre.default($1, @1.first_line, @1.first_column, $2) }
+;
+
+accion : MAS MAS { $$ = "mas" }
+        | MENOS MENOS { $$ = "menos" }
 ;
 
 lower_upper : TOLOWER PARIN expresion PARFIN { $$ = new FuncionesN.default(FuncionesN.Operadores.LOWER, @1.first_line, @1.first_column, $3) }
@@ -209,9 +212,8 @@ round : ROUND PARIN expresion PARFIN { $$ = new FuncionesN.default(FuncionesN.Op
 longitud : PUNTO LENGTH PARIN PARFIN {  }
 ;
 
-// tipo_lon : ID { $$ = new AccesoVar.default($1, @1.first_line, @1.first_column) }
-//             | CADENA { $$ = new Datos.default(new Tipo.default(Tipo.tipoD.CADENA), $1, @1.first_line, @1.first_column) }
-// ;
+typeof : TYPEOF PARIN expresion PARFIN { $$ = new FuncionesN.default(FuncionesN.Operadores.TYPEOF, @1.first_line, @1.first_column, $3) }
+;
 
 expresion : expresion MAS expresion { $$ = new Aritmeticas.default(Aritmeticas.Operadores.SUMA, @1.first_line, @1.first_column, $1, $3) }
         | expresion MENOS expresion { $$ = new Aritmeticas.default(Aritmeticas.Operadores.RESTA, @1.first_line, @1.first_column, $1, $3) }
@@ -230,6 +232,7 @@ expresion : expresion MAS expresion { $$ = new Aritmeticas.default(Aritmeticas.O
         | ID { $$ = new AccesoVar.default($1, @1.first_line, @1.first_column) }
         | lower_upper { $$ = $1 }
         | round { $$ = $1 }
+        | typeof { $$ = $1 }
 ;
 
 tipos : STD DOSPUNTOS DOSPUNTOS r_STRING { $$ = new Tipo.default(Tipo.tipoD.CADENA) } 
