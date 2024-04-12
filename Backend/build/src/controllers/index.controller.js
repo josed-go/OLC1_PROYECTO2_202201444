@@ -27,6 +27,7 @@ class Controller {
             for (let i of ast.getInstrucciones()) {
                 console.log(i);
                 var resultado = i.interpretar(ast, tabla);
+                console.log(resultado);
             }
             console.log(tabla);
             // let resultado = parser.parse('cout << "Hola";')

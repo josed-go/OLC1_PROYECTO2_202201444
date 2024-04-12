@@ -28,14 +28,30 @@ export default class FuncionesN extends Instruccion {
             case Operadores.UPPER:
                 if(this.valor1?.tipoD.getTipo() != tipoD.CADENA) return new Errores('Semantico', 'No se puede hacer la funcion con este tipo de dato', this.linea, this.columna)
                 return unico.toLocaleUpperCase()
-        
+            case Operadores.ROUND:
+                return this.round(unico)
             default:
                 break;
+        }
+    }
+
+    round(valor:any){
+        let tipo = this.valor1?.tipoD.getTipo()
+        switch (tipo) {
+            case tipoD.DOUBLE:
+                this.tipoD = new Tipo(tipoD.INT)
+                return Math.round(valor)
+            case tipoD.INT:
+                this.tipoD = new Tipo(tipoD.INT)
+                return Math.round(parseFloat(valor))
+            default:
+                return new Errores('Semantico', 'No se puede hacer redondear ese tipo de dato', this.linea, this.columna )
         }
     }
 }
 
 export enum Operadores {
     LOWER,
-    UPPER
+    UPPER,
+    ROUND
 }
