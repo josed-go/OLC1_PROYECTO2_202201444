@@ -7,6 +7,7 @@
     const AccesoVar = require('./expresiones/acceso.var')
     const Asignacion = require('./instrucciones/asignacion')
     const Creacion = require('./instrucciones/creacion.var')
+    const IncreDecre = require('./instrucciones/incre.decre')
     var texto = ''
 
 %}
@@ -154,6 +155,7 @@ instrucciones : instrucciones sentencias { $1.push($2); $$ = $1 }
 sentencias : declaracion { $$ = $1 }
             | imprimir { $$ = $1 }
             | asignacion { $$ = $1 }
+            | incre_decre { $$ = $1 }
 ;
 
 declaracion : tipos l_id fin_declaracion { 
@@ -188,6 +190,10 @@ final_imp : DMENOR ENDL PYC { $$ = 1 }
 ;
 
 asignacion : ID IGUAL expresion PYC { $$ = new Asignacion.default($1, $3, @1.first_line, @1.first_column) }
+;
+
+incre_decre : ID MAS MAS PYC { $$ = new IncreDecre.default($1, @1.first_line, @1.first_column, "mas") }
+            | ID MENOS MENOS PYC { $$ = new IncreDecre.default($1, @1.first_line, @1.first_column, "menos") }
 ;
 
 expresion : expresion MAS expresion { $$ = new Aritmeticas.default(Aritmeticas.Operadores.SUMA, @1.first_line, @1.first_column, $1, $3) }
