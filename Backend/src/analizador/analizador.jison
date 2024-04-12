@@ -5,7 +5,7 @@
     const Cout = require('./instrucciones/cout')
     const Declaracion = require('./instrucciones/declaracion')
     const AccesoVar = require('./expresiones/acceso.var')
-    var string = ''
+    var texto = ''
 
 %}
 
@@ -52,7 +52,7 @@
 
 /* TIPOS DE DATOS */
 "double" return "DOUBLE";
-"string" return "STRING";
+"string" return "r_STRING";
 "int" return "INT";
 "bool" return "BOOL";
 "char" return "CHAR";
@@ -99,7 +99,7 @@
 "[" return "CORCHIN";
 "]" return "CORCHFIN";
 "," return "COMA";
-"\"" return "COMILLADOBLE";
+// "\"" return "COMILLADOBLE";
 "'" return "COMILLASIMPLE";
 
 /* TIPOS DE DATOS */
@@ -109,16 +109,16 @@
 "false" return "BOOLEANO";
 \'[^'\r\n]*\' return "CARACTER";
 // \"[^\"]*\" return "STRING";
-["]						{ string = ''; this.begin("string"); }
-<string>[^"\\]+			{ string += yytext; }
-<string>"\\\""			{ string += "\""; }
-<string>"\\n"			{ string += "\n"; }
-<string>\s				{ string += " ";  }
-<string>"\\t"			{ string += "\t"; }
-<string>"\\\\"			{ string += "\\"; }
-<string>"\\\'"			{ string += "\'"; }
-<string>"\\r"			{ string += "\r"; }
-<string>["]				{ yytext = string; this.popState(); return 'STRING'; }
+["]						{ texto = ''; this.begin("string"); }
+<string>[^"\\]+			{ texto += yytext; }
+<string>"\\\""			{ texto += "\""; }
+<string>"\\n"			{ texto += "\n"; }
+<string>\s				{ texto += " ";  }
+<string>"\\t"			{ texto += "\t"; }
+<string>"\\\\"			{ texto += "\\"; }
+<string>"\\\'"			{ texto += "\'"; }
+<string>"\\r"			{ texto += "\r"; }
+<string>["]				{ yytext = texto; this.popState(); return 'CADENA'; }
 
 ([a-zA-Z])[a-zA-Z0-9_]* return 'ID';
 
@@ -191,7 +191,7 @@ expresion : expresion MAS expresion { $$ = new Aritmeticas.default(Aritmeticas.O
         | ID { $$ = new AccesoVar.default($1, @1.first_line, @1.first_column) }
 ;
 
-tipos : STD DOSPUNTOS DOSPUNTOS STRING { $$ = new Tipo.default(Tipo.tipoD.CADENA) } 
+tipos : STD DOSPUNTOS DOSPUNTOS r_STRING { $$ = new Tipo.default(Tipo.tipoD.CADENA) } 
         | INT { $$ = new Tipo.default(Tipo.tipoD.INT) } 
         | DOUBLE { $$ = new Tipo.default(Tipo.tipoD.DOUBLE) } 
         | BOOL { $$ = new Tipo.default(Tipo.tipoD.BOOL) } 

@@ -31,7 +31,7 @@ class Controller {
             console.log(tabla)
             // let resultado = parser.parse('cout << "Hola";')
             // let resultado = parser.parse(req.body.entrada)
-            res.json({message: ast.getConsola()})
+            res.json({"respuesta": ast.getConsola()})
         } catch (error:any) {
             console.log(error)
             res.json({message: "Ya no sale"})
