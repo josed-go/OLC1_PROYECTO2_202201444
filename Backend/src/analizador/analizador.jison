@@ -5,6 +5,7 @@
     const Cout = require('./instrucciones/cout')
     const Declaracion = require('./instrucciones/declaracion')
     const AccesoVar = require('./expresiones/acceso.var')
+    const Asignacion = require('./instrucciones/asignacion')
     var texto = ''
 
 %}
@@ -151,16 +152,24 @@ instrucciones : instrucciones sentencias { $1.push($2); $$ = $1 }
 
 sentencias : declaracion { $$ = $1 }
             | imprimir { $$ = $1 }
+            | asignacion { $$ = $1 }
 ;
 
-declaracion : tipos l_id fin_declaracion { $$ = new Declaracion.default($1, @1.first_line, @1.first_column, $2, $3) }
+declaracion : tipos l_id fin_declaracion { 
+        if($3 == false) {
+            
+        }else {
+            
+            $$ = new Declaracion.default($1, @1.first_line, @1.first_column, $2, $3) 
+        }
+    }
 ;
 
 l_id : l_id COMA ID { $1.push($3); $$ = $1 }
     | ID { $$ = [$1] }
 ;
 
-fin_declaracion : PYC { $$ = $1 }
+fin_declaracion : PYC { $$ = false }
                 | IGUAL expresion PYC{ $$ = $2 }
 ;
 
@@ -175,6 +184,9 @@ imprimir : COUT DMENOR expresion final_imp {
 
 final_imp : DMENOR ENDL PYC { $$ = 1 }
             | PYC { $$ = 0 }
+;
+
+asignacion : ID IGUAL expresion PYC { $$ = new Asignacion.default($1, $3, @1.first_line, @1.first_column) }
 ;
 
 expresion : expresion MAS expresion { $$ = new Aritmeticas.default(Aritmeticas.Operadores.SUMA, @1.first_line, @1.first_column, $1, $3) }
