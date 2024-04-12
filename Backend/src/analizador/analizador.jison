@@ -103,6 +103,7 @@
 "[" return "CORCHIN";
 "]" return "CORCHFIN";
 "," return "COMA";
+"." return "PUNTO";
 // "\"" return "COMILLADOBLE";
 // "'" return "COMILLASIMPLE";
 
@@ -135,12 +136,13 @@
 /lex
 
 // SINTACTICO
-
+%left longitud
 %left 'IGUALIGUAL' 'DIF' 'MENORIGUAL' 'MAYORIGUAL' 'MENOR' 'MAYOR'
 %left 'OR' 'AND'
 %left 'MAS' 'MENOS'
 %left 'DIV' 'MUL' 'MOD'
 %right 'UMENOS'
+%left 'PUNTO'
 
 %start inicio
 
@@ -204,6 +206,13 @@ lower_upper : TOLOWER PARIN expresion PARFIN { $$ = new FuncionesN.default(Funci
 round : ROUND PARIN expresion PARFIN { $$ = new FuncionesN.default(FuncionesN.Operadores.ROUND, @1.first_line, @1.first_column, $3) }
 ;
 
+longitud : PUNTO LENGTH PARIN PARFIN {  }
+;
+
+// tipo_lon : ID { $$ = new AccesoVar.default($1, @1.first_line, @1.first_column) }
+//             | CADENA { $$ = new Datos.default(new Tipo.default(Tipo.tipoD.CADENA), $1, @1.first_line, @1.first_column) }
+// ;
+
 expresion : expresion MAS expresion { $$ = new Aritmeticas.default(Aritmeticas.Operadores.SUMA, @1.first_line, @1.first_column, $1, $3) }
         | expresion MENOS expresion { $$ = new Aritmeticas.default(Aritmeticas.Operadores.RESTA, @1.first_line, @1.first_column, $1, $3) }
         | expresion MUL expresion { $$ = new Aritmeticas.default(Aritmeticas.Operadores.MUL, @1.first_line, @1.first_column, $1, $3) }
@@ -212,6 +221,7 @@ expresion : expresion MAS expresion { $$ = new Aritmeticas.default(Aritmeticas.O
         | POT PARIN expresion COMA expresion PARFIN { $$ = new Aritmeticas.default(Aritmeticas.Operadores.POW, @1.first_line, @1.first_column, $3, $5)  }
         | PARIN expresion PARFIN { $$ = $2 }
         | MENOS expresion %prec UMENOS { $$ = new Aritmeticas.default(Aritmeticas.Operadores.NEGACION, @1.first_line, @1.first_column, $2) }
+        | expresion longitud { $$ = new FuncionesN.default(FuncionesN.Operadores.LENGTH, @1.first_line, @1.first_column, $1) }
         | NUM { $$ = new Datos.default(new Tipo.default(Tipo.tipoD.INT), $1, @1.first_line, @1.first_column) }
         | DOUBLE { $$ = new Datos.default(new Tipo.default(Tipo.tipoD.DOUBLE), $1, @1.first_line, @1.first_column) }
         | CADENA { $$ = new Datos.default(new Tipo.default(Tipo.tipoD.CADENA), $1, @1.first_line, @1.first_column) }

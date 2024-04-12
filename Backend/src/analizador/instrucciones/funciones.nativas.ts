@@ -32,6 +32,9 @@ export default class FuncionesN extends Instruccion {
                 return unico.toLocaleUpperCase()
             case Operadores.ROUND:
                 return this.round(unico)
+            
+            case Operadores.LENGTH:
+                return this.longitud(unico)
             default:
                 break;
         }
@@ -50,10 +53,22 @@ export default class FuncionesN extends Instruccion {
                 return new Errores('Semantico', 'No se puede hacer redondear ese tipo de dato', this.linea, this.columna )
         }
     }
+
+    longitud(valor:any) {
+        let tipo = this.valor1?.tipoD.getTipo()
+        switch (tipo) {
+            case tipoD.CADENA:
+                this.tipoD = new Tipo(tipoD.INT)
+                return valor.length
+            default:
+                return new Errores('Semantico', 'No se puede hacer redondear ese tipo de dato', this.linea, this.columna )
+        }
+    }
 }
 
 export enum Operadores {
     LOWER,
     UPPER,
-    ROUND
+    ROUND,
+    LENGTH
 }
