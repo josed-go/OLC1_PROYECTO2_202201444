@@ -193,7 +193,7 @@ asignacion : ID IGUAL expresion PYC { $$ = new Asignacion.default($1, $3, @1.fir
 expresion : expresion MAS expresion { $$ = new Aritmeticas.default(Aritmeticas.Operadores.SUMA, @1.first_line, @1.first_column, $1, $3) }
         | expresion MENOS expresion { $$ = new Aritmeticas.default(Aritmeticas.Operadores.RESTA, @1.first_line, @1.first_column, $1, $3) }
         | expresion MUL expresion { $$ = new Aritmeticas.default(Aritmeticas.Operadores.MUL, @1.first_line, @1.first_column, $1, $3) }
-        | expresion DIV expresion {  }
+        | expresion DIV expresion { $$ = new Aritmeticas.default(Aritmeticas.Operadores.DIV, @1.first_line, @1.first_column, $1, $3) }
         | PARIN expresion PARFIN { $$ = $2 }
         | MENOS expresion %prec UMENOS { $$ = new Aritmeticas.default(Aritmeticas.Operadores.NEGACION, @1.first_line, @1.first_column, $2) }
         | NUM { $$ = new Datos.default(new Tipo.default(Tipo.tipoD.INT), $1, @1.first_line, @1.first_column) }

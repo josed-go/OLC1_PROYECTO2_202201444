@@ -45,6 +45,9 @@ export default class Aritmeticas extends Instruccion {
 
             case Operadores.MUL:
                 return this.multi(oprI, oprD)
+
+            case Operadores.DIV:
+                return this.div(oprI, oprD)
         
             default:
                 return new Errores('Semantico', 'Operador invalido', this.linea, this.columna)
@@ -283,6 +286,56 @@ export default class Aritmeticas extends Instruccion {
                 }
             default:
                 return new Errores('Semantico', 'No se puede hacer '+tipo1+" * "+tipo2, this.linea, this.columna )
+        }
+    }
+
+    div(valor1: any, valor2: any) {
+        let tipo1 = this.valor1?.tipoD.getTipo()
+        let tipo2 = this.valor2?.tipoD.getTipo()
+
+        switch (tipo1) {
+            case tipoD.INT:
+                switch (tipo2) {
+                    case tipoD.INT:
+                        this.tipoD = new Tipo(tipoD.DOUBLE)
+                        return parseFloat(valor1) / parseFloat(valor2)
+                    case tipoD.DOUBLE:
+                        this.tipoD = new Tipo(tipoD.DOUBLE)
+                        return parseFloat(valor1) / parseFloat(valor2)
+                    case tipoD.CHAR:
+                        this.tipoD = new Tipo(tipoD.DOUBLE)
+                        return parseFloat(valor1) / parseFloat(valor2.charCodeAt(1))
+                    default:
+                        return new Errores('Semantico', 'No se puede hacer '+tipo1+" + "+tipo2, this.linea, this.columna )
+                }
+
+            case tipoD.DOUBLE:
+                switch (tipo2) {
+                    case tipoD.INT:
+                        this.tipoD = new Tipo(tipoD.DOUBLE)
+                        return parseFloat(valor1) / parseFloat(valor2)
+                    case tipoD.DOUBLE:
+                        this.tipoD = new Tipo(tipoD.DOUBLE)
+                        return parseFloat(valor1) / parseFloat(valor2)
+                    case tipoD.CHAR:
+                        this.tipoD = new Tipo(tipoD.DOUBLE)
+                        return parseFloat(valor1) / parseFloat(valor2.charCodeAt(1))
+                    default:
+                        return new Errores('Semantico', 'No se puede hacer '+tipo1+" + "+tipo2, this.linea, this.columna )
+                }
+            case tipoD.CHAR:
+                switch (tipo2) {
+                    case tipoD.INT:
+                        this.tipoD = new Tipo(tipoD.DOUBLE)
+                        return parseFloat(valor1.charCodeAt[0]) / parseFloat(valor2)
+                    case tipoD.DOUBLE:
+                        this.tipoD = new Tipo(tipoD.DOUBLE)
+                        return parseFloat(valor1.charCodeAt[0]) / parseFloat(valor2)
+                    default:
+                        return new Errores('Semantico', 'No se puede hacer '+tipo1+" + "+tipo2, this.linea, this.columna )
+                }
+            default:
+                return new Errores('Semantico', 'No se puede hacer '+tipo1+" + "+tipo2, this.linea, this.columna )
         }
     }
 }
