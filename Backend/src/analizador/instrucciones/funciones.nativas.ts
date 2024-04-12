@@ -23,9 +23,11 @@ export default class FuncionesN extends Instruccion {
 
         switch (this.operacion) {
             case Operadores.LOWER:
+                this.tipoD = new Tipo(tipoD.CADENA)
                 if(this.valor1?.tipoD.getTipo() != tipoD.CADENA) return new Errores('Semantico', 'No se puede hacer la funcion con este tipo de dato', this.linea, this.columna)
                 return unico.toLocaleLowerCase()
             case Operadores.UPPER:
+                this.tipoD = new Tipo(tipoD.CADENA)
                 if(this.valor1?.tipoD.getTipo() != tipoD.CADENA) return new Errores('Semantico', 'No se puede hacer la funcion con este tipo de dato', this.linea, this.columna)
                 return unico.toLocaleUpperCase()
             case Operadores.ROUND:
