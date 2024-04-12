@@ -6,6 +6,7 @@
     const Declaracion = require('./instrucciones/declaracion')
     const AccesoVar = require('./expresiones/acceso.var')
     const Asignacion = require('./instrucciones/asignacion')
+    const Creacion = require('./instrucciones/creacion.var')
     var texto = ''
 
 %}
@@ -157,7 +158,7 @@ sentencias : declaracion { $$ = $1 }
 
 declaracion : tipos l_id fin_declaracion { 
         if($3 == false) {
-            
+            $$ = new Creacion.default($1, @1.first_line, @1.first_column, $2) 
         }else {
             
             $$ = new Declaracion.default($1, @1.first_line, @1.first_column, $2, $3) 
