@@ -44,7 +44,7 @@ export default class Creacion extends Instruccion {
                     break;
             
                 default:
-                    break;
+                    return new Errores("Semantico", "No se existe ese tipo de dato", this.linea, this.columna)
             }
 
             if(!tabla.setVariable(new Simbolo(this.tipoD, id, valor))) {
