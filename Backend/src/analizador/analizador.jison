@@ -100,7 +100,7 @@
 "]" return "CORCHFIN";
 "," return "COMA";
 // "\"" return "COMILLADOBLE";
-"'" return "COMILLASIMPLE";
+// "'" return "COMILLASIMPLE";
 
 /* TIPOS DE DATOS */
 ([0-9]+)([0-9]+)*\.([0-9]+)([0-9]+)* return "DOUBLE";
@@ -179,7 +179,7 @@ final_imp : DMENOR ENDL PYC { $$ = 1 }
 
 expresion : expresion MAS expresion { $$ = new Aritmeticas.default(Aritmeticas.Operadores.SUMA, @1.first_line, @1.first_column, $1, $3) }
         | expresion MENOS expresion { $$ = new Aritmeticas.default(Aritmeticas.Operadores.RESTA, @1.first_line, @1.first_column, $1, $3) }
-        | expresion MUL expresion {  }
+        | expresion MUL expresion { $$ = new Aritmeticas.default(Aritmeticas.Operadores.MUL, @1.first_line, @1.first_column, $1, $3) }
         | expresion DIV expresion {  }
         | PARIN expresion PARFIN { $$ = $2 }
         | MENOS expresion %prec UMENOS { $$ = new Aritmeticas.default(Aritmeticas.Operadores.NEGACION, @1.first_line, @1.first_column, $2) }

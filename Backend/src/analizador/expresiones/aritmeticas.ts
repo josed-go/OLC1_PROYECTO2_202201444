@@ -38,11 +38,13 @@ export default class Aritmeticas extends Instruccion {
             
             case Operadores.RESTA:
                 return this.resta(oprI, oprD)
-            break;
 
             case Operadores.NEGACION:
             
-            break;
+                return this.negacion(unico)
+
+            case Operadores.MUL:
+                return this.multi(oprI, oprD)
         
             default:
                 return new Errores('Semantico', 'Operador invalido', this.linea, this.columna)
@@ -72,7 +74,7 @@ export default class Aritmeticas extends Instruccion {
                         return valor1 + valor2
                     case tipoD.CHAR:
                         this.tipoD = new Tipo(tipoD.INT)
-                        return parseInt(valor1) + parseInt(valor2.charCodeAt(0))
+                        return parseInt(valor1) + parseInt(valor2.charCodeAt(1))
                     default:
                         return new Errores('Semantico', 'No se puede hacer '+tipo1+" + "+tipo2, this.linea, this.columna )
                 }
@@ -92,8 +94,8 @@ export default class Aritmeticas extends Instruccion {
                         this.tipoD = new Tipo(tipoD.CADENA)
                         return valor1 + valor2
                     case tipoD.CHAR:
-                        this.tipoD = new Tipo(tipoD.CADENA)
-                        return parseFloat(valor1) + parseFloat(valor2.charCodeAt(0))
+                        this.tipoD = new Tipo(tipoD.DOUBLE)
+                        return parseFloat(valor1) + parseFloat(valor2.charCodeAt(1))
                     default:
                         return new Errores('Semantico', 'No se puede hacer '+tipo1+" + "+tipo2, this.linea, this.columna )
                 }
@@ -171,7 +173,7 @@ export default class Aritmeticas extends Instruccion {
                         return parseInt(valor1) - valor2
                     case tipoD.CHAR:
                         this.tipoD = new Tipo(tipoD.INT)
-                        return parseInt(valor1) - parseInt(valor2.charCodeAt(0))
+                        return parseInt(valor1) - parseInt(valor2.charCodeAt(1))
                     default:
                         return new Errores('Semantico', 'No se puede hacer '+tipo1+" - "+tipo2, this.linea, this.columna )
                 }
@@ -188,8 +190,8 @@ export default class Aritmeticas extends Instruccion {
                         this.tipoD = new Tipo(tipoD.DOUBLE)
                         return parseFloat(valor1) - valor2
                     case tipoD.CHAR:
-                        this.tipoD = new Tipo(tipoD.CADENA)
-                        return parseFloat(valor1) - parseFloat(valor2.charCodeAt(0))
+                        this.tipoD = new Tipo(tipoD.DOUBLE)
+                        return parseFloat(valor1) - parseFloat(valor2.charCodeAt(1))
                     default:
                         return new Errores('Semantico', 'No se puede hacer '+tipo1+" - "+tipo2, this.linea, this.columna )
                 }
@@ -208,10 +210,10 @@ export default class Aritmeticas extends Instruccion {
                 switch (tipo2) {
                     case tipoD.INT:
                         this.tipoD = new Tipo(tipoD.INT)
-                        return parseInt(valor1.charCodeAt[0]) - (valor2)
+                        return parseInt(valor1.charCodeAt(1)) - (valor2)
                     case tipoD.DOUBLE:
                         this.tipoD = new Tipo(tipoD.DOUBLE)
-                        return parseFloat(valor1.charCodeAt[0]) - parseFloat(valor2)
+                        return parseFloat(valor1.charCodeAt(1)) - parseFloat(valor2)
                     default:
                         return new Errores('Semantico', 'No se puede hacer '+tipo1+" + "+tipo2, this.linea, this.columna )
                 }
@@ -234,10 +236,61 @@ export default class Aritmeticas extends Instruccion {
                 return new Errores('Semantico', 'No se puede hacer negar '+opeU, this.linea, this.columna )
         }
     }
+
+    multi(valor1: any, valor2: any) {
+        let tipo1 = this.valor1?.tipoD.getTipo()
+        let tipo2 = this.valor2?.tipoD.getTipo()
+
+        switch (tipo1) {
+            case tipoD.INT:
+                switch (tipo2) {
+                    case tipoD.INT:
+                        this.tipoD = new Tipo(tipoD.INT)
+                        return parseInt(valor1) * parseInt(valor2)
+                    case tipoD.DOUBLE:
+                        this.tipoD = new Tipo(tipoD.DOUBLE)
+                        return parseFloat(valor1) * parseFloat(valor2)
+                    case tipoD.CHAR:
+                        this.tipoD = new Tipo(tipoD.INT)
+                        return parseInt(valor1) * parseInt(valor2.charCodeAt(1))
+                    default:
+                        return new Errores('Semantico', 'No se puede hacer '+tipo1+" * "+tipo2, this.linea, this.columna )
+                }
+            case tipoD.DOUBLE:
+                switch (tipo2) {
+                    case tipoD.INT:
+                        this.tipoD = new Tipo(tipoD.DOUBLE)
+                        return parseFloat(valor1) * parseFloat(valor2)
+                    case tipoD.DOUBLE:
+                        this.tipoD = new Tipo(tipoD.DOUBLE)
+                        return parseFloat(valor1) * parseFloat(valor2)
+                    case tipoD.CHAR:
+                        this.tipoD = new Tipo(tipoD.DOUBLE)
+                        return parseFloat(valor1) * parseFloat(valor2.charCodeAt(1))
+                    default:
+                        return new Errores('Semantico', 'No se puede hacer '+tipo1+" * "+tipo2, this.linea, this.columna )
+                }
+            case tipoD.CHAR:
+                switch (tipo2) {
+                    case tipoD.INT:
+                        this.tipoD = new Tipo(tipoD.INT)
+                        return parseInt(valor1.charCodeAt(1)) * (valor2)
+                    case tipoD.DOUBLE:
+                        this.tipoD = new Tipo(tipoD.DOUBLE)
+                        return parseFloat(valor1.charCodeAt(1)) * parseFloat(valor2)
+                    default:
+                        return new Errores('Semantico', 'No se puede hacer '+tipo1+" * "+tipo2, this.linea, this.columna )
+                }
+            default:
+                return new Errores('Semantico', 'No se puede hacer '+tipo1+" * "+tipo2, this.linea, this.columna )
+        }
+    }
 }
 
 export enum Operadores {
     SUMA,
     RESTA,
-    NEGACION
+    NEGACION,
+    MUL,
+    DIV
 }
