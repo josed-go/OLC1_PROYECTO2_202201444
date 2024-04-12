@@ -215,6 +215,9 @@ longitud : PUNTO LENGTH PARIN PARFIN {  }
 typeof : TYPEOF PARIN expresion PARFIN { $$ = new FuncionesN.default(FuncionesN.Operadores.TYPEOF, @1.first_line, @1.first_column, $3) }
 ;
 
+astring : STD DOSPUNTOS DOSPUNTOS TOSTRING PARIN expresion PARFIN { $$ = new FuncionesN.default(FuncionesN.Operadores.TOSTRING, @1.first_line, @1.first_column, $6) }
+;
+
 expresion : expresion MAS expresion { $$ = new Aritmeticas.default(Aritmeticas.Operadores.SUMA, @1.first_line, @1.first_column, $1, $3) }
         | expresion MENOS expresion { $$ = new Aritmeticas.default(Aritmeticas.Operadores.RESTA, @1.first_line, @1.first_column, $1, $3) }
         | expresion MUL expresion { $$ = new Aritmeticas.default(Aritmeticas.Operadores.MUL, @1.first_line, @1.first_column, $1, $3) }
@@ -233,6 +236,7 @@ expresion : expresion MAS expresion { $$ = new Aritmeticas.default(Aritmeticas.O
         | lower_upper { $$ = $1 }
         | round { $$ = $1 }
         | typeof { $$ = $1 }
+        | astring { $$ = $1 }
 ;
 
 tipos : STD DOSPUNTOS DOSPUNTOS r_STRING { $$ = new Tipo.default(Tipo.tipoD.CADENA) } 
