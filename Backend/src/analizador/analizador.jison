@@ -145,10 +145,12 @@
 
 // SINTACTICO
 // %left 'INTERR'
-%left if_t_s
+%left 'OR'
+%left 'AND'
+%right 'NOT'
+// %left if_t_s
 %left longitud
 %left 'IGUALIGUAL' 'DIF' 'MENORIGUAL' 'MAYORIGUAL' 'MENOR' 'MAYOR'
-%left 'OR' 'AND'
 %left 'MAS' 'MENOS'
 %left 'DIV' 'MUL' 'MOD'
 %left 'INCRE' 'DECRE'
@@ -256,7 +258,9 @@ expresion : expresion MAS expresion { $$ = new Aritmeticas.default(Aritmeticas.O
         | expresion DIF expresion { $$ = new Relacionales.default(Relacionales.Relacional.DIF, $1, $3, @1.first_line, @1.first_column) }
         | expresion MENORIGUAL expresion { $$ = new Relacionales.default(Relacionales.Relacional.MENORI, $1, $3, @1.first_line, @1.first_column) }
         | expresion MAYORIGUAL expresion { $$ = new Relacionales.default(Relacionales.Relacional.MAYORI, $1, $3, @1.first_line, @1.first_column) }
-        | expresion OR expresion { $$ = new Logicas.default(Logicas.Logico.OR, $1, $3, @1.first_line, @1.first_column) }
+        | expresion OR expresion { $$ = new Logicas.default(Logicas.Logico.OR, @1.first_line, @1.first_column, $1, $3) }
+        | expresion AND expresion { $$ = new Logicas.default(Logicas.Logico.AND, @1.first_line, @1.first_column, $1, $3) }
+        | NOT expresion { $$ = new Logicas.default(Logicas.Logico.NOT, @1.first_line, @1.first_column, $2) }
         | POT PARIN expresion COMA expresion PARFIN { $$ = new Aritmeticas.default(Aritmeticas.Operadores.POW, @1.first_line, @1.first_column, $3, $5)  }
         | PARIN expresion PARFIN { $$ = $2 }
         | MENOS expresion %prec UMENOS { $$ = new Aritmeticas.default(Aritmeticas.Operadores.NEGACION, @1.first_line, @1.first_column, $2) }
