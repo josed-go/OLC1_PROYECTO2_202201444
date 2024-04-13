@@ -9,6 +9,10 @@
     const Creacion = require('./instrucciones/creacion.var')
     const IncreDecre = require('./instrucciones/incre.decre')
     const FuncionesN = require('./instrucciones/funciones.nativas')
+    const If = require('./instrucciones/if')
+    const Relacionales = require('./expresiones/relacionales')
+    const While = require('./instrucciones/while')
+    const Break = require('./instrucciones/break')
     var texto = ''
 
 %}
@@ -110,8 +114,8 @@
 /* TIPOS DE DATOS */
 ([0-9]+)([0-9]+)*\.([0-9]+)([0-9]+)* return "DOUBLE";
 ([0-9]+)([0-9]+)* return "NUM";
-"true" return "BOOLEANO";
-"false" return "BOOLEANO";
+"true" return "TRUE";
+"false" return "FALSE";
 \'[^'\r\n]*\' return "CARACTER";
 // \"[^\"]*\" return "STRING";
 ["]						{ texto = ''; this.begin("string"); }
@@ -159,6 +163,9 @@ sentencias : declaracion { $$ = $1 }
             | imprimir { $$ = $1 }
             | asignacion { $$ = $1 }
             | incre_decre { $$ = $1 }
+            | if_s { $$ = $1 }
+            | while_s { $$ = $1 }
+            | break_s { $$ = $1 }
 ;
 
 declaracion : tipos l_id fin_declaracion { 
@@ -195,7 +202,16 @@ final_imp : DMENOR ENDL PYC { $$ = 1 }
 asignacion : ID IGUAL expresion PYC { $$ = new Asignacion.default($1, $3, @1.first_line, @1.first_column) }
 ;
 
-incre_decre : ID accion PYC { new IncreDecre.default($1, @1.first_line, @1.first_column, $2) }
+if_s : IF PARIN expresion PARFIN LLAVEIN instrucciones LLAVEFIN { $$ = new If.default($3, $6, @1.first_line, @1.first_column) }
+;
+
+while_s : WHILE PARIN expresion PARFIN LLAVEIN instrucciones LLAVEFIN { $$ = new While.default($3, $6, @1.first_line, @1.first_column) }
+;
+
+break_s : BREAK PYC { $$ = new Break.default(@1.first_line, @1.first_column) }
+;
+
+incre_decre : ID accion PYC { $$ = new IncreDecre.default($1, @1.first_line, @1.first_column, $2) }
 ;
 
 accion : MAS MAS { $$ = "mas" }
@@ -223,6 +239,7 @@ expresion : expresion MAS expresion { $$ = new Aritmeticas.default(Aritmeticas.O
         | expresion MUL expresion { $$ = new Aritmeticas.default(Aritmeticas.Operadores.MUL, @1.first_line, @1.first_column, $1, $3) }
         | expresion DIV expresion { $$ = new Aritmeticas.default(Aritmeticas.Operadores.DIV, @1.first_line, @1.first_column, $1, $3) }
         | expresion MOD expresion { $$ = new Aritmeticas.default(Aritmeticas.Operadores.MOD, @1.first_line, @1.first_column, $1, $3) }
+        | expresion MENOR expresion { $$ = new Relacionales.default(Relacionales.Relacional.MENOR, $1, $3, @1.first_line, @1.first_column) }
         | POT PARIN expresion COMA expresion PARFIN { $$ = new Aritmeticas.default(Aritmeticas.Operadores.POW, @1.first_line, @1.first_column, $3, $5)  }
         | PARIN expresion PARFIN { $$ = $2 }
         | MENOS expresion %prec UMENOS { $$ = new Aritmeticas.default(Aritmeticas.Operadores.NEGACION, @1.first_line, @1.first_column, $2) }
@@ -231,7 +248,8 @@ expresion : expresion MAS expresion { $$ = new Aritmeticas.default(Aritmeticas.O
         | DOUBLE { $$ = new Datos.default(new Tipo.default(Tipo.tipoD.DOUBLE), $1, @1.first_line, @1.first_column) }
         | CADENA { $$ = new Datos.default(new Tipo.default(Tipo.tipoD.CADENA), $1, @1.first_line, @1.first_column) }
         | CARACTER { $$ = new Datos.default(new Tipo.default(Tipo.tipoD.CHAR), $1, @1.first_line, @1.first_column) }
-        | BOOLEANO { $$ = new Datos.default(new Tipo.default(Tipo.tipoD.BOOL), $1, @1.first_line, @1.first_column) }
+        | TRUE { $$ = new Datos.default(new Tipo.default(Tipo.tipoD.BOOL), true, @1.first_line, @1.first_column) }
+        | FALSE { $$ = new Datos.default(new Tipo.default(Tipo.tipoD.BOOL), false, @1.first_line, @1.first_column) }
         | ID { $$ = new AccesoVar.default($1, @1.first_line, @1.first_column) }
         | lower_upper { $$ = $1 }
         | round { $$ = $1 }
@@ -245,6 +263,9 @@ tipos : STD DOSPUNTOS DOSPUNTOS r_STRING { $$ = new Tipo.default(Tipo.tipoD.CADE
         | BOOL { $$ = new Tipo.default(Tipo.tipoD.BOOL) } 
         | CHAR { $$ = new Tipo.default(Tipo.tipoD.CHAR) } 
 ;
+
+// tipos_relacionales : MENOR { $$ = Relacionales.Relacional.MENOR  }
+// ;
 
 // expresion : NUM
 //             | DOUBLE

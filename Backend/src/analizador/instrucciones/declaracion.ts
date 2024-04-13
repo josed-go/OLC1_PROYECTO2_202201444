@@ -55,27 +55,26 @@ export default class Declaracion extends Instruccion {
         //     }
         // }
         
+        // REVISAR
         if(this.valor.tipoD.getTipo() == tipoD.INT && this.tipoD.getTipo() == tipoD.DOUBLE){
             this.id.forEach(id => {
                 valorf = parseFloat(valorf);
                 if (!tabla.setVariable(new Simbolo(this.tipoD, id, valorf))){
                     return new Errores("Semantico", "No se puede declarar variable que ya existe", this.linea, this.columna)
                 }   
+            })
+        }else{
+
+            if(this.valor.tipoD.getTipo() != this.tipoD.getTipo()) {
+                return new Errores("Semantico", "No se puede declarar variable", this.linea, this.columna)
+            }
+                    
+            this.id.forEach(id => {
+                if(!tabla.setVariable(new Simbolo(this.tipoD, id, valorf))) {
+                    return new Errores("Semantico", "No se puede declarar variable que ya existe", this.linea, this.columna)
+                }
             });
         }
-
-        if(this.valor.tipoD.getTipo() != this.tipoD.getTipo()) {
-            return new Errores("Semantico", "No se puede declarar variable", this.linea, this.columna)
-        }
-                
-        this.id.forEach(id => {
-            if(!tabla.setVariable(new Simbolo(this.tipoD, id, valorf))) {
-                return new Errores("Semantico", "No se puede declarar variable que ya existe", this.linea, this.columna)
-            }
-        });
-            
-    
-        
 
 
     }
