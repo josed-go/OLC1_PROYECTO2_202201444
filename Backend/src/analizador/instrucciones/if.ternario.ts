@@ -35,7 +35,7 @@ export default class Ternario extends Instruccion {
             this.tipoD = this.exp1.tipoD
             return expresion1
         }else {
-            this.tipoD = this.exp1.tipoD
+            this.tipoD = this.exp2.tipoD
             return expresion2
         }
     }
