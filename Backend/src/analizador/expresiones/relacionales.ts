@@ -40,7 +40,6 @@ export default class Relacionales extends Instruccion {
 
         switch (comp1) {
             case tipoD.INT:
-                console.log(comp2)
                 switch (comp2) {
                     case tipoD.INT:
                         this.tipoD = new Tipo(tipoD.BOOL)
