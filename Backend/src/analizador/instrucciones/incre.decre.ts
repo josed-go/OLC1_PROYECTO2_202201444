@@ -19,14 +19,20 @@ export default class IncreDecre extends Instruccion{
         let valor = tabla.getVariable(this.id.toLocaleLowerCase())
         if(valor == null) return new Errores('Semantico', 'Variable no existe', this.linea, this.columna)
         
-        if(valor.getTipo().getTipo() != tipoD.INT) return new Errores('Semantico', 'No se puede incrementar o decrementar ese tipo de dato', this.linea, this.columna)
+        if(valor.getTipo().getTipo() != tipoD.INT && valor.getTipo().getTipo() != tipoD.DOUBLE) return new Errores('Semantico', 'No se puede incrementar o decrementar ese tipo de dato', this.linea, this.columna)
         
         if(this.accion == "mas") {
-
-            valor.setValor(parseInt(valor.getValor()) + 1)
-        }else if(this.accion == "menos") {
-
-            valor.setValor(parseInt(valor.getValor()) - 1)
+            if(valor.getTipo().getTipo() == tipoD.INT){
+                valor.setValor(parseInt(valor.getValor()) + 1)
+            }else{
+                valor.setValor(parseFloat(valor.getValor()) + 1)
+            }
+        }else  {
+            if(valor.getTipo().getTipo() == tipoD.INT){
+                valor.setValor(parseInt(valor.getValor()) - 1)
+            }else{
+                valor.setValor(parseFloat(valor.getValor()) - 1)
+            }
         }
         
     }
