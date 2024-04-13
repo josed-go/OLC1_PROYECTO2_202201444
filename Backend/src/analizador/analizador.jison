@@ -242,6 +242,7 @@ expresion : expresion MAS expresion { $$ = new Aritmeticas.default(Aritmeticas.O
         | expresion MENOR expresion { $$ = new Relacionales.default(Relacionales.Relacional.MENOR, $1, $3, @1.first_line, @1.first_column) }
         | expresion MAYOR expresion { $$ = new Relacionales.default(Relacionales.Relacional.MAYOR, $1, $3, @1.first_line, @1.first_column) }
         | expresion IGUALIGUAL expresion { $$ = new Relacionales.default(Relacionales.Relacional.IGUAL, $1, $3, @1.first_line, @1.first_column) }
+        | expresion DIF expresion { $$ = new Relacionales.default(Relacionales.Relacional.DIF, $1, $3, @1.first_line, @1.first_column) }
         | POT PARIN expresion COMA expresion PARFIN { $$ = new Aritmeticas.default(Aritmeticas.Operadores.POW, @1.first_line, @1.first_column, $3, $5)  }
         | PARIN expresion PARFIN { $$ = $2 }
         | MENOS expresion %prec UMENOS { $$ = new Aritmeticas.default(Aritmeticas.Operadores.NEGACION, @1.first_line, @1.first_column, $2) }
