@@ -144,7 +144,7 @@
 /lex
 
 // SINTACTICO
-// %left 'INTERR'
+%left 'INTERR'
 %left 'OR'
 %left 'AND'
 %right 'NOT'
@@ -175,7 +175,6 @@ sentencias : declaracion { $$ = $1 }
             | if_s { $$ = $1 }
             | while_s { $$ = $1 }
             | break_s { $$ = $1 }
-            // | if_t_s { $$ = $1 }
 ;
 
 declaracion : tipos l_id fin_declaracion { 
@@ -215,8 +214,8 @@ asignacion : ID IGUAL expresion PYC { $$ = new Asignacion.default($1, $3, @1.fir
 if_s : IF PARIN expresion PARFIN LLAVEIN instrucciones LLAVEFIN { $$ = new If.default($3, $6, @1.first_line, @1.first_column) }
 ;
 
-// if_t_s : expresion INTERR expresion DOSPUNTOS expresion PYC { $$ = new Ternario.default($1, $3, $5, @1.first_line, @1.first_column) }
-// ;
+if_t_s : expresion INTERR expresion DOSPUNTOS expresion { $$ = new Ternario.default($1, $3, $5, @1.first_line, @1.first_column) }
+;
 
 while_s : WHILE PARIN expresion PARFIN LLAVEIN instrucciones LLAVEFIN { $$ = new While.default($3, $6, @1.first_line, @1.first_column) }
 ;
@@ -276,6 +275,7 @@ expresion : expresion MAS expresion { $$ = new Aritmeticas.default(Aritmeticas.O
         | round { $$ = $1 }
         | typeof { $$ = $1 }
         | astring { $$ = $1 }
+        | if_t_s { $$ = $1 }
 ;
 
 tipos : STD DOSPUNTOS DOSPUNTOS r_STRING { $$ = new Tipo.default(Tipo.tipoD.CADENA) } 
