@@ -13,6 +13,8 @@
     const Relacionales = require('./expresiones/relacionales')
     const While = require('./instrucciones/while')
     const Break = require('./instrucciones/break')
+    const Ternario = require('./instrucciones/if.ternario')
+    const Logicas = require('./expresiones/logicas')
     var texto = ''
 
 %}
@@ -69,6 +71,8 @@
 /* OTROS */
 "<<" return"DMENOR";
 "std" return "STD";
+"++" return "INCRE";
+"--" return "DECRE";
 
 /* OPERADORES ARITMETICOS */
 "+" return "MAS";
@@ -140,11 +144,14 @@
 /lex
 
 // SINTACTICO
+// %left 'INTERR'
+%left if_t_s
 %left longitud
 %left 'IGUALIGUAL' 'DIF' 'MENORIGUAL' 'MAYORIGUAL' 'MENOR' 'MAYOR'
 %left 'OR' 'AND'
 %left 'MAS' 'MENOS'
 %left 'DIV' 'MUL' 'MOD'
+%left 'INCRE' 'DECRE'
 %right 'UMENOS'
 %left 'PUNTO'
 
@@ -166,6 +173,7 @@ sentencias : declaracion { $$ = $1 }
             | if_s { $$ = $1 }
             | while_s { $$ = $1 }
             | break_s { $$ = $1 }
+            // | if_t_s { $$ = $1 }
 ;
 
 declaracion : tipos l_id fin_declaracion { 
@@ -205,6 +213,9 @@ asignacion : ID IGUAL expresion PYC { $$ = new Asignacion.default($1, $3, @1.fir
 if_s : IF PARIN expresion PARFIN LLAVEIN instrucciones LLAVEFIN { $$ = new If.default($3, $6, @1.first_line, @1.first_column) }
 ;
 
+// if_t_s : expresion INTERR expresion DOSPUNTOS expresion PYC { $$ = new Ternario.default($1, $3, $5, @1.first_line, @1.first_column) }
+// ;
+
 while_s : WHILE PARIN expresion PARFIN LLAVEIN instrucciones LLAVEFIN { $$ = new While.default($3, $6, @1.first_line, @1.first_column) }
 ;
 
@@ -214,8 +225,8 @@ break_s : BREAK PYC { $$ = new Break.default(@1.first_line, @1.first_column) }
 incre_decre : ID accion PYC { $$ = new IncreDecre.default($1, @1.first_line, @1.first_column, $2) }
 ;
 
-accion : MAS MAS { $$ = "mas" }
-        | MENOS MENOS { $$ = "menos" }
+accion : INCRE { $$ = "mas" }
+        | DECRE { $$ = "menos" }
 ;
 
 lower_upper : TOLOWER PARIN expresion PARFIN { $$ = new FuncionesN.default(FuncionesN.Operadores.LOWER, @1.first_line, @1.first_column, $3) }
@@ -245,6 +256,7 @@ expresion : expresion MAS expresion { $$ = new Aritmeticas.default(Aritmeticas.O
         | expresion DIF expresion { $$ = new Relacionales.default(Relacionales.Relacional.DIF, $1, $3, @1.first_line, @1.first_column) }
         | expresion MENORIGUAL expresion { $$ = new Relacionales.default(Relacionales.Relacional.MENORI, $1, $3, @1.first_line, @1.first_column) }
         | expresion MAYORIGUAL expresion { $$ = new Relacionales.default(Relacionales.Relacional.MAYORI, $1, $3, @1.first_line, @1.first_column) }
+        | expresion OR expresion { $$ = new Logicas.default(Logicas.Logico.OR, $1, $3, @1.first_line, @1.first_column) }
         | POT PARIN expresion COMA expresion PARFIN { $$ = new Aritmeticas.default(Aritmeticas.Operadores.POW, @1.first_line, @1.first_column, $3, $5)  }
         | PARIN expresion PARFIN { $$ = $2 }
         | MENOS expresion %prec UMENOS { $$ = new Aritmeticas.default(Aritmeticas.Operadores.NEGACION, @1.first_line, @1.first_column, $2) }
