@@ -59,21 +59,24 @@ const Content = ({archivos, setArchivos, cantidad, setCantidad, actual, setActua
 
 
     const guardarArchivo = () => {
-        const blob = new Blob([editorRef.current.getValue()], { type: 'text/plain;charset=utf-8' })
-        const newArchivos = archivos.map(archivo => {
-            if(archivo.name == actual.name) {
-                return {
-                    ...archivo,
-                    name: nombre,
-                    content: editorRef.current.getValue(),
+        if(nombre !== ""){
+
+            const blob = new Blob([editorRef.current.getValue()], { type: 'text/plain;charset=utf-8' })
+            const newArchivos = archivos.map(archivo => {
+                if(archivo.name == actual.name) {
+                    return {
+                        ...archivo,
+                        name: nombre,
+                        content: editorRef.current.getValue(),
+                    }
+                }else{
+                    return archivo
                 }
-            }else{
-                return archivo
-            }
-        })
-        setArchivos(newArchivos)
-        setAbierto(abierto => !abierto)
-        saveAs(blob, nombre+".sc")
+            })
+            setArchivos(newArchivos)
+            setAbierto(abierto => !abierto)
+            saveAs(blob, nombre+".sc")
+        }
     }
 
     const handleEditor = (editor, id) => {
