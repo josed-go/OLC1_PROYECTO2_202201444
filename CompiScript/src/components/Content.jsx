@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import Editor from '@monaco-editor/react'
 import ArrowDown from './ArrowDown';
 import ArrowUp from './ArrowUp';
+import { saveAs } from 'file-saver';
 
 const Content = ({archivos, setArchivos, cantidad, setCantidad, actual, setActual, editorRef, consolaRef}) => {
 
@@ -10,29 +11,54 @@ const Content = ({archivos, setArchivos, cantidad, setCantidad, actual, setActua
 
     // const [ archivos, setArchivos ] = useState([])
     // const [ cantArchivos, setCantArchivos ] = useState(1)
+    const inputRef = useRef()
+    const [ archivoSeleccionado, setArchivoSeleccionado ] = useState(null)
     const [abierto, setAbierto] = useState(false)
     // const editorRef = useRef(null)
     // const consolaRef = useRef(null)
 
-    const nuevoArchivo = () => {
+    const nuevoArchivo = (nombre, content) => {
         var file = {
             "id": cantidad,
-            "name": "Nuevo archivo "+cantidad,
+            "name": nombre,
             "ruta": "src/",
-            "content": ""
+            "content": content
         }
         console.log("aqui")
         archivos.push(file)
         setAbierto(abierto => !abierto)
         setCantidad()
-        editorRef.current.setValue("")
+        editorRef.current.setValue(content)
         setActual(file)
         // setCantidad(cantArchivos + 1)
     }
 
+    const handleOnChange = (event) => {
+        if(event.target.files && event.target.files.length > 0) {
+            const file = event.target.files[0]
+            const fileReader = new FileReader()
+
+            fileReader.readAsText(file)
+
+            fileReader.onload = () => {
+                nuevoArchivo(file.name, fileReader.result)
+            }
+
+            fileReader.onerror = () => {
+                console.log(fileReader.error)
+            }
+        }
+    }
+
+    const onChooseFile = () => {
+        inputRef.current.click()
+    }
+
+
     const guardarArchivo = () => {
+        const blob = new Blob([editorRef.current.getValue()], { type: 'text/plain;charset=utf-8' })
         const newArchivos = archivos.map(archivo => {
-            if(archivo.id == actual.id) {
+            if(archivo.name == actual.name) {
                 return {
                     ...archivo,
                     content: editorRef.current.getValue(),
@@ -88,12 +114,13 @@ const Content = ({archivos, setArchivos, cantidad, setCantidad, actual, setActua
                     abierto && (
                         <div className='bg-gris-50 absolute z-50 w-1/4 flex flex-col text-white'>
                             <button className='hover:bg-gris h-8'
-                                onClick={() => nuevoArchivo()}
+                                onClick={() => nuevoArchivo("Nuevo archivo "+cantidad, "")}
                             >Nuevo archivo</button>
-                            <button className='hover:bg-gris h-8'>Abrir archivo</button>
-                            <button className='hover:bg-gris h-8'
-                                onClick={() => guardarArchivo()}
-                            >Guardar</button>
+                            <button className='hover:bg-gris h-8' onClick={() => onChooseFile()}>Abrir archivo</button>
+                            <input type='file' className='hover:bg-gris h-8' ref={inputRef} style={{ display: "none" }} onChange={handleOnChange} multiple={false}/>
+                            <button className='hover:bg-gris h-8'>Guardar archivo</button>
+                                {/* // onClick={() => guardarArchivo()} */}
+                            {/* // >Guardar</input> */}
                         </div>
                     )
                 }
