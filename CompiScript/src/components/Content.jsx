@@ -3,6 +3,7 @@ import Editor from '@monaco-editor/react'
 import ArrowDown from './ArrowDown';
 import ArrowUp from './ArrowUp';
 import { saveAs } from 'file-saver';
+import ModalG from './ModalG'
 
 const Content = ({archivos, setArchivos, cantidad, setCantidad, actual, setActual, editorRef, consolaRef}) => {
 
@@ -14,6 +15,8 @@ const Content = ({archivos, setArchivos, cantidad, setCantidad, actual, setActua
     const inputRef = useRef()
     const [ archivoSeleccionado, setArchivoSeleccionado ] = useState(null)
     const [abierto, setAbierto] = useState(false)
+    const [open, setOpen] = useState(false)
+    const [ nombre, setNombre ] = useState("")
     // const editorRef = useRef(null)
     // const consolaRef = useRef(null)
 
@@ -61,8 +64,8 @@ const Content = ({archivos, setArchivos, cantidad, setCantidad, actual, setActua
             if(archivo.name == actual.name) {
                 return {
                     ...archivo,
+                    name: nombre,
                     content: editorRef.current.getValue(),
-
                 }
             }else{
                 return archivo
@@ -70,6 +73,7 @@ const Content = ({archivos, setArchivos, cantidad, setCantidad, actual, setActua
         })
         setArchivos(newArchivos)
         setAbierto(abierto => !abierto)
+        saveAs(blob, nombre+".sc")
     }
 
     const handleEditor = (editor, id) => {
@@ -118,7 +122,7 @@ const Content = ({archivos, setArchivos, cantidad, setCantidad, actual, setActua
                             >Nuevo archivo</button>
                             <button className='hover:bg-gris h-8' onClick={() => onChooseFile()}>Abrir archivo</button>
                             <input type='file' className='hover:bg-gris h-8' ref={inputRef} style={{ display: "none" }} onChange={handleOnChange} multiple={false}/>
-                            <button className='hover:bg-gris h-8'>Guardar archivo</button>
+                            <button className='hover:bg-gris h-8' onClick={() => setOpen(true)}>Guardar archivo</button>
                                 {/* // onClick={() => guardarArchivo()} */}
                             {/* // >Guardar</input> */}
                         </div>
@@ -150,6 +154,32 @@ const Content = ({archivos, setArchivos, cantidad, setCantidad, actual, setActua
                     />
                 </section>
             </div>
+
+            <ModalG open={open} onClose={() => setOpen(false)}>
+                <div className="text-center w-56">
+                    <div className="mx-auto my-4 w-48">
+                    <h3 className="text-lg font-black text-gray-800">Guardar archivo</h3>
+                    <p className="text-sm text-gray-700">
+                        Escribe el nombre del archivo
+                    </p>
+                    <input type='text' name='Nombre archivo' className='bg-gray-400'
+                        value={nombre}
+                        onChange={(e) => setNombre(e.target.value)}
+                        />
+                    </div>
+                    <div className="flex gap-4">
+                    <button className="btn btn-danger w-full"
+                        onClick={() => guardarArchivo()}
+                    >Guardar</button>
+                    <button
+                        className="btn btn-light w-full"
+                        onClick={() => setOpen(false)}
+                    >
+                        Cancelar
+                    </button>
+                    </div>
+                </div>
+            </ModalG>
         </>
     )
     
