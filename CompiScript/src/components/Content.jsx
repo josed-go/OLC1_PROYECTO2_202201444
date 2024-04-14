@@ -76,6 +76,7 @@ const Content = ({archivos, setArchivos, cantidad, setCantidad, actual, setActua
             setArchivos(newArchivos)
             setAbierto(abierto => !abierto)
             saveAs(blob, nombre+".sc")
+            setOpen(false)
         }
     }
 
