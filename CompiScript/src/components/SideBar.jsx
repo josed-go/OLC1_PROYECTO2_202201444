@@ -56,7 +56,7 @@ const SideBar = ({getArchivos, archivos, actual, setActual, editorRef, consolaRe
                                 getArchivos.map((item, i) => (
                                     <div className='flex flex-row hover:bg-gris-50'>
 
-                                        <div className='flex flex-row hover:bg-gris-50 cursor-pointer h-8 align-middle pl-8 w-4/5' key={i}
+                                        <div className='flex flex-row hover:bg-gris-50 cursor-pointer h-8 align-middle pl-8 w-4/5' key={i+item.name}
                                             onClick={() => handleCurrentFile(item)}
                                         >
                                             {/* {console.log(item.name, item.content)} */}
