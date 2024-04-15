@@ -219,8 +219,19 @@ final_imp : DMENOR ENDL PYC { $$ = 1 }
 asignacion : ID IGUAL expresion { $$ = new Asignacion.default($1, $3, @1.first_line, @1.first_column) }
 ;
 
-if_s : IF PARIN expresion PARFIN LLAVEIN instrucciones LLAVEFIN { $$ = new If.default($3, $6, @1.first_line, @1.first_column) }
+if_s : IF PARIN expresion PARFIN bloque_ins   { $$ = new If.default($3, $5, @1.first_line, @1.first_column, undefined, undefined) }
+    | IF PARIN expresion PARFIN bloque_ins ELSE bloque_ins { $$ = new If.default($3, $5, @1.first_line, @1.first_column, undefined, $7) }
+    | IF PARIN expresion PARFIN bloque_ins ELSE if_s { $$ = new If.default($3, $5, @1.first_line, @1.first_column, $7, undefined) }
 ;
+
+bloque_ins : LLAVEIN instrucciones LLAVEFIN { $$ = $2 }
+            | LLAVEFIN  LLAVEFIN { $$ = [] }
+;
+
+// elseif : LLAVEFIN { $$ = null }
+//         | LLAVEFIN ELSE LLAVEFIN instrucciones LLAVEFIN elseif { $$ = $3 }
+//         | LLAVEFIN if_s { $$ = $2 }
+// ;
 
 if_t_s : expresion INTERR expresion DOSPUNTOS expresion { $$ = new Ternario.default($1, $3, $5, @1.first_line, @1.first_column) }
 ;
