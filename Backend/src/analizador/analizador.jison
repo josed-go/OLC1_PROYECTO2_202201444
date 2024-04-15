@@ -18,6 +18,7 @@
     const Logicas = require('./expresiones/logicas')
     const DoWhile = require('./instrucciones/do.while')
     const For = require('./instrucciones/for')
+    const Casteo = require('./instrucciones/casteo')
     var texto = ''
 
 %}
@@ -64,11 +65,11 @@
 "execute" return "EXECUTE";
 
 /* TIPOS DE DATOS */
-"double" return "DOUBLE";
+"double" return "r_DOUBLE";
 "string" return "r_STRING";
-"int" return "INT";
-"bool" return "BOOL";
-"char" return "CHAR";
+"int" return "r_INT";
+"bool" return "r_BOOL";
+"char" return "r_CHAR";
 
 
 /* OTROS */
@@ -159,6 +160,7 @@
 %left 'INCRE' 'DECRE'
 %right 'UMENOS'
 %left 'PUNTO'
+%left PARIN
 
 %start inicio
 
@@ -269,6 +271,17 @@ typeof : TYPEOF PARIN expresion PARFIN { $$ = new FuncionesN.default(FuncionesN.
 astring : STD DOSPUNTOS DOSPUNTOS TOSTRING PARIN expresion PARFIN { $$ = new FuncionesN.default(FuncionesN.Operadores.TOSTRING, @1.first_line, @1.first_column, $6) }
 ;
 
+// inicia_par : PARIN producciones { $$ = $2 }
+// ;
+
+// producciones: expresion PARFIN { $$ = $1 }
+//             | tipos PARFIN expresion { $$ = new Casteo.default($3, $1,  @1.first_line, @1.first_column) }
+// ;
+
+
+casteo : PARIN tipos PARFIN expresion { $$ = new Casteo.default($4, $2,  @1.first_line, @1.first_column) }
+;
+
 expresion : expresion MAS expresion { $$ = new Aritmeticas.default(Aritmeticas.Operadores.SUMA, @1.first_line, @1.first_column, $1, $3) }
         | expresion MENOS expresion { $$ = new Aritmeticas.default(Aritmeticas.Operadores.RESTA, @1.first_line, @1.first_column, $1, $3) }
         | expresion MUL expresion { $$ = new Aritmeticas.default(Aritmeticas.Operadores.MUL, @1.first_line, @1.first_column, $1, $3) }
@@ -299,13 +312,15 @@ expresion : expresion MAS expresion { $$ = new Aritmeticas.default(Aritmeticas.O
         | typeof { $$ = $1 }
         | astring { $$ = $1 }
         | if_t_s { $$ = $1 }
+        | casteo { $$ = $1 }
+        // | inicia_par { $$ = $1 }
 ;
 
 tipos : STD DOSPUNTOS DOSPUNTOS r_STRING { $$ = new Tipo.default(Tipo.tipoD.CADENA) } 
-        | INT { $$ = new Tipo.default(Tipo.tipoD.INT) } 
-        | DOUBLE { $$ = new Tipo.default(Tipo.tipoD.DOUBLE) } 
-        | BOOL { $$ = new Tipo.default(Tipo.tipoD.BOOL) } 
-        | CHAR { $$ = new Tipo.default(Tipo.tipoD.CHAR) } 
+        | r_INT { $$ = new Tipo.default(Tipo.tipoD.INT) } 
+        | r_DOUBLE { $$ = new Tipo.default(Tipo.tipoD.DOUBLE) } 
+        | r_BOOL { $$ = new Tipo.default(Tipo.tipoD.BOOL) } 
+        | r_CHAR { $$ = new Tipo.default(Tipo.tipoD.CHAR) } 
 ;
 
 // tipos_relacionales : MENOR { $$ = Relacionales.Relacional.MENOR  }
