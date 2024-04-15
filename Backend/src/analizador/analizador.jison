@@ -225,7 +225,7 @@ if_s : IF PARIN expresion PARFIN bloque_ins   { $$ = new If.default($3, $5, @1.f
 ;
 
 bloque_ins : LLAVEIN instrucciones LLAVEFIN { $$ = $2 }
-            | LLAVEFIN  LLAVEFIN { $$ = [] }
+            | LLAVEIN  LLAVEFIN { $$ = [] }
 ;
 
 // elseif : LLAVEFIN { $$ = null }
