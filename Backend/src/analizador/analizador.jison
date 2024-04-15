@@ -16,6 +16,7 @@
     const Ternario = require('./instrucciones/if.ternario')
     const Logicas = require('./expresiones/logicas')
     const DoWhile = require('./instrucciones/do.while')
+    const For = require('./instrucciones/for')
     var texto = ''
 
 %}
@@ -171,12 +172,13 @@ instrucciones : instrucciones sentencias { $1.push($2); $$ = $1 }
 
 sentencias : declaracion { $$ = $1 }
             | imprimir { $$ = $1 }
-            | asignacion { $$ = $1 }
-            | incre_decre { $$ = $1 }
+            | asignacion PYC { $$ = $1 }
+            | incre_decre PYC { $$ = $1 }
             | if_s { $$ = $1 }
             | while_s { $$ = $1 }
             | break_s { $$ = $1 }
             | do_while_s { $$ = $1 }
+            | for_s { $$ = $1 }
 ;
 
 declaracion : tipos l_id fin_declaracion { 
@@ -210,7 +212,7 @@ final_imp : DMENOR ENDL PYC { $$ = 1 }
             | PYC { $$ = 0 }
 ;
 
-asignacion : ID IGUAL expresion PYC { $$ = new Asignacion.default($1, $3, @1.first_line, @1.first_column) }
+asignacion : ID IGUAL expresion { $$ = new Asignacion.default($1, $3, @1.first_line, @1.first_column) }
 ;
 
 if_s : IF PARIN expresion PARFIN LLAVEIN instrucciones LLAVEFIN { $$ = new If.default($3, $6, @1.first_line, @1.first_column) }
@@ -225,10 +227,21 @@ while_s : WHILE PARIN expresion PARFIN LLAVEIN instrucciones LLAVEFIN { $$ = new
 do_while_s : DO LLAVEIN instrucciones LLAVEFIN WHILE  PARIN expresion PARFIN PYC { $$ = new DoWhile.default($7, $3, @1.first_line, @1.first_column) }
 ;
 
+for_s : FOR PARIN for_pri expresion PYC actualizacion PARFIN LLAVEIN instrucciones LLAVEFIN { $$ = new For.default($4, $9, $6, $3, @1.first_line, @1.first_column) }
+;
+
+for_pri : asignacion PYC { $$ = $1 }
+        | declaracion { $$ = $1 }
+;
+
+actualizacion : asignacion { $$ = $1 }
+                | incre_decre { $$ = $1 }
+;
+
 break_s : BREAK PYC { $$ = new Break.default(@1.first_line, @1.first_column) }
 ;
 
-incre_decre : ID accion PYC { $$ = new IncreDecre.default($1, @1.first_line, @1.first_column, $2) }
+incre_decre : ID accion { $$ = new IncreDecre.default($1, @1.first_line, @1.first_column, $2) }
 ;
 
 accion : INCRE { $$ = "mas" }
