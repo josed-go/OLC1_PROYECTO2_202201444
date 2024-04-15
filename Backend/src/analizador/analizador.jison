@@ -13,6 +13,7 @@
     const Relacionales = require('./expresiones/relacionales')
     const While = require('./instrucciones/while')
     const Break = require('./instrucciones/break')
+    const Continue = require('./instrucciones/continue')
     const Ternario = require('./instrucciones/if.ternario')
     const Logicas = require('./expresiones/logicas')
     const DoWhile = require('./instrucciones/do.while')
@@ -177,6 +178,7 @@ sentencias : declaracion { $$ = $1 }
             | if_s { $$ = $1 }
             | while_s { $$ = $1 }
             | break_s { $$ = $1 }
+            | continue_s { $$ = $1 }
             | do_while_s { $$ = $1 }
             | for_s { $$ = $1 }
 ;
@@ -239,6 +241,9 @@ actualizacion : asignacion { $$ = $1 }
 ;
 
 break_s : BREAK PYC { $$ = new Break.default(@1.first_line, @1.first_column) }
+;
+
+continue_s : CONTINUE PYC { $$ = new Continue.default(@1.first_line, @1.first_column) }
 ;
 
 incre_decre : ID accion { $$ = new IncreDecre.default($1, @1.first_line, @1.first_column, $2) }

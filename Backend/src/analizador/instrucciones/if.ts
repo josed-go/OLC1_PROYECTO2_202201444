@@ -5,6 +5,7 @@ import Simbolo from "../simbolo/simbolo";
 import TablaSimbolos from "../simbolo/tabla.simbolos";
 import Tipo, { tipoD } from "../simbolo/tipo";
 import Break from "./break";
+import Continue from "./continue";
 
 export default class If extends Instruccion {
     private condicion: Instruccion
@@ -28,8 +29,10 @@ export default class If extends Instruccion {
         if(condicion) {
             for(let i of this.instrucciones) {
                 if(i instanceof Break) return i;
+                if(i instanceof Continue) return i;
                 let resultado = i.interpretar(arbol, tablaN)
-
+                if( resultado instanceof Errores) return resultado
+                // if(resultado instanceof Continue) return resultado
             }
         }
     }

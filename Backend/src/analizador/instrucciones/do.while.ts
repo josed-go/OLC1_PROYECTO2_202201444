@@ -5,6 +5,7 @@ import Simbolo from "../simbolo/simbolo";
 import TablaSimbolos from "../simbolo/tabla.simbolos";
 import Tipo, { tipoD } from "../simbolo/tipo";
 import Break from "./break";
+import Continue from "./continue";
 
 export default class DoWhile extends Instruccion {
     private condicion: Instruccion
@@ -29,10 +30,13 @@ export default class DoWhile extends Instruccion {
             for(let i of this.instrucciones) {
 
                 if(i instanceof Break) return
+                if(i instanceof Continue) break
 
                 let resultado = i.interpretar(arbol, tablaN)
+                if( resultado instanceof Errores) return resultado
 
                 if(resultado instanceof Break) return
+                if(resultado instanceof Continue) break
                 // AGREGAR ERRORES
             }
         } while (this.condicion.interpretar(arbol, tabla));
