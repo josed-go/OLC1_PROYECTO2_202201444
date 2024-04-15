@@ -15,6 +15,7 @@
     const Break = require('./instrucciones/break')
     const Ternario = require('./instrucciones/if.ternario')
     const Logicas = require('./expresiones/logicas')
+    const DoWhile = require('./instrucciones/do.while')
     var texto = ''
 
 %}
@@ -175,6 +176,7 @@ sentencias : declaracion { $$ = $1 }
             | if_s { $$ = $1 }
             | while_s { $$ = $1 }
             | break_s { $$ = $1 }
+            | do_while_s { $$ = $1 }
 ;
 
 declaracion : tipos l_id fin_declaracion { 
@@ -218,6 +220,9 @@ if_t_s : expresion INTERR expresion DOSPUNTOS expresion { $$ = new Ternario.defa
 ;
 
 while_s : WHILE PARIN expresion PARFIN LLAVEIN instrucciones LLAVEFIN { $$ = new While.default($3, $6, @1.first_line, @1.first_column) }
+;
+
+do_while_s : DO LLAVEIN instrucciones LLAVEFIN WHILE  PARIN expresion PARFIN PYC { $$ = new DoWhile.default($7, $3, @1.first_line, @1.first_column) }
 ;
 
 break_s : BREAK PYC { $$ = new Break.default(@1.first_line, @1.first_column) }
