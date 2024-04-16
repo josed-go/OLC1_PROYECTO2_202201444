@@ -19,6 +19,9 @@
     const DoWhile = require('./instrucciones/do.while')
     const For = require('./instrucciones/for')
     const Casteo = require('./instrucciones/casteo')
+    const Switch = require('./instrucciones/switch')
+    const Case = require('./instrucciones/switch.case')
+    const Default = require('./instrucciones/switch.default')
     var texto = ''
 
 %}
@@ -183,6 +186,7 @@ sentencias : declaracion { $$ = $1 }
             | continue_s { $$ = $1 }
             | do_while_s { $$ = $1 }
             | for_s { $$ = $1 }
+            | switch_s { $$ = $1 }
 ;
 
 declaracion : tipos l_id fin_declaracion { 
@@ -226,6 +230,31 @@ if_s : IF PARIN expresion PARFIN bloque_ins   { $$ = new If.default($3, $5, @1.f
 
 bloque_ins : LLAVEIN instrucciones LLAVEFIN { $$ = $2 }
             | LLAVEIN  LLAVEFIN { $$ = [] }
+;
+
+// switch_s : SWITCH PARIN expresion PARFIN LLAVEIN casos_list LLAVEFIN { $$ = new Switch.default($3, $6, @1.first_line, @1.first_column) }
+// ;
+// switch_s : SWITCH PARIN expresion PARFIN LLAVEIN cases_list LLAVEFIN { $$ = new Switch.default($3, $6, @1.first_line, @1.first_column) }
+//             | SWITCH PARIN expresion PARFIN LLAVEIN cases_list default_c LLAVEFIN { $$ = new Switch.default($3, $6, @1.first_line, @1.first_column) }
+// ;
+
+// casos_list : casos_list caso { $1.push($2); $$ = $1 }
+//             | default_c { $$ = [$1] }
+// ;
+
+switch_s: SWITCH PARIN expresion PARFIN LLAVEIN cases_list default_c LLAVEFIN { $$ = new Switch.default($3, @1.first_line, @1.first_column, $6, $7) }
+        | SWITCH PARIN expresion PARFIN LLAVEIN cases_list LLAVEFIN { $$ = new Switch.default($3, @1.first_line, @1.first_column, $6, undefined) }
+        | SWITCH PARIN expresion PARFIN LLAVEIN default_c LLAVEFIN { $$ = new Switch.default($3, @1.first_line, @1.first_column, undefined, $6) }
+;
+
+cases_list : cases_list caso { if($2 != false) $1.push($2); $$ = $1 }
+            | caso { $$ = ($1 != false) ? [$1] : [] }
+;
+
+caso : CASE expresion DOSPUNTOS instrucciones { $$ = new Case.default($2, $4, @1.first_line, @1.first_column) }
+;
+
+default_c : DEFAULT DOSPUNTOS instrucciones { $$ = new Default.default($3, @1.first_line, @1.first_column) }
 ;
 
 // elseif : LLAVEFIN { $$ = null }
