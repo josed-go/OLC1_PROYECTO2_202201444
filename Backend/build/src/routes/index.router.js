@@ -8,9 +8,8 @@ class router {
         this.config();
     }
     config() {
-        this.router.get('/', index_controller_1.indexController.prueba);
-        this.router.post('/post', index_controller_1.indexController.probarPost);
         this.router.post('/analizar', index_controller_1.indexController.analizar);
+        this.router.get('/obtenerErrores', index_controller_1.indexController.getErrores);
     }
 }
 const indexRouter = new router();

@@ -4,6 +4,7 @@ import ArrowDown from './ArrowDown';
 import ArrowUp from './ArrowUp';
 import { saveAs } from 'file-saver';
 import ModalG from './ModalG'
+import Errores from './Errores';
 
 const Content = ({archivos, setArchivos, cantidad, setCantidad, actual, setActual, editorRef, consolaRef}) => {
 
@@ -15,8 +16,13 @@ const Content = ({archivos, setArchivos, cantidad, setCantidad, actual, setActua
     const inputRef = useRef()
     const [ archivoSeleccionado, setArchivoSeleccionado ] = useState(null)
     const [abierto, setAbierto] = useState(false)
+    const [reportes, setReportes] = useState(false)
     const [open, setOpen] = useState(false)
     const [ nombre, setNombre ] = useState("")
+    const [ errores, setErrores ] = useState([])
+    const [ contenido, setContenido ] = useState("editor")
+    const [ isEditor, setIsEditor ] = useState(true)
+    const [ isErrores, setIsErrores ] = useState(false)
     // const editorRef = useRef(null)
     // const consolaRef = useRef(null)
 
@@ -99,11 +105,39 @@ const Content = ({archivos, setArchivos, cantidad, setCantidad, actual, setActua
         }).then(response => response.json())
         .then(data => {
             consolaRef.current.setValue(data.respuesta)
+            // setErrores(data.lista_errores)
         })
         .catch((error) => {
             alert("No sale compi")
             console.error('Error:', error)
         })
+    }
+
+    const getErrores = () => {
+        fetch('http://localhost:4000/obtenerErrores', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }).then(response => response.json())
+        .then(data => {
+            setErrores(data.lista_errores)
+        })
+        .catch((error) => {
+            alert("Error al obtener errores")
+            console.error('Error:', error)
+        })
+    }
+
+    const changeView = (view) => {
+        if(view == "editor"){
+            setIsEditor(true)
+            setIsErrores(false)
+        } else if(view == "errores") {
+            setIsEditor(false)
+            setIsErrores(true)
+
+        }
     }
     
     return (
@@ -113,7 +147,9 @@ const Content = ({archivos, setArchivos, cantidad, setCantidad, actual, setActua
                         <p className='flex flex-col cursor-pointer text-lg text-center w-full h-full hover:bg-gris-50 align-middle justify-center'
                             onClick={() => setAbierto((prev) => !prev)}
                         >Archivo</p>
-                        <p className='flex flex-col cursor-pointer text-lg text-center w-full h-full hover:bg-gris-50 align-middle justify-center'>Reportes</p>
+                        <p className='flex flex-col cursor-pointer text-lg text-center w-full h-full hover:bg-gris-50 align-middle justify-center'
+                            onClick={() => setReportes((prev) => !prev)}
+                        >Reportes</p>
                         <p className='flex flex-col cursor-pointer text-lg text-center w-full h-full hover:bg-gris-50 align-middle justify-center'
                             onClick={() => interpretar()}
                         >Ejecutar</p>
@@ -132,31 +168,53 @@ const Content = ({archivos, setArchivos, cantidad, setCantidad, actual, setActua
                         </div>
                     )
                 }
+                {
+                    reportes && (
+                        <div className='bg-gris-50 absolute z-50 w-1/4 flex flex-col text-white ml-[538px]'>
+                            <button className='hover:bg-gris h-8'
+                                onClick={() => {changeView("errores"); setReportes(false); getErrores()}}
+                            >Tabla de errores</button>
+                            <button className='hover:bg-gris h-8'>Tabla de símbolos</button>
+                            <button className='hover:bg-gris h-8'>AST</button>
+                        </div>
+                    )
+                }
             </div>
             <div className='w-full bg-white flex flex-col h-5/6'>
-                <section className='w-full'>
-                    <Editor 
-                        height="63vh" 
-                        width="100%"
-                        theme='vs-dark'
-                        defaultLanguage='cpp'
-                        defaultValue=''
-                        onMount={(editor) => handleEditor(editor, "editor")}
-                    />
-                </section>
-                
-                <section className='w-full'>
-                    <p className='bg-gris text-white font-bold text-center h-7 align-middle'>Consola</p>
-                    <Editor 
-                            height="30vh" 
-                            width="100%"
-                            theme='vs-dark'
-                            defaultLanguage='cpp'
-                            defaultValue=''
-                            options={{readOnly: true}}
-                            onMount={(editor) => handleEditor(editor, "consola")}
-                    />
-                </section>
+                {
+                    isEditor && (
+                        <>
+                        <section className='w-full'>
+                            <Editor 
+                                height="63vh" 
+                                width="100%"
+                                theme='vs-dark'
+                                defaultLanguage='cpp'
+                                defaultValue=''
+                                onMount={(editor) => handleEditor(editor, "editor")}
+                            />
+                        </section>
+                        
+                        <section className='w-full'>
+                            <p className='bg-gris text-white font-bold text-center h-7 align-middle'>Consola</p>
+                            <Editor 
+                                    height="30vh" 
+                                    width="100%"
+                                    theme='vs-dark'
+                                    defaultLanguage='cpp'
+                                    defaultValue=''
+                                    options={{readOnly: true}}
+                                    onMount={(editor) => handleEditor(editor, "consola")}
+                            />
+                        </section>
+                        </>
+                    )
+                }
+                {
+                    isErrores && (
+                        <Errores errores={errores} setView={changeView} />
+                    )
+                }
             </div>
 
             <ModalG open={open} onClose={() => setOpen(false)}>

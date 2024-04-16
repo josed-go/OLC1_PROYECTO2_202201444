@@ -9,14 +9,6 @@ const tabla_simbolos_1 = __importDefault(require("../analizador/simbolo/tabla.si
 const errores_1 = __importDefault(require("../analizador/errores/errores"));
 exports.lista_errores = [];
 class Controller {
-    // public tabla_simbolos: Array<nodoSym> = []
-    prueba(req, res) {
-        res.json({ message: "HEllo WOLRD" });
-    }
-    probarPost(req, res) {
-        console.log(req.body);
-        res.json({ message: "metdo post" });
-    }
     analizar(req, res) {
         exports.lista_errores = new Array;
         try {
@@ -43,8 +35,21 @@ class Controller {
                 }
             }
             console.log(tabla);
-            res.json({ "respuesta": ast.getConsola() });
+            res.json({ "respuesta": ast.getConsola(), "lista_errores": exports.lista_errores });
             console.log(exports.lista_errores);
+        }
+        catch (error) {
+            console.log(error);
+            res.json({ message: "Ya no sale" });
+        }
+    }
+    getErrores(req, res) {
+        console.log(exports.lista_errores);
+        // return res.send({
+        //     "lista_errores": lista_errores
+        // })
+        try {
+            res.json({ "lista_errores": exports.lista_errores });
         }
         catch (error) {
             console.log(error);

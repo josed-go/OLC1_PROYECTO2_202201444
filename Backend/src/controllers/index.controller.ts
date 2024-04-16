@@ -6,16 +6,6 @@ import Errores from "../analizador/errores/errores"
 export let lista_errores: Array<Errores> = []
 
 class Controller {
-    // public tabla_simbolos: Array<nodoSym> = []
-    
-    public prueba (req: Request, res:Response) {
-        res.json({message: "HEllo WOLRD"})
-    }
-    
-    public probarPost (req: Request, res: Response) {
-        console.log(req.body)
-        res.json({message: "metdo post"})
-    }
 
     public analizar(req: Request, res:Response) {
         lista_errores = new Array<Errores>
@@ -46,9 +36,23 @@ class Controller {
             }
             console.log(tabla)
 
-            res.json({"respuesta": ast.getConsola()})
+            res.json({"respuesta": ast.getConsola(), "lista_errores": lista_errores})
             console.log(lista_errores)
         } catch (error:any) {
+            console.log(error)
+            res.json({message: "Ya no sale"})
+        }
+    }
+
+    public getErrores(req: Request, res:Response) {
+        console.log(lista_errores)
+        // return res.send({
+        //     "lista_errores": lista_errores
+        // })
+
+        try {
+            res.json({ "lista_errores": lista_errores })
+        } catch (error) {
             console.log(error)
             res.json({message: "Ya no sale"})
         }
