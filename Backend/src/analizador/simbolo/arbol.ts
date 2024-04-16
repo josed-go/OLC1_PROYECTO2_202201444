@@ -47,5 +47,10 @@ export default class Arbol {
     public Cout(contenido: any) {
         this.consola = `${this.consola}${contenido}`
     }
+    
+    public actualizarConsola(contenido: any){
+        this.consola = `${this.consola}${contenido}\n`
+
+    }
 
 }

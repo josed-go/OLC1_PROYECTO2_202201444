@@ -1,10 +1,12 @@
 import { Request, Response } from "express"
 import Arbol from "../analizador/simbolo/arbol"
 import TablaSimbolos from "../analizador/simbolo/tabla.simbolos"
+import Errores from "../analizador/errores/errores"
+
+export let lista_errores: Array<Errores> = []
 
 class Controller {
     // public tabla_simbolos: Array<nodoSym> = []
-    // public lista_errores: Array<Error_N> = []
     
     public prueba (req: Request, res:Response) {
         res.json({message: "HEllo WOLRD"})
@@ -16,6 +18,7 @@ class Controller {
     }
 
     public analizar(req: Request, res:Response) {
+        lista_errores = new Array<Errores>
         try {
             let parser = require('../analizador/analizador.js')
             let ast = new Arbol(parser.parse(req.body.entrada))
@@ -23,16 +26,28 @@ class Controller {
             tabla.setNombre("Tabla simbolos")
             ast.setTablaGlobal(tabla)
             ast.setConsola("")
-            
+
+            for (let error of lista_errores) {
+                ast.actualizarConsola((<Errores>error).obtenerError())
+            }
+
             for(let i of ast.getInstrucciones()) {
+                if(i instanceof Errores){
+                    lista_errores.push(i)
+                    ast.actualizarConsola((<Errores>i).obtenerError())
+                } 
                 console.log(i)
                 var resultado = i.interpretar(ast, tabla)
                 console.log(resultado)
+                if(resultado instanceof Errores){
+                    lista_errores.push(resultado)
+                    ast.actualizarConsola((<Errores>resultado).obtenerError())
+                } 
             }
             console.log(tabla)
-            // let resultado = parser.parse('cout << "Hola";')
-            // let resultado = parser.parse(req.body.entrada)
+
             res.json({"respuesta": ast.getConsola()})
+            console.log(lista_errores)
         } catch (error:any) {
             console.log(error)
             res.json({message: "Ya no sale"})

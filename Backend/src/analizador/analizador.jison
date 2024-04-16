@@ -1,4 +1,5 @@
 %{
+    const index = require('../controllers/index.controller')
     const Tipo = require('./simbolo/tipo')
     const Datos = require('./expresiones/nativo')
     const Aritmeticas = require('./expresiones/aritmeticas')
@@ -22,6 +23,7 @@
     const Switch = require('./instrucciones/switch')
     const Case = require('./instrucciones/switch.case')
     const Default = require('./instrucciones/switch.default')
+    const Errores = require('./errores/errores')
     var texto = ''
 
 %}
@@ -146,7 +148,8 @@
 
 <<EOF>> return 'EOF';
 
-. {console.log('Error lexico: '+yytext+' | Linea: '+yylloc.first_line+' | Columna: '+yylloc.first_column); }
+. {console.log('Error lexico: '+yytext+' | Linea: '+yylloc.first_line+' | Columna: '+yylloc.first_column);
+    index.lista_errores.push(new Errores.default("Lexico", "Simbolo \""+yytext+"\" no pertenece al lenguaje",yylloc.first_line,yylloc.first_column ))}
 
 /lex
 

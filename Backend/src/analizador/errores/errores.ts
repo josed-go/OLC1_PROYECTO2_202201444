@@ -10,4 +10,10 @@ export default class Errores {
         this.fila = fila
         this.columna = columna
     }
+
+    public obtenerError(): string {
+        return (
+            '-> Error '+this.tipo+': '+this.descripcion+" en linea: "+this.fila+" en columna: "+this.columna
+        )
+    }
 }
