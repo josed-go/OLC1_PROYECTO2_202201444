@@ -1,3 +1,4 @@
+import { lista_errores } from "../../controllers/index.controller";
 import { Instruccion } from "../abstracto/instruccion";
 import Errores from "../errores/errores";
 import Arbol from "../simbolo/arbol";
@@ -44,7 +45,11 @@ export default class For extends Instruccion {
 
                 let resultado = i.interpretar(arbol, tablaN)
 
-                if( resultado instanceof Errores) return resultado
+                // if( resultado instanceof Errores) return resultado
+                if( resultado instanceof Errores) {
+                    lista_errores.push(resultado)
+                    arbol.actualizarConsola((<Errores>resultado).obtenerError())
+                }
 
                 if(resultado instanceof Break) return
 

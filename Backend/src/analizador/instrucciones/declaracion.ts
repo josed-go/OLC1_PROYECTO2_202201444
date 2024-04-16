@@ -60,18 +60,18 @@ export default class Declaracion extends Instruccion {
             this.id.forEach(id => {
                 valorf = parseFloat(valorf);
                 if (!tabla.setVariable(new Simbolo(this.tipoD, id, valorf))){
-                    return new Errores("Semantico", "No se puede declarar variable que ya existe", this.linea, this.columna)
+                    return new Errores("Semantico", "No se puede declarar variable "+id+" porque ya existe", this.linea, this.columna)
                 }   
             })
         }else{
 
             if(this.valor.tipoD.getTipo() != this.tipoD.getTipo()) {
-                return new Errores("Semantico", "No se puede declarar variable", this.linea, this.columna)
+                return new Errores("Semantico", "No se pueden declarar variables de diferentes tipos", this.linea, this.columna)
             }
                     
             this.id.forEach(id => {
                 if(!tabla.setVariable(new Simbolo(this.tipoD, id, valorf))) {
-                    return new Errores("Semantico", "No se puede declarar variable que ya existe", this.linea, this.columna)
+                    return new Errores("Semantico", "No se puede declarar variable "+id+" porque ya existe", this.linea, this.columna)
                 }
             });
         }

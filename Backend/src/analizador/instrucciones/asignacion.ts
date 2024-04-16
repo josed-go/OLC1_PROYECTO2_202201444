@@ -20,7 +20,7 @@ export default class Asignacion extends Instruccion {
         if(valorN instanceof Errores) return valorN
 
         let valor = tabla.getVariable(this.id.toLocaleLowerCase())
-        if(valor == null) return new Errores('Semantico', 'Variable no existe', this.linea, this.columna)
+        if(valor == null) return new Errores('Semantico', 'Variable '+this.id+' no existe', this.linea, this.columna)
         
         if(this.expresion.tipoD.getTipo() != valor.getTipo().getTipo()) return new Errores('Semantico', 'Asignacion de diferentes tipos', this.linea, this.columna)
         this.tipoD = valor.getTipo()
