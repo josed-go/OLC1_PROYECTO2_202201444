@@ -12,14 +12,14 @@ const Errores = ({ errores, setView }) => {
                     <thead>
 
                     <tr className='bg-yellow-100'>
-                        <th colSpan="5" className='font-bold text-2xl border p-4'>Reporte de errores</th>
+                        <th colSpan="5" className='font-bold text-2xl border p-4 border-slate-800'>Reporte de errores</th>
                     </tr>
                     <tr className='bg-gris-50 text-white'>
-                        <th className='font-bold text-xl border p-2'>No.</th>
-                        <th className='font-bold text-xl border p-2'>Tipo</th>
-                        <th className='font-bold text-xl border p-2'>Descripción</th>
-                        <th className='font-bold text-xl border p-2'>Linea</th>
-                        <th className='font-bold text-xl border p-2'>Columna</th>
+                        <th className='font-bold text-xl border-2 p-2 border-slate-800'>No.</th>
+                        <th className='font-bold text-xl border-2 p-2 border-slate-800'>Tipo</th>
+                        <th className='font-bold text-xl border-2 p-2 border-slate-800'>Descripción</th>
+                        <th className='font-bold text-xl border-2 p-2 border-slate-800'>Linea</th>
+                        <th className='font-bold text-xl border-2 p-2 border-slate-800'>Columna</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -28,11 +28,11 @@ const Errores = ({ errores, setView }) => {
                         {
                             errores.map((error, i) => (
                                 <tr key={i}>
-                                    <td className='border font-semibold py-4'>{i}</td>
-                                    <td className='border font-semibold py-4'>{error.tipo}</td>
-                                    <td className='border font-semibold py-4'>{error.descripcion}</td>
-                                    <td className='border font-semibold py-4'>{error.fila}</td>
-                                    <td className='border font-semibold py-4'>{error.columna}</td>
+                                    <td className='border-2 font-semibold py-4 border-slate-800'>{i}</td>
+                                    <td className='border-2 font-semibold py-4 border-slate-800'>{error.tipo}</td>
+                                    <td className='border-2 font-semibold py-4 border-slate-800'>{error.descripcion}</td>
+                                    <td className='border-2 font-semibold py-4 border-slate-800'>{error.fila}</td>
+                                    <td className='border-2 font-semibold py-4 border-slate-800'>{error.columna}</td>
                                 </tr>
                             ))
                         }
