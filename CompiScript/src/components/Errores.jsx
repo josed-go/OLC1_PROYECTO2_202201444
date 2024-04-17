@@ -28,7 +28,7 @@ const Errores = ({ errores, setView }) => {
                         {
                             errores.map((error, i) => (
                                 <tr key={i}>
-                                    <td className='border-2 font-semibold py-4 border-slate-800'>{i}</td>
+                                    <td className='border-2 font-semibold py-4 border-slate-800'>{i+1}</td>
                                     <td className='border-2 font-semibold py-4 border-slate-800'>{error.tipo}</td>
                                     <td className='border-2 font-semibold py-4 border-slate-800'>{error.descripcion}</td>
                                     <td className='border-2 font-semibold py-4 border-slate-800'>{error.fila}</td>
