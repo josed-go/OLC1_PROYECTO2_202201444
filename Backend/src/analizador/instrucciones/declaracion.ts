@@ -1,3 +1,4 @@
+import { lista_errores } from "../../controllers/index.controller";
 import { Instruccion } from "../abstracto/instruccion";
 import Errores from "../errores/errores";
 import Arbol from "../simbolo/arbol";
@@ -60,22 +61,27 @@ export default class Declaracion extends Instruccion {
             this.id.forEach(id => {
                 valorf = parseFloat(valorf);
                 if (!tabla.setVariable(new Simbolo(this.tipoD, id, valorf))){
+                    let error = new Errores("Semantico", "No se puede declarar variable "+id+" porque ya existe", this.linea, this.columna)
+                    lista_errores.push(error)
+                    arbol.actualizarConsola((<Errores>error).obtenerError())
                     return new Errores("Semantico", "No se puede declarar variable "+id+" porque ya existe", this.linea, this.columna)
                 }   
             })
         }else{
-
+            
             if(this.valor.tipoD.getTipo() != this.tipoD.getTipo()) {
                 return new Errores("Semantico", "No se pueden declarar variables de diferentes tipos", this.linea, this.columna)
             }
-                    
+            
             this.id.forEach(id => {
                 if(!tabla.setVariable(new Simbolo(this.tipoD, id, valorf))) {
+                    let error = new Errores("Semantico", "No se puede declarar variable "+id+" porque ya existe", this.linea, this.columna)
+                    lista_errores.push(error)
+                    arbol.actualizarConsola((<Errores>error).obtenerError())
                     return new Errores("Semantico", "No se puede declarar variable "+id+" porque ya existe", this.linea, this.columna)
                 }
             });
         }
-
 
     }
 }
