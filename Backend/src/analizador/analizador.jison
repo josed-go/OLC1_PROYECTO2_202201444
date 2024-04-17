@@ -24,6 +24,9 @@
     const Case = require('./instrucciones/switch.case')
     const Default = require('./instrucciones/switch.default')
     const Errores = require('./errores/errores')
+
+    const Vector1D = require('./instrucciones/vectores.ud')
+    const AccesoVector1D = require('./expresiones/acceso.vectorud')
     var texto = ''
 
 %}
@@ -190,6 +193,7 @@ sentencias : declaracion { $$ = $1 }
             | do_while_s { $$ = $1 }
             | for_s { $$ = $1 }
             | switch_s { $$ = $1 }
+            | vector_ud { $$ = $1 }
 ;
 
 declaracion : tipos l_id fin_declaracion { 
@@ -325,6 +329,20 @@ astring : STD DOSPUNTOS DOSPUNTOS TOSTRING PARIN expresion PARFIN { $$ = new Fun
 casteo : PARIN tipos PARFIN expresion { $$ = new Casteo.default($4, $2,  @1.first_line, @1.first_column) }
 ;
 
+vector_ud : tipos ID CORCHIN CORCHFIN IGUAL NEW tipos CORCHIN expresion CORCHFIN PYC { $$ = new Vector1D.default(@1.first_line, @1.first_column, $1, $2, $9, $7, true) }
+            | tipos ID CORCHIN CORCHFIN IGUAL lista PYC { $$ = new Vector1D.default(@1.first_line, @1.first_column, $1, $2, $6, null, false) }
+;
+
+lista : CORCHIN lista_expresion CORCHFIN { $$ = $2 }
+;
+
+lista_expresion : lista_expresion COMA expresion { $1.push($3); $$ = $1 }
+                    | expresion { $$ = [$1] }
+;
+
+acceso_vud : ID CORCHIN expresion CORCHFIN { $$ = new AccesoVector1D.default($1, $3, @1.first_line, @1.first_column) }
+;
+
 expresion : expresion MAS expresion { $$ = new Aritmeticas.default(Aritmeticas.Operadores.SUMA, @1.first_line, @1.first_column, $1, $3) }
         | expresion MENOS expresion { $$ = new Aritmeticas.default(Aritmeticas.Operadores.RESTA, @1.first_line, @1.first_column, $1, $3) }
         | expresion MUL expresion { $$ = new Aritmeticas.default(Aritmeticas.Operadores.MUL, @1.first_line, @1.first_column, $1, $3) }
@@ -356,6 +374,7 @@ expresion : expresion MAS expresion { $$ = new Aritmeticas.default(Aritmeticas.O
         | astring { $$ = $1 }
         | if_t_s { $$ = $1 }
         | casteo { $$ = $1 }
+        | acceso_vud { $$ = $1 }
         // | inicia_par { $$ = $1 }
 ;
 
