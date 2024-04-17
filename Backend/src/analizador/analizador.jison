@@ -27,6 +27,7 @@
 
     const Vector1D = require('./instrucciones/vectores.ud')
     const AccesoVector1D = require('./expresiones/acceso.vectorud')
+    const ModificarVector1D = require('./instrucciones/modificar.vectorud')
     var texto = ''
 
 %}
@@ -194,6 +195,7 @@ sentencias : declaracion { $$ = $1 }
             | for_s { $$ = $1 }
             | switch_s { $$ = $1 }
             | vector_ud { $$ = $1 }
+            | modificar_vud { $$ = $1 }
 ;
 
 declaracion : tipos l_id fin_declaracion { 
@@ -341,6 +343,9 @@ lista_expresion : lista_expresion COMA expresion { $1.push($3); $$ = $1 }
 ;
 
 acceso_vud : ID CORCHIN expresion CORCHFIN { $$ = new AccesoVector1D.default($1, $3, @1.first_line, @1.first_column) }
+;
+
+modificar_vud : ID CORCHIN expresion CORCHFIN IGUAL expresion PYC { $$ = new ModificarVector1D.default($1, $3, $6, @1.first_line, @1.first_column ) }
 ;
 
 expresion : expresion MAS expresion { $$ = new Aritmeticas.default(Aritmeticas.Operadores.SUMA, @1.first_line, @1.first_column, $1, $3) }

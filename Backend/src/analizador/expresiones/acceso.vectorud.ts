@@ -29,7 +29,8 @@ export default class AccesoVector1D extends Instruccion {
             return valor.getValor()[expresion]
         }
         
-        return null;
+        // return null;
+        return new Errores("Semantico", "La variable " +this.id+" no existe ", this.linea, this.columna)
         
     }
 }
