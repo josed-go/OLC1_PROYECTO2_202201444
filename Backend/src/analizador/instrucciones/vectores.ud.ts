@@ -35,8 +35,10 @@ export default class Vector1D extends Instruccion {
 
             let arreglo: any = [];
 
+            let valor = this.getValorDefault(this.tipo1.getTipo())
+
             for(let i = 0; i < cantidad; i++) {
-                arreglo[i] = []
+                arreglo[i] = valor
             }
 
             if(!tabla.setVariable(new Simbolo(this.tipoD, this.id, arreglo))) {
@@ -71,5 +73,25 @@ export default class Vector1D extends Instruccion {
         }
     }
 
+    public getValorDefault(tipo: tipoD){
+        switch (tipo) {
+            case tipoD.INT:
+                return 0      
+
+            case tipoD.DOUBLE:
+                return 0.0
+
+            case tipoD.BOOL:
+                return true
+
+            case tipoD.CHAR:
+                return '0'
+            case tipoD.CADENA:
+                return ""
+        
+            default:
+                return new Errores("Semantico", "No se existe ese tipo de dato", this.linea, this.columna)
+        }
+    }
 
 }
