@@ -325,7 +325,7 @@ typeof : TYPEOF PARIN expresion PARFIN { $$ = new FuncionesN.default(FuncionesN.
 astring : STD DOSPUNTOS DOSPUNTOS TOSTRING PARIN expresion PARFIN { $$ = new FuncionesN.default(FuncionesN.Operadores.TOSTRING, @1.first_line, @1.first_column, $6) }
 ;
 
-f_cstr : expresion PUNTO CSTR PARIN PARFIN { $$ = $$ = new FuncionesN.default(FuncionesN.Operadores.CSTR, @1.first_line, @1.first_column, $1) }
+f_cstr : expresion PUNTO CSTR PARIN PARFIN { $$ = new FuncionesN.default(FuncionesN.Operadores.CSTR, @1.first_line, @1.first_column, $1) }
 ;
 
 // inicia_par : PARIN producciones { $$ = $2 }
