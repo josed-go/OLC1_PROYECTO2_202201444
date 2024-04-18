@@ -25,27 +25,45 @@ export default class Vector1D extends Instruccion {
         
         
         if(!Array.isArray(this.expresion)) {
-            if(this.tipo1.getTipo() != this.tipo2?.getTipo()) return new Errores("Semantico", "Los tipos son diferentes para la declaracion del vector", this.linea, this.columna)
-            let cantidad = this.expresion.interpretar(arbol, tabla)
+            if(this.new_ == true) {
+                console.log("Entre2")
 
-            if(cantidad instanceof Errores) return cantidad
-
-            if(this.expresion.tipoD.getTipo() != tipoD.INT) return new Errores("Semantico", "La variable para el tamaño del vector no es de tipo int", this.linea, this.columna)
-            cantidad = parseInt(cantidad)
-
-            let arreglo: any = [];
-
-            let valor = this.getValorDefault(this.tipo1.getTipo())
-
-            for(let i = 0; i < cantidad; i++) {
-                arreglo[i] = valor
-            }
-
-            if(!tabla.setVariable(new Simbolo(this.tipoD, this.id, arreglo))) {
-                // let error = new Errores("Semantico", "No se puede declarar variable "+id+" porque ya existe", this.linea, this.columna)
-                // lista_errores.push(error)
-                // arbol.actualizarConsola((<Errores>error).obtenerError())
-                return new Errores("Semantico", "No se puede declarar el vector, porque ya existe el ID "+this.id, this.linea, this.columna)
+                if(this.tipo1.getTipo() != this.tipo2?.getTipo()) return new Errores("Semantico", "Los tipos son diferentes para la declaracion del vector", this.linea, this.columna)
+                let cantidad = this.expresion.interpretar(arbol, tabla)
+    
+                if(cantidad instanceof Errores) return cantidad
+    
+                if(this.expresion.tipoD.getTipo() != tipoD.INT) return new Errores("Semantico", "La variable para el tamaño del vector no es de tipo int", this.linea, this.columna)
+                cantidad = parseInt(cantidad)
+    
+                let arreglo: any = [];
+    
+                let valor = this.getValorDefault(this.tipo1.getTipo())
+    
+                for(let i = 0; i < cantidad; i++) {
+                    arreglo[i] = valor
+                }
+    
+                if(!tabla.setVariable(new Simbolo(this.tipoD, this.id, arreglo))) {
+                    // let error = new Errores("Semantico", "No se puede declarar variable "+id+" porque ya existe", this.linea, this.columna)
+                    // lista_errores.push(error)
+                    // arbol.actualizarConsola((<Errores>error).obtenerError())
+                    return new Errores("Semantico", "No se puede declarar el vector, porque ya existe el ID "+this.id, this.linea, this.columna)
+                }
+            }else {
+                console.log("Entre")
+                console.log("aqui", this.tipo1.getTipo())
+                if(this.tipo1.getTipo() != tipoD.CHAR) return new Errores("Semantico", "El arreglo debe de ser de tipo char", this.linea, this.columna)
+                let valores = this.expresion.interpretar(arbol, tabla)
+    
+                if(valores instanceof Errores) return valores
+    
+                if(!tabla.setVariable(new Simbolo(this.tipoD, this.id, valores))) {
+                    // let error = new Errores("Semantico", "No se puede declarar variable "+id+" porque ya existe", this.linea, this.columna)
+                    // lista_errores.push(error)
+                    // arbol.actualizarConsola((<Errores>error).obtenerError())
+                    return new Errores("Semantico", "No se puede declarar el vector, porque ya existe el ID "+this.id, this.linea, this.columna)
+                }
             }
         }else {
             let arreglo: any = []
