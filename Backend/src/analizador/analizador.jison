@@ -28,6 +28,9 @@
     const Vector1D = require('./instrucciones/vectores.ud')
     const AccesoVector1D = require('./expresiones/acceso.vectorud')
     const ModificarVector1D = require('./instrucciones/modificar.vectorud')
+    const Vector2D = require('./instrucciones/vector.dd')
+    const AccesoVector2D = require('./expresiones/acceso.vectordd')
+    const ModificarVector2D = require('./instrucciones/modificar.vectordd')
     var texto = ''
 
 %}
@@ -196,6 +199,8 @@ sentencias : declaracion { $$ = $1 }
             | switch_s { $$ = $1 }
             | vector_ud { $$ = $1 }
             | modificar_vud { $$ = $1 }
+            | vector_dd { $$ = $1 }
+            | modificar_vdd { $$ = $1 }
 ;
 
 declaracion : tipos l_id fin_declaracion { 
@@ -320,6 +325,9 @@ typeof : TYPEOF PARIN expresion PARFIN { $$ = new FuncionesN.default(FuncionesN.
 astring : STD DOSPUNTOS DOSPUNTOS TOSTRING PARIN expresion PARFIN { $$ = new FuncionesN.default(FuncionesN.Operadores.TOSTRING, @1.first_line, @1.first_column, $6) }
 ;
 
+f_cstr : expresion PUNTO CSTR PARIN PARFIN { $$ = $$ = new FuncionesN.default(FuncionesN.Operadores.CSTR, @1.first_line, @1.first_column, $1) }
+;
+
 // inicia_par : PARIN producciones { $$ = $2 }
 // ;
 
@@ -333,6 +341,14 @@ casteo : PARIN tipos PARFIN expresion { $$ = new Casteo.default($4, $2,  @1.firs
 
 vector_ud : tipos ID CORCHIN CORCHFIN IGUAL NEW tipos CORCHIN expresion CORCHFIN PYC { $$ = new Vector1D.default(@1.first_line, @1.first_column, $1, $2, $9, $7, true) }
             | tipos ID CORCHIN CORCHFIN IGUAL lista PYC { $$ = new Vector1D.default(@1.first_line, @1.first_column, $1, $2, $6, null, false) }
+            | tipos ID CORCHIN CORCHFIN IGUAL f_cstr PYC { $$ = new Vector1D.default(@1.first_line, @1.first_column, $1, $2, $6, null, false) }
+;
+
+vector_dd : tipos ID CORCHIN CORCHFIN CORCHIN CORCHFIN IGUAL NEW tipos CORCHIN expresion CORCHFIN CORCHIN expresion CORCHFIN PYC { $$ = new Vector2D.default(@1.first_line, @1.first_column, $1, $2,$11,$14, $9, true) }
+;
+
+lista_valores : lista_valores COMA lista { $1.push($3); $$ = $1 }
+                | lista { $$ = [$1] }
 ;
 
 lista : CORCHIN lista_expresion CORCHFIN { $$ = $2 }
@@ -346,6 +362,12 @@ acceso_vud : ID CORCHIN expresion CORCHFIN { $$ = new AccesoVector1D.default($1,
 ;
 
 modificar_vud : ID CORCHIN expresion CORCHFIN IGUAL expresion PYC { $$ = new ModificarVector1D.default($1, $3, $6, @1.first_line, @1.first_column ) }
+;
+
+acceso_vdd : ID CORCHIN expresion CORCHFIN CORCHIN expresion CORCHFIN{ $$ = new AccesoVector2D.default($1, $3, $6, @1.first_line, @1.first_column) }
+;
+
+modificar_vdd : ID CORCHIN expresion CORCHFIN CORCHIN expresion CORCHFIN IGUAL expresion PYC { $$ = new ModificarVector2D.default($1, $3, $6, $9, @1.first_line, @1.first_column ) }
 ;
 
 expresion : expresion MAS expresion { $$ = new Aritmeticas.default(Aritmeticas.Operadores.SUMA, @1.first_line, @1.first_column, $1, $3) }
@@ -380,6 +402,7 @@ expresion : expresion MAS expresion { $$ = new Aritmeticas.default(Aritmeticas.O
         | if_t_s { $$ = $1 }
         | casteo { $$ = $1 }
         | acceso_vud { $$ = $1 }
+        | acceso_vdd { $$ = $1 }
         // | inicia_par { $$ = $1 }
 ;
 

@@ -29,7 +29,7 @@ export default class ModificarVector1D extends Instruccion {
             
             let arreglo = valor.getValor()
 
-            if(parseInt(ele) > arreglo.length) return new Errores("Semantico", "La posición esta fuera del rango del vector", this.linea, this.columna)
+            if(parseInt(ele) > arreglo.length-1) return new Errores("Semantico", "La posición esta fuera del rango del vector", this.linea, this.columna)
 
             let expresion2 = this.exp2.interpretar(arbol, tabla)
 
