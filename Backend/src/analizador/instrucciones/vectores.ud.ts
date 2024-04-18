@@ -51,8 +51,6 @@ export default class Vector1D extends Instruccion {
                     return new Errores("Semantico", "No se puede declarar el vector, porque ya existe el ID "+this.id, this.linea, this.columna)
                 }
             }else {
-                console.log("Entre")
-                console.log("aqui", this.tipo1.getTipo())
                 if(this.tipo1.getTipo() != tipoD.CHAR) return new Errores("Semantico", "El arreglo debe de ser de tipo char", this.linea, this.columna)
                 let valores = this.expresion.interpretar(arbol, tabla)
     

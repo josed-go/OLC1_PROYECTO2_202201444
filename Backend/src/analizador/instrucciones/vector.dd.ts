@@ -12,8 +12,10 @@ export default class Vector2D extends Instruccion {
     private new_?: boolean
     private expresion : Instruccion[] | Instruccion
     private expresion2 : Instruccion[] | Instruccion
+    // private lista: Array<Array<Instruccion>>
+    private lista: Instruccion[][]
 
-    constructor(linea: number, columna: number, tipo1: Tipo, id: string, expresion: Instruccion[] | Instruccion, expresion2: Instruccion[] | Instruccion, tipo2?: Tipo, new_?: boolean) {
+    constructor(linea: number, columna: number, tipo1: Tipo, id: string, expresion: Instruccion[] | Instruccion, expresion2: Instruccion[] | Instruccion, lista: Instruccion[][], tipo2?: Tipo, new_?: boolean) {
         super(tipo1, linea, columna)
         this.tipo1 = tipo1
         this.tipo2 = tipo2
@@ -21,6 +23,7 @@ export default class Vector2D extends Instruccion {
         this.id = id
         this.expresion = expresion
         this.expresion2 = expresion2
+        this.lista = lista
     }
 
     interpretar(arbol: Arbol, tabla: TablaSimbolos) {
@@ -58,6 +61,35 @@ export default class Vector2D extends Instruccion {
             if(!tabla.setVariable(new Simbolo(this.tipoD, this.id, arreglo))) {
                 return new Errores("Semantico", "No se puede declarar el vector, porque ya existe el ID "+this.id, this.linea, this.columna)
             }
+        }else if(this.lista.length > 0) {
+            let arreglo = new Array(this.lista.length)
+
+            for (let i = 0; i < this.lista.length; i++) {
+
+                if(Array.isArray(this.lista[i])) {
+
+                    arreglo[i] = new Array(this.lista[i].length)
+                    
+                    for (let j = 0; j < this.lista[i].length; j++) {
+                        
+                        let valor = this.lista[i][j].interpretar(arbol, tabla)
+                        if(valor instanceof Errores) return valor
+                        if(this.tipo1.getTipo() != this.lista[i][j].tipoD.getTipo()) {
+                            return new Errores("Semantico", "Tipo de dato distinto al del vector", this.linea, this.columna)
+                        }
+                        
+                        arreglo[i][j] = valor
+                    }
+                }else {
+                    return new Errores("Semantico", "Debe de ser un vector", this.linea, this.columna)
+                }
+                
+            }
+
+            if(!tabla.setVariable(new Simbolo(this.tipoD, this.id, arreglo))) {
+                return new Errores("Semantico", "No se puede declarar el vector, porque ya existe el ID "+this.id, this.linea, this.columna)
+            }
+
         }
     }
 

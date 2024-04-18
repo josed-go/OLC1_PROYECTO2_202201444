@@ -344,7 +344,8 @@ vector_ud : tipos ID CORCHIN CORCHFIN IGUAL NEW tipos CORCHIN expresion CORCHFIN
             | tipos ID CORCHIN CORCHFIN IGUAL f_cstr PYC { $$ = new Vector1D.default(@1.first_line, @1.first_column, $1, $2, $6, null, false) }
 ;
 
-vector_dd : tipos ID CORCHIN CORCHFIN CORCHIN CORCHFIN IGUAL NEW tipos CORCHIN expresion CORCHFIN CORCHIN expresion CORCHFIN PYC { $$ = new Vector2D.default(@1.first_line, @1.first_column, $1, $2,$11,$14, $9, true) }
+vector_dd : tipos ID CORCHIN CORCHFIN CORCHIN CORCHFIN IGUAL NEW tipos CORCHIN expresion CORCHFIN CORCHIN expresion CORCHFIN PYC { $$ = new Vector2D.default(@1.first_line, @1.first_column, $1, $2,$11,$14, [],$9, true) }
+            | tipos ID CORCHIN CORCHFIN CORCHIN CORCHFIN IGUAL CORCHIN lista_valores CORCHFIN PYC { $$ = new Vector2D.default(@1.first_line, @1.first_column, $1, $2,[],[],$9, null, true) }
 ;
 
 lista_valores : lista_valores COMA lista { $1.push($3); $$ = $1 }

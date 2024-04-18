@@ -37,11 +37,8 @@ export default class ModificarVector2D extends Instruccion {
             let arreglo = valor.getValor()
             let arreglo2 = arreglo[0]
 
-            if(parseInt(posicion1) > arreglo.length-1) return new Errores("Semantico", "La posición 1 esta fuera del rango del vector", this.linea, this.columna)
-                console.log("aqui1", arreglo[0].length)
-                console.log(posicion2)
-                console.log(parseInt(posicion2) > arreglo2.length-1)
-            if(parseInt(posicion2) > arreglo2.length-1) return new Errores("Semantico", "La posición 2 esta fuera del rango del vector", this.linea, this.columna)
+            if(parseInt(posicion1) < 0 || parseInt(posicion1) > arreglo.length-1) return new Errores("Semantico", "La posición 1 esta fuera del rango del vector", this.linea, this.columna)
+            if(parseInt(posicion2) < 0 || parseInt(posicion2) > arreglo2.length-1) return new Errores("Semantico", "La posición 2 esta fuera del rango del vector", this.linea, this.columna)
 
             let expresion = this.exp.interpretar(arbol, tabla)
 

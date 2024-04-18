@@ -28,7 +28,7 @@ export default class AccesoVector1D extends Instruccion {
             this.tipoD = valor.getTipo()
             let arreglo = valor.getValor()
 
-            if(parseInt(expresion) > arreglo.length - 1) return new Errores("Semantico", "La posición esta fuera del rango del vector", this.linea, this.columna)
+            if(parseInt(expresion) < 0 || parseInt(expresion) > arreglo.length - 1) return new Errores("Semantico", "La posición esta fuera del rango del vector", this.linea, this.columna)
 
             return valor.getValor()[expresion]
         }
