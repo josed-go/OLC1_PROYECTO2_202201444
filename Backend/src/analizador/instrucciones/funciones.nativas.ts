@@ -41,6 +41,9 @@ export default class FuncionesN extends Instruccion {
 
             case Operadores.TOSTRING:
                 return this.string(unico)
+
+            case Operadores.CSTR:
+                return this.cstr(unico)
             default:
                 break;
         }
@@ -66,8 +69,11 @@ export default class FuncionesN extends Instruccion {
             case tipoD.CADENA:
                 this.tipoD = new Tipo(tipoD.INT)
                 return valor.length
+            case tipoD.INT:
+                this.tipoD = new Tipo(tipoD.INT)
+                return valor.length
             default:
-                return new Errores('Semantico', 'No se puede hacer redondear ese tipo de dato', this.linea, this.columna )
+                return new Errores('Semantico', 'No se puede realizar el length ese tipo de dato', this.linea, this.columna )
         }
     }
 
@@ -116,6 +122,18 @@ export default class FuncionesN extends Instruccion {
                 return new Errores('Semantico', 'No se puede retornar ese tipo de dato', this.linea, this.columna )
         }
     }
+
+    cstr(valor: any) {
+        let tipo = this.valor1?.tipoD.getTipo()
+        switch (tipo) {
+            case tipoD.CADENA:
+                this.tipoD = new Tipo(tipoD.CHAR)
+
+                return valor.split('')
+            default:
+                return new Errores('Semantico', 'No se puede usar la funcion c_str con ese tipo de dato', this.linea, this.columna )
+        }
+    }
 }
 
 export enum Operadores {
@@ -124,5 +142,6 @@ export enum Operadores {
     ROUND,
     LENGTH,
     TYPEOF,
-    TOSTRING
+    TOSTRING,
+    CSTR
 }
