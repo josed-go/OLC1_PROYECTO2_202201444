@@ -34,6 +34,9 @@ export default class FuncionesN extends Instruccion {
                 return this.round(unico)
             
             case Operadores.LENGTH:
+                if(Array.isArray(unico)) {
+                    return this.longitud2(unico)
+                }
                 return this.longitud(unico)
             
             case Operadores.TYPEOF:
@@ -69,7 +72,29 @@ export default class FuncionesN extends Instruccion {
             case tipoD.CADENA:
                 this.tipoD = new Tipo(tipoD.INT)
                 return valor.length
+            default:
+                return new Errores('Semantico', 'No se puede realizar el length ese tipo de dato', this.linea, this.columna )
+        }
+    }
+
+    longitud2(valor:any) {
+        let tipo = this.valor1?.tipoD.getTipo()
+        switch (tipo) {
+            case tipoD.CADENA:
+                this.tipoD = new Tipo(tipoD.INT)
+                return valor.length
             case tipoD.INT:
+                this.tipoD = new Tipo(tipoD.INT)
+                return valor.length
+
+            case tipoD.CHAR:
+                this.tipoD = new Tipo(tipoD.INT)
+                return valor.length
+
+            case tipoD.DOUBLE:
+                this.tipoD = new Tipo(tipoD.INT)
+                return valor.length
+            case tipoD.BOOL:
                 this.tipoD = new Tipo(tipoD.INT)
                 return valor.length
             default:
