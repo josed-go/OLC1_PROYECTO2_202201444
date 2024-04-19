@@ -38,7 +38,6 @@ export default class Llamada extends Instruccion {
             if(metodo.parametros.length > this.params.length) new Errores("Semantico", "Se recibieron menos parametros de los que se esperaban", this.linea, this.columna)
                 
             for (let i = 0; i < metodo.parametros.length; i++) {
-                console.log("Poorbar ", metodo.parametros[i].id[0])
                 let decla = new Declaracion(metodo.parametros[i].tipo, this.linea, this.columna, metodo.parametros[i].id, this.params[i])
                 
                 let resultado = decla.interpretar(arbol, tablaN)
@@ -71,10 +70,6 @@ export default class Llamada extends Instruccion {
             for (let i = 0; i < funcion.parametros.length; i++) {
                 let varN = this.params[i].interpretar(arbol, tabla)
                 if(varN instanceof Errores) return varN
-                if(varN instanceof AccesoVar) {
-                    console.log("Es un acceso var")
-                }
-                console.log("Llegue aqui en la iteracion:", i)
                 let decla = new Declaracion(funcion.parametros[i].tipo, this.linea, this.columna, funcion.parametros[i].id, this.params[i])
 
                 let resultado = decla.interpretar(arbol, tablaN)
@@ -87,7 +82,6 @@ export default class Llamada extends Instruccion {
                     if(variable.getTipo().getTipo() != this.params[i].tipoD.getTipo()) {
                         return new Errores("Semantico", "Parametro "+i+" es de diferente tipo al que se esperaba", this.linea, this.columna) 
                     }else{
-                        console.log("Entre aquiiiiiiiiiiiiiiiiii", varN)
                         variable.setValor(varN)
                     }
                 }else {
@@ -95,9 +89,7 @@ export default class Llamada extends Instruccion {
                 }
                 
             }
-            console.log("OLLaPRITO", funcion.tipoD)
             // this.tipoD.setTipo(funcion.tipoD.getTipo())
-            console.log("LOLOPRITO", this.tipoD)
             let resultadoF: any = funcion.interpretar(arbol, tablaN)
             if(resultadoF instanceof Errores) return resultadoF
             return resultadoF

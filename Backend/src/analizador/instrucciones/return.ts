@@ -16,7 +16,9 @@ export default class Return extends Instruccion {
 
     interpretar(arbol: Arbol, tabla: TablaSimbolos) {
         if(this.exp) {
-            this.valor = this.exp.interpretar(arbol, tabla)
+            let val = this.exp.interpretar(arbol, tabla)
+            this.valor = val
+            if(val instanceof Errores) return val
             this.tipoD.setTipo(this.exp.tipoD.getTipo())
         }
         return this

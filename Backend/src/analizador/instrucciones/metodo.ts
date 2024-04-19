@@ -34,6 +34,12 @@ export default class Metodo extends Instruccion {
                     lista_errores.push(i)
                     arbol.actualizarConsola((<Errores>i).obtenerError())
                 }
+
+                // if(i instanceof Return) {
+                //     if(i.valor != undefined){
+                //         return i.valor
+                //     }
+                // }
         
                 // if(i instanceof Continue) return new Errores("Semantico", "Continue no esta en un ciclo", this.linea, this.columna)
                 // if(i instanceof Break) return
@@ -48,20 +54,19 @@ export default class Metodo extends Instruccion {
                 // if(resultado instanceof Break) return
                 // if(resultado instanceof Continue) return new Errores("Semantico", "Continue no esta en un ciclo", this.linea, this.columna)
                 
-                if(i instanceof Return) {
+                // if(i instanceof Return) {
                     if(resultado instanceof Return) {
                         if(resultado.valor != null) {
-                            let error = new Errores("Semantico", "No se puede devolver un valor en un metodo", this.linea, this.columna)
-                            lista_errores.push(error)
-                            arbol.actualizarConsola((<Errores>error).obtenerError())
+                            // let error = new Errores("Semantico", "No se puede devolver un valor en un metodo", this.linea, this.columna)
+                            // lista_errores.push(error)
+                            // arbol.actualizarConsola((<Errores>error).obtenerError())
                             return new Errores("Semantico", "No se puede devolver un valor en un metodo", this.linea, this.columna)
-                        }else {
-                            break
                         }
+                        break
         
-                    }else {
-                        return new Errores("Semantico", "No se puede devolver un valor en un metodo", this.linea, this.columna)
-                    }
+                    }//else {
+                        //return new Errores("Semantico", "No se puede devolver un valor en un metodo", this.linea, this.columna)
+                    //}
                     // if(i.valor != null) {
                     //     let error = new Errores("Semantico", "No se puede devolver un valor en un metodo", this.linea, this.columna)
                     //     lista_errores.push(error)
@@ -69,7 +74,7 @@ export default class Metodo extends Instruccion {
                     // }else {
                     //     break
                     // }
-                }
+                //}
         
                 
             }

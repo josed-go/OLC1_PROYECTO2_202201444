@@ -75,8 +75,6 @@ export default class Funcion extends Instruccion {
             
             if(varN instanceof Return) {
                 if(varN.valor != null){
-                    console.log("Primer tipo: ", this.tipoD.getTipo())
-                    console.log("Segundo tipo(VarN): ", varN.tipoD.getTipo())
                     if(this.tipoD.getTipo() != varN.tipoD.getTipo()) return new Errores("Semantico", "El tipo de la funcion y del valor de retorno son diferentes", this.linea, this.columna)
                     return varN.valor
                 }

@@ -37,10 +37,7 @@ export default class If extends Instruccion {
             for(let i of this.instrucciones) {
                 // if(i instanceof Break) return i;
                 // if(i instanceof Continue) return i;
-                // if(i instanceof Return) {
-                //     console.log("estooooooooooooooooooy2")
-                //     return i;
-                // }
+                // if(i instanceof Return) return i
                 let resultado = i.interpretar(arbol, tablaN)
                 if( resultado instanceof Errores) {
                     lista_errores.push(resultado)
