@@ -36,7 +36,7 @@ export default class Creacion extends Instruccion {
                     break;
 
                 case tipoD.CHAR:
-                    valor = '0'
+                    valor = '\u0000'
                     break;
 
                 case tipoD.CADENA:

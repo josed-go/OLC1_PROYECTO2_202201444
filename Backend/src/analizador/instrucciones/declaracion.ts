@@ -34,9 +34,9 @@ export default class Declaracion extends Instruccion {
             })
         }else{
             
-            if(this.valor.tipoD.getTipo() != this.tipoD.getTipo()) {
-                return new Errores("Semantico", "No se pueden declarar variables de diferentes tipos", this.linea, this.columna)
-            }
+            // if(this.valor.tipoD.getTipo() != this.tipoD.getTipo()) {
+            //     return new Errores("Semantico", "No se pueden declarar variables de diferentes tipos", this.linea, this.columna)
+            // }
             
             this.id.forEach(id => {
                 if(!tabla.setVariable(new Simbolo(this.tipoD, id, valorf))) {

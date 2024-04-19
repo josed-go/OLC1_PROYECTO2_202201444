@@ -15,7 +15,7 @@ export default class AccesoVar extends Instruccion {
 
     interpretar(arbol: Arbol, tabla: TablaSimbolos) {
         let valorV: Simbolo = <Simbolo> tabla.getVariable(this.id)
-        if(valorV == null) return new Errores("Semantico", "Acceso invalido", this.linea, this.columna)
+        if(valorV == null) return new Errores("Semantico", "Acceso invalido para ID: "+this.id, this.linea, this.columna)
         this.tipoD = valorV.getTipo()
         return valorV.getValor()
     }
