@@ -31,6 +31,12 @@
     const Vector2D = require('./instrucciones/vector.dd')
     const AccesoVector2D = require('./expresiones/acceso.vectordd')
     const ModificarVector2D = require('./instrucciones/modificar.vectordd')
+
+    const Metodo = require('./instrucciones/metodo')
+    const Funcion = require('./instrucciones/funcion')
+    const Execute = require('./instrucciones/execute')
+    const Llamada = require('./instrucciones/llamada')
+    const Return = require('./instrucciones/return')
     var texto = ''
 
 %}
@@ -64,7 +70,7 @@
 "break" return "BREAK";
 "continue" return "CONTINUE";
 "return" return "RETURN";
-"void" return "VOID";
+// "void" return "VOID";
 "cout" return "COUT";
 "endl" return "ENDL";
 "tolower" return "TOLOWER";
@@ -82,6 +88,7 @@
 "int" return "r_INT";
 "bool" return "r_BOOL";
 "char" return "r_CHAR";
+"void" return "r_VOID"
 
 
 /* OTROS */
@@ -201,6 +208,11 @@ sentencias : declaracion { $$ = $1 }
             | modificar_vud { $$ = $1 }
             | vector_dd { $$ = $1 }
             | modificar_vdd { $$ = $1 }
+            | funcion { $$ = $1 }
+            | metodo_fun { $$ = $1 }
+            | execute_s { $$ = $1 }
+            | llamada_s PYC { $$ = $1 }
+            | return_s { $$ = $1 }
 ;
 
 declaracion : tipos l_id fin_declaracion { 
@@ -371,6 +383,44 @@ acceso_vdd : ID CORCHIN expresion CORCHFIN CORCHIN expresion CORCHFIN{ $$ = new 
 modificar_vdd : ID CORCHIN expresion CORCHFIN CORCHIN expresion CORCHFIN IGUAL expresion PYC { $$ = new ModificarVector2D.default($1, $3, $6, $9, @1.first_line, @1.first_column ) }
 ;
 
+// metodo_fun : tipos ID PARIN params LLAVEIN instrucciones LLAVEFIN { $$ = new MetodoFuncion.default($2, $1, $6, @1.first_line, @1.first_column, $4) }    
+// ;
+metodo_fun : r_VOID ID PARIN params LLAVEIN instrucciones LLAVEFIN { $$ = new Metodo.default($2, new Tipo.default(Tipo.tipoD.VOID), $6, @1.first_line, @1.first_column, $4) }    
+;
+
+funcion : tipos ID PARIN params LLAVEIN instrucciones LLAVEFIN { $$ = new Funcion.default($2, $1, $6, @1.first_line, @1.first_column, $4) }
+;
+
+params : lista_params PARFIN { $$ = $1 }
+        | PARFIN { $$ = [] }
+;
+
+lista_params : lista_params COMA tipos ID { $1.push({tipo:$3, id:[$4]}); $$ = $1 }
+                | tipos ID { $$ = [{tipo: $1, id: [$2]}] }
+;
+
+execute_s : EXECUTE ID PARIN params_call PYC { $$ = new Execute.default($2, @1.first_line, @1.first_column, $4) }
+;
+
+llamada_s : ID PARIN params_call { $$ = new Llamada.default($1, @1.first_line, @1.first_column, $3) }
+;
+
+params_call : lista_paramsC PARFIN { $$ = $1 }
+                | PARFIN { $$ = [] }
+;
+
+lista_paramsC : lista_paramsC COMA expresion { $1.push($3); $$ = $1 }
+                | expresion { $$ = [$1] }
+;
+
+return_s : RETURN PYC { $$ = new Return.default(@1.first_line, @1.first_column) }
+        | RETURN expresion PYC { $$ = new Return.default(@1.first_line, @1.first_column, $2) }
+;
+
+// fin_return : expresion PYC { $$ = $1 }
+//             | PYC { $$ = undefined }
+// ;
+
 expresion : expresion MAS expresion { $$ = new Aritmeticas.default(Aritmeticas.Operadores.SUMA, @1.first_line, @1.first_column, $1, $3) }
         | expresion MENOS expresion { $$ = new Aritmeticas.default(Aritmeticas.Operadores.RESTA, @1.first_line, @1.first_column, $1, $3) }
         | expresion MUL expresion { $$ = new Aritmeticas.default(Aritmeticas.Operadores.MUL, @1.first_line, @1.first_column, $1, $3) }
@@ -404,6 +454,7 @@ expresion : expresion MAS expresion { $$ = new Aritmeticas.default(Aritmeticas.O
         | casteo { $$ = $1 }
         | acceso_vud { $$ = $1 }
         | acceso_vdd { $$ = $1 }
+        | llamada_s { $$ = $1 }
         // | inicia_par { $$ = $1 }
 ;
 
@@ -412,6 +463,7 @@ tipos : STD DOSPUNTOS DOSPUNTOS r_STRING { $$ = new Tipo.default(Tipo.tipoD.CADE
         | r_DOUBLE { $$ = new Tipo.default(Tipo.tipoD.DOUBLE) } 
         | r_BOOL { $$ = new Tipo.default(Tipo.tipoD.BOOL) } 
         | r_CHAR { $$ = new Tipo.default(Tipo.tipoD.CHAR) } 
+        // | r_VOID { $$ = new Tipo.default(Tipo.tipoD.VOID) } 
 ;
 
 // tipos_relacionales : MENOR { $$ = Relacionales.Relacional.MENOR  }

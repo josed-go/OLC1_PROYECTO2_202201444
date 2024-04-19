@@ -7,6 +7,7 @@ import TablaSimbolos from "../simbolo/tabla.simbolos";
 import Tipo, { tipoD } from "../simbolo/tipo";
 import Break from "./break";
 import Continue from "./continue";
+import Return from "./return";
 import Case from "./switch.case";
 import Default from "./switch.default";
 
@@ -43,6 +44,7 @@ export default class Switch extends Instruccion {
                     }
 
                     if(resultado instanceof Break) return
+                    if(resultado instanceof Return) return resultado
                     
                     if(resultado instanceof Continue) return new Errores("Semantico", "Continue no esta en un ciclo", this.linea, this.columna)
                             // console.log(resultado.getCondicion(), "|", condi)

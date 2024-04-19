@@ -7,6 +7,7 @@ import TablaSimbolos from "../simbolo/tabla.simbolos";
 import Tipo, { tipoD } from "../simbolo/tipo";
 import Break from "./break";
 import Continue from "./continue";
+import Return from "./return";
 
 export default class Case extends Instruccion {
     private condicion: Instruccion
@@ -35,6 +36,7 @@ export default class Case extends Instruccion {
     
                 if(i instanceof Break) return i 
                 if(i instanceof Continue) return i 
+                if(i instanceof Return) return i 
     
                 let resultado = i.interpretar(arbol, tablaN)
                 // if( resultado instanceof Errores) return resultado
@@ -45,6 +47,7 @@ export default class Case extends Instruccion {
     
                 if(resultado instanceof Break) return resultado
                 if(resultado instanceof Continue) return resultado
+                if(resultado instanceof Return) return resultado
                 // AGREGAR ERRORES
             }
         }

@@ -7,6 +7,7 @@ import TablaSimbolos from "../simbolo/tabla.simbolos";
 import Tipo, { tipoD } from "../simbolo/tipo";
 import Break from "./break";
 import Continue from "./continue";
+import Return from "./return";
 
 export default class If extends Instruccion {
     private condicion: Instruccion
@@ -34,14 +35,21 @@ export default class If extends Instruccion {
             tablaN.setNombre("Sentencia if")
 
             for(let i of this.instrucciones) {
-                if(i instanceof Break) return i;
-                if(i instanceof Continue) return i;
+                // if(i instanceof Break) return i;
+                // if(i instanceof Continue) return i;
+                // if(i instanceof Return) {
+                //     console.log("estooooooooooooooooooy2")
+                //     return i;
+                // }
                 let resultado = i.interpretar(arbol, tablaN)
                 if( resultado instanceof Errores) {
                     lista_errores.push(resultado)
                     arbol.actualizarConsola((<Errores>resultado).obtenerError())
                 }
-                // if(resultado instanceof Continue) return resultado
+                if(resultado instanceof Break) return resultado;
+                if(resultado instanceof Continue) return resultado;
+                if(resultado instanceof Return) return resultado;
+
             }
         }else {
             if(this.instrucciones_else != undefined) {
@@ -49,14 +57,18 @@ export default class If extends Instruccion {
                 tablaN.setNombre("Sentencia else")
                 
                 for(let i of this.instrucciones_else) {
-                    if(i instanceof Break) return i;
-                    if(i instanceof Continue) return i;
+                    // if(i instanceof Break) return i;
+                    // if(i instanceof Continue) return i;
+                    // if(i instanceof Return) return i;
                     let resultado = i.interpretar(arbol, tablaN)
                     // if( resultado instanceof Errores) return resultado
                     if( resultado instanceof Errores) {
                         lista_errores.push(resultado)
                         arbol.actualizarConsola((<Errores>resultado).obtenerError())
                     }
+                    if(resultado instanceof Break) return resultado;
+                    if(resultado instanceof Continue) return resultado;
+                    if(resultado instanceof Return) return resultado;
                     // if(resultado instanceof Continue) return resultado
                 }
             }else if(this.condicion_else != undefined) {
@@ -64,7 +76,8 @@ export default class If extends Instruccion {
                 if( a instanceof Errores) return a
                 if(a instanceof Break) return a;
                 if(a instanceof Continue) return a;
-        }
+                if(a instanceof Return) return a;
+            }
         }
     }
 }

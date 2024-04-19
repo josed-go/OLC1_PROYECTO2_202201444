@@ -7,6 +7,7 @@ import TablaSimbolos from "../simbolo/tabla.simbolos";
 import Tipo, { tipoD } from "../simbolo/tipo";
 import Break from "./break";
 import Continue from "./continue";
+import Return from "./return";
 
 export default class For extends Instruccion {
     private condicion: Instruccion
@@ -43,6 +44,8 @@ export default class For extends Instruccion {
 
                 if(i instanceof Break) return
 
+                if(i instanceof Return) return i
+
                 let resultado = i.interpretar(arbol, tablaN)
 
                 // if( resultado instanceof Errores) return resultado
@@ -54,6 +57,7 @@ export default class For extends Instruccion {
                 if(resultado instanceof Break) return
 
                 if(resultado instanceof Continue) break
+                if(resultado instanceof Return) return resultado
                 // AGREGAR ERRORES
             }
             let act = this.actualizacion.interpretar(arbol, tablaN)
