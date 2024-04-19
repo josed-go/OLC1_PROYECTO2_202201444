@@ -351,9 +351,9 @@ f_cstr : expresion PUNTO CSTR PARIN PARFIN { $$ = new FuncionesN.default(Funcion
 casteo : PARIN tipos PARFIN expresion { $$ = new Casteo.default($4, $2,  @1.first_line, @1.first_column) }
 ;
 
-vector_ud : tipos ID CORCHIN CORCHFIN IGUAL NEW tipos CORCHIN expresion CORCHFIN PYC { $$ = new Vector1D.default(@1.first_line, @1.first_column, $1, $2, $9, $7, true) }
-            | tipos ID CORCHIN CORCHFIN IGUAL lista PYC { $$ = new Vector1D.default(@1.first_line, @1.first_column, $1, $2, $6, null, false) }
-            | tipos ID CORCHIN CORCHFIN IGUAL f_cstr PYC { $$ = new Vector1D.default(@1.first_line, @1.first_column, $1, $2, $6, null, false) }
+vector_ud : tipos ID CORCHIN CORCHFIN IGUAL NEW tipos CORCHIN expresion CORCHFIN PYC { $$ = new Vector1D.default(@1.first_line, @1.first_column, $1, $2, $9, false, $7, true) }
+            | tipos ID CORCHIN CORCHFIN IGUAL lista PYC { $$ = new Vector1D.default(@1.first_line, @1.first_column, $1, $2, $6, false, null, false) }
+            | tipos ID CORCHIN CORCHFIN IGUAL f_cstr PYC { $$ = new Vector1D.default(@1.first_line, @1.first_column, $1, $2, $6, true, null, false) }
 ;
 
 vector_dd : tipos ID CORCHIN CORCHFIN CORCHIN CORCHFIN IGUAL NEW tipos CORCHIN expresion CORCHFIN CORCHIN expresion CORCHFIN PYC { $$ = new Vector2D.default(@1.first_line, @1.first_column, $1, $2,$11,$14, [],$9, true) }
@@ -395,8 +395,13 @@ params : lista_params PARFIN { $$ = $1 }
         | PARFIN { $$ = [] }
 ;
 
-lista_params : lista_params COMA tipos ID { $1.push({tipo:$3, id:[$4]}); $$ = $1 }
-                | tipos ID { $$ = [{tipo: $1, id: [$2]}] }
+lista_params : lista_params COMA parametros { $1.push($3); $$ = $1 }
+                | parametros { $$ = [$1] }
+;
+
+parametros : tipos ID { $$ = {tipo: $1, id: [$2], accion: 1} }
+            | tipos ID CORCHIN CORCHFIN { $$ = {tipo: $1, id: [$2], accion: 2} }
+            // | tipos ID CORCHIN CORCHFIN CORCHIN CORCHFIN { $$ = {tipo: $1, id: [$2], vdd: true} }
 ;
 
 execute_s : EXECUTE ID PARIN params_call PYC { $$ = new Execute.default($2, @1.first_line, @1.first_column, $4) }

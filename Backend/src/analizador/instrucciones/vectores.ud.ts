@@ -11,14 +11,16 @@ export default class Vector1D extends Instruccion {
     private id: string
     private new_?: boolean
     private expresion : Instruccion[] | Instruccion
+    private isChar: boolean
 
-    constructor(linea: number, columna: number, tipo1: Tipo, id: string, expresion: Instruccion[] | Instruccion, tipo2?: Tipo, new_?: boolean) {
+    constructor(linea: number, columna: number, tipo1: Tipo, id: string, expresion: Instruccion[] | Instruccion, isc: boolean, tipo2?: Tipo, new_?: boolean) {
         super(tipo1, linea, columna)
         this.tipo1 = tipo1
         this.tipo2 = tipo2
         this.new_ = new_
         this.id = id
         this.expresion = expresion
+        this.isChar = isc
     }
 
     interpretar(arbol: Arbol, tabla: TablaSimbolos) {
@@ -26,8 +28,6 @@ export default class Vector1D extends Instruccion {
         
         if(!Array.isArray(this.expresion)) {
             if(this.new_ == true) {
-                console.log("Entre2")
-
                 if(this.tipo1.getTipo() != this.tipo2?.getTipo()) return new Errores("Semantico", "Los tipos son diferentes para la declaracion del vector", this.linea, this.columna)
                 let cantidad = this.expresion.interpretar(arbol, tabla)
     
@@ -51,16 +51,31 @@ export default class Vector1D extends Instruccion {
                     return new Errores("Semantico", "No se puede declarar el vector, porque ya existe el ID "+this.id, this.linea, this.columna)
                 }
             }else {
-                if(this.tipo1.getTipo() != tipoD.CHAR) return new Errores("Semantico", "El arreglo debe de ser de tipo char", this.linea, this.columna)
-                let valores = this.expresion.interpretar(arbol, tabla)
-    
-                if(valores instanceof Errores) return valores
-    
-                if(!tabla.setVariable(new Simbolo(this.tipoD, this.id, valores))) {
-                    // let error = new Errores("Semantico", "No se puede declarar variable "+id+" porque ya existe", this.linea, this.columna)
-                    // lista_errores.push(error)
-                    // arbol.actualizarConsola((<Errores>error).obtenerError())
-                    return new Errores("Semantico", "No se puede declarar el vector, porque ya existe el ID "+this.id, this.linea, this.columna)
+                if(this.isChar){
+
+                    if(this.tipo1.getTipo() != tipoD.CHAR) return new Errores("Semantico", "El arreglo debe de ser de tipo char", this.linea, this.columna)
+                    let valores = this.expresion.interpretar(arbol, tabla)
+        
+                    if(valores instanceof Errores) return valores
+        
+                    if(!tabla.setVariable(new Simbolo(this.tipoD, this.id, valores))) {
+                        // let error = new Errores("Semantico", "No se puede declarar variable "+id+" porque ya existe", this.linea, this.columna)
+                        // lista_errores.push(error)
+                        // arbol.actualizarConsola((<Errores>error).obtenerError())
+                        return new Errores("Semantico", "No se puede declarar el vector, porque ya existe el ID "+this.id, this.linea, this.columna)
+                    }
+                }else {
+                    // if(this.tipo1.getTipo() != tipoD.CHAR) return new Errores("Semantico", "El arreglo debe de ser de tipo char", this.linea, this.columna)
+                    let valores = this.expresion.interpretar(arbol, tabla)
+        
+                    if(valores instanceof Errores) return valores
+        
+                    if(!tabla.setVariable(new Simbolo(this.tipoD, this.id, valores))) {
+                        // let error = new Errores("Semantico", "No se puede declarar variable "+id+" porque ya existe", this.linea, this.columna)
+                        // lista_errores.push(error)
+                        // arbol.actualizarConsola((<Errores>error).obtenerError())
+                        return new Errores("Semantico", "No se puede declarar el vector, porque ya existe el ID "+this.id, this.linea, this.columna)
+                    }
                 }
             }
         }else {

@@ -10,6 +10,8 @@ import Declaracion from "./declaracion";
 import Funcion from "./funcion";
 // import MetodoFunciones from "./metodo.funciones";
 import Metodo from "./metodo";
+import Vector2D from "./vector.dd";
+import Vector1D from "./vectores.ud";
 
 export default class Llamada extends Instruccion {
     private id: string
@@ -38,7 +40,14 @@ export default class Llamada extends Instruccion {
             if(metodo.parametros.length > this.params.length) new Errores("Semantico", "Se recibieron menos parametros de los que se esperaban", this.linea, this.columna)
                 
             for (let i = 0; i < metodo.parametros.length; i++) {
-                let decla = new Declaracion(metodo.parametros[i].tipo, this.linea, this.columna, metodo.parametros[i].id, this.params[i])
+                let decla
+                if(metodo.parametros[i].accion == 2) {
+                    decla = new Vector1D(this.linea, this.columna, metodo.parametros[i].tipo, metodo.parametros[i].id[0], this.params[i], false, undefined, false)
+                // }else if (metodo.parametros[i].vdd && Array.isArray(this.params[i])){
+                //     decla = new Vector2D(metodo.linea, metodo.columna, metodo.parametros[i].tipoD, metodo.parametros[i].id[0], [], [], this.params[i] ,null, false )
+                }else{
+                    decla = new Declaracion(metodo.parametros[i].tipo, this.linea, this.columna, metodo.parametros[i].id, this.params[i])
+                }
                 
                 let resultado = decla.interpretar(arbol, tablaN)
                 if(resultado instanceof Errores) return resultado
@@ -70,7 +79,16 @@ export default class Llamada extends Instruccion {
             for (let i = 0; i < funcion.parametros.length; i++) {
                 let varN = this.params[i].interpretar(arbol, tabla)
                 if(varN instanceof Errores) return varN
-                let decla = new Declaracion(funcion.parametros[i].tipo, this.linea, this.columna, funcion.parametros[i].id, this.params[i])
+                let decla
+
+                if(funcion.parametros[i].accion == 2) {
+                    decla = new Vector1D(this.linea, this.columna, funcion.parametros[i].tipo, funcion.parametros[i].id[0], this.params[i], false, undefined, false)
+                // }else if (metodo.parametros[i].vdd && Array.isArray(this.params[i])){
+                //     decla = new Vector2D(metodo.linea, metodo.columna, metodo.parametros[i].tipoD, metodo.parametros[i].id[0], [], [], this.params[i] ,null, false )
+                }else{
+                    decla = new Declaracion(funcion.parametros[i].tipo, this.linea, this.columna, funcion.parametros[i].id, this.params[i])
+                }
+                //let decla = new Declaracion(funcion.parametros[i].tipo, this.linea, this.columna, funcion.parametros[i].id, this.params[i])
 
                 let resultado = decla.interpretar(arbol, tablaN)
                 if(resultado instanceof Errores) return resultado
