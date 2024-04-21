@@ -45,10 +45,6 @@ class Controller {
                 }
             }
             for (let i of ast.getInstrucciones()) {
-                let nodo = `n${contador.get()}`;
-                exports.dot += `${nodo}[label=\"INSTRUCCION\"];\n`;
-                exports.dot += `nINSTRUCCIONES->${nodo};\n`;
-                exports.dot += i.nodo(nodo);
                 if (i instanceof errores_1.default) {
                     exports.lista_errores.push(i);
                     ast.actualizarConsola(i.obtenerError());
@@ -77,6 +73,10 @@ class Controller {
                         ast.actualizarConsola(resultado.obtenerError());
                     }
                 }
+                let nodo = `n${contador.get()}`;
+                exports.dot += `${nodo}[label=\"INSTRUCCION\"];\n`;
+                exports.dot += `nINSTRUCCIONES->${nodo};\n`;
+                exports.dot += i.nodo(nodo);
             }
             // PRIMER RECORRIDO
             // for(let i of ast.getInstrucciones()) {

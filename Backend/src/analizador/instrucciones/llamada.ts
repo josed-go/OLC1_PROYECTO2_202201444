@@ -3,6 +3,7 @@ import { Instruccion } from "../abstracto/instruccion";
 import Errores from "../errores/errores";
 import AccesoVar from "../expresiones/acceso.var";
 import Arbol from "../simbolo/arbol";
+import Cont from "../simbolo/cont";
 import Simbolo from "../simbolo/simbolo";
 import TablaSimbolos from "../simbolo/tabla.simbolos";
 import Tipo, { tipoD } from "../simbolo/tipo";
@@ -116,6 +117,49 @@ export default class Llamada extends Instruccion {
     }
 
     nodo(anterior: string): string {
-        return ""
+        let cont = Cont.getInstancia()
+
+        let resultado = ""
+
+        let nodoLL = `n${cont.get()}`
+        let nodoID = `n${cont.get()}`
+        let nodoP1 = `n${cont.get()}`
+        let nodoPC = `n${cont.get()}`
+        let nodoP2 = `n${cont.get()}`
+
+        let params = []
+
+        for (let i = 0; i < this.params.length; i++) {
+            params.push(`n${cont.get()}`)
+        }
+
+        resultado += `${nodoLL}[label="LLAMADA"]\n`
+        resultado += `${nodoID}[label="${this.id}"]\n`
+        resultado += `${nodoP1}[label="("]\n`
+
+        for(let i = 0; i < this.params.length; i++){
+            resultado += `${params[i]}[label="PARAMS"]\n`
+        }
+
+        resultado += `${nodoP2}[label=")"]\n`
+        resultado += `${nodoPC}[label=";"]\n`
+
+
+        resultado += `${anterior} -> ${nodoLL}\n`
+        resultado += `${nodoLL} -> ${nodoID}\n`
+        resultado += `${nodoLL} -> ${nodoP1}\n`
+
+        for(let i = 0; i < this.params.length; i++){
+            resultado += `${nodoLL} -> ${params[i]}\n`
+        }
+
+        resultado += `${nodoLL} -> ${nodoP2}\n`
+        resultado += `${nodoLL} -> ${nodoPC}\n`
+        
+        for(let i = 0; i < this.params.length; i++){
+            resultado += this.params[i].nodo(params[i])
+        }
+
+        return resultado
     }
 }

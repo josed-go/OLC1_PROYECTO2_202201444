@@ -1,6 +1,7 @@
 import { Instruccion } from "../abstracto/instruccion";
 import Errores from "../errores/errores";
 import Arbol from "../simbolo/arbol";
+import Cont from "../simbolo/cont";
 import Simbolo from "../simbolo/simbolo";
 import TablaSimbolos from "../simbolo/tabla.simbolos";
 import Tipo, { tipoD } from "../simbolo/tipo";
@@ -41,6 +42,39 @@ export default class Ternario extends Instruccion {
     }
 
     nodo(anterior: string): string {
-        return ""
+        let cont = Cont.getInstancia()
+
+        let resultado = ""
+
+        let nodoIFT = `n${cont.get()}`
+        let nodoCON = `n${cont.get()}`
+        let nodoIT = `n${cont.get()}`
+        let nodoE1 = `n${cont.get()}`
+        let nodoDP = `n${cont.get()}`
+        let nodoE2 = `n${cont.get()}`
+        let nodoPC = `n${cont.get()}`
+
+        resultado += `${nodoIFT}[label="TERNARIO"]\n`
+        resultado += `${nodoCON}[label="CONDICION"]\n`
+        // resultado += `${nodoC}[label=""]\n`
+        resultado += `${nodoIT}[label="?"]\n`
+        resultado += `${nodoE1}[label="EXPRESION"]\n`
+        resultado += `${nodoDP}[label=":"]\n`
+        resultado += `${nodoE2}[label="EXPRESION"]\n`
+        resultado += `${nodoPC}[label=";"]\n`
+
+        resultado += `${anterior}->${nodoIFT}\n`
+        resultado += `${nodoIFT}->${nodoCON}\n`
+        resultado += `${nodoIFT}->${nodoIT}\n`
+        resultado += `${nodoIFT}->${nodoE1}\n`
+        resultado += `${nodoIFT}->${nodoDP}\n`
+        resultado += `${nodoIFT}->${nodoE2}\n`
+        resultado += `${nodoIFT}->${nodoPC}\n`
+
+        resultado += this.condicion.nodo(nodoCON)
+        resultado += this.exp1.nodo(nodoE1)
+        resultado += this.exp2.nodo(nodoE2)
+
+        return resultado
     }
 }

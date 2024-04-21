@@ -434,8 +434,8 @@ export default class Aritmeticas extends Instruccion {
         resultado += `${anterior}->${nodoE1}\n`
         resultado += `${anterior}->${nodoop}\n`
         resultado += `${anterior}->${nodoE2}\n`
-        resultado += this.valor1?.nodo(anterior)
-        resultado += this.valor2?.nodo(anterior)
+        resultado += this.valor1?.nodo(nodoE1)
+        resultado += this.valor2?.nodo(nodoE2)
         
         return resultado
     }

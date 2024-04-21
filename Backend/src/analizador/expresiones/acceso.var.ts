@@ -29,10 +29,12 @@ export default class AccesoVar extends Instruccion {
         let resultado = ""
 
         let nodoD = `n${cont.get()}`
-        
+        let nodoID = `n${cont.get()}`
+        resultado += `${nodoID}[label="${this.id}"]\n`
         resultado += `${nodoD}[label="${this.valor}"]\n`
 
-        resultado += `${anterior}->${nodoD}\n`
+        resultado += `${anterior}->${nodoID}\n`
+        resultado += `${nodoID}->${nodoD}\n`
 
         return resultado
     }

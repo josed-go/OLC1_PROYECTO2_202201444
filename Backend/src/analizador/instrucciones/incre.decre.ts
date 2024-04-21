@@ -46,20 +46,24 @@ export default class IncreDecre extends Instruccion{
         let nodoN = `n${cont.get()}`
         let nodoMA = `n${cont.get()}`
         let nodoME = `n${cont.get()}`
+        let nodoPC= `n${cont.get()}`
 
         resultado += ` ${nodoI}[label="ID"]\n`
         resultado += ` ${nodoN}[label="${this.id}"]\n`
-
+        
         if(this.accion == "mas"){
-            resultado += ` ${nodoMA}[label="++"]\n`
+            resultado += `${nodoMA}[label="++"]\n`
+            resultado += `${anterior} -> ${nodoMA}\n`
         }else{
             resultado += ` ${nodoME}[label="--"]\n`
+            resultado += `${anterior} -> ${nodoME}\n`
         }
-
+        
+        resultado += ` ${nodoPC}[label=";"]\n`
+        
         resultado += ` ${anterior} -> ${nodoI}\n`
         resultado += ` ${nodoI} -> ${nodoN}\n`
-        resultado += `${anterior} -> ${nodoMA}\n`
-        resultado += `${anterior} -> ${nodoME}\n`
+        resultado += ` ${anterior} -> ${nodoPC}\n`
 
         return resultado
     }

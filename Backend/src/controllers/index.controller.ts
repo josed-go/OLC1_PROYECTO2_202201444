@@ -51,11 +51,6 @@ class Controller {
 
             for(let i of ast.getInstrucciones()) {
 
-                let nodo = `n${contador.get()}`
-                dot += `${nodo}[label=\"INSTRUCCION\"];\n`
-                dot += `nINSTRUCCIONES->${nodo};\n`
-                dot += i.nodo(nodo)
-
                 if(i instanceof Errores){
                     lista_errores.push(i)
                     ast.actualizarConsola((<Errores>i).obtenerError())
@@ -85,6 +80,11 @@ class Controller {
                         ast.actualizarConsola((<Errores>resultado).obtenerError())
                     }
                 }
+
+                let nodo = `n${contador.get()}`
+                dot += `${nodo}[label=\"INSTRUCCION\"];\n`
+                dot += `nINSTRUCCIONES->${nodo};\n`
+                dot += i.nodo(nodo)
             }
 
             // PRIMER RECORRIDO

@@ -1,6 +1,7 @@
 import { Instruccion } from "../abstracto/instruccion";
 import Errores from "../errores/errores";
 import Arbol from "../simbolo/arbol";
+import Cont from "../simbolo/cont";
 import Simbolo from "../simbolo/simbolo";
 import TablaSimbolos from "../simbolo/tabla.simbolos";
 import Tipo, { tipoD } from "../simbolo/tipo";
@@ -25,6 +26,28 @@ export default class Return extends Instruccion {
     }
 
     nodo(anterior: string): string {
-        return ""
+        let cont = Cont.getInstancia()
+
+        let resultado = ""
+
+        let nodoR = `n${cont.get()}`
+        let nodoE = `n${cont.get()}`
+        let nodoPC = `n${cont.get()}`
+
+        resultado += `${nodoR}[label="RETURN"]\n`
+        if(this.exp != undefined){
+            resultado += `${nodoE}[label="EXPRESION"]\n`
+            resultado += `${anterior} -> ${nodoE}\n`
+            resultado += this.exp?.nodo(nodoE);
+        }
+
+        resultado += `${nodoPC}[label=";"]\n`
+
+        resultado += `${anterior} -> ${nodoR}\n`
+
+        resultado += `${anterior} -> ${nodoPC}\n`
+        
+
+        return resultado
     }
 }

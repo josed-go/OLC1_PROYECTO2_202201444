@@ -2,6 +2,7 @@ import { lista_errores } from "../../controllers/index.controller";
 import { Instruccion } from "../abstracto/instruccion";
 import Errores from "../errores/errores";
 import Arbol from "../simbolo/arbol";
+import Cont from "../simbolo/cont";
 import Simbolo from "../simbolo/simbolo";
 import TablaSimbolos from "../simbolo/tabla.simbolos";
 import Tipo, { tipoD } from "../simbolo/tipo";
@@ -91,7 +92,120 @@ export default class Funcion extends Instruccion {
     }
 
     nodo(anterior: string): string {
-        return ""
+        let cont = Cont.getInstancia()
+        let resultado = ""
+
+        let paramsT = []
+        let params = []
+        let instru = []
+
+        let nodoP = `n${cont.get()}`
+        let nodoT = `n${cont.get()}`
+        let nodoPI = `n${cont.get()}`
+        let nodoID = `n${cont.get()}`
+        let nodoP1 = `n${cont.get()}`
+        let nodoPar = `n${cont.get()}`
+
+        let nodoP2 = `n${cont.get()}`
+        let nodoL1 = `n${cont.get()}`
+        let nodoL2 = `n${cont.get()}`
+        let nodoPIns = `n${cont.get()}`
+
+        for(let i = 0; i < this.parametros.length; i++){
+            paramsT.push(`n${cont.get()}`)
+            params.push(`n${cont.get()}`)
+        }
+
+        for(let i= 0; i< this.instrucciones.length; i++){
+            instru.push(`n${cont.get()}`)
+        }
+
+        resultado += `${nodoP}[label="FUNCION"]\n`
+        switch (this.tipoD.getTipo()) {
+            case tipoD.INT:
+                
+                resultado += `${nodoT}[label="INT"]\n`
+                break
+            case tipoD.DOUBLE:
+                
+                resultado += `${nodoT}[label="DOUBLE"]\n`
+                break
+            case tipoD.CHAR:
+                
+                resultado += `${nodoT}[label="INT"]\n`
+                break
+            case tipoD.BOOL:
+                
+                resultado += `${nodoT}[label="BOOL"]\n`
+                break
+            case tipoD.CADENA:
+                
+                resultado += `${nodoT}[label="STD::STRING"]\n`
+                break
+        }
+
+        resultado += `${nodoPI}[label="ID"]\n`
+        resultado += `${nodoID}[label="${this.id}"]\n`
+        resultado += `${nodoP1}[label="("]\n`
+        resultado += `${nodoPar}[label="PARAMS"]\n`
+
+        for(let i = 0; i < this.parametros.length; i++){
+            if(this.parametros[i].tipo.getTipo() == tipoD.INT){
+                resultado += `${paramsT[i]}[label="INT"]\n`
+            }else if(this.parametros[i].tipo.getTipo() == tipoD.DOUBLE){
+                resultado += `${paramsT[i]}[label="DOUBLE"]\n`
+            }else if(this.parametros[i].tipo.getTipo() == tipoD.CADENA){
+                resultado += `${paramsT[i]}[label="std::string"]\n`
+            }else if(this.parametros[i].tipo.getTipo() == tipoD.BOOL){
+                resultado += `${paramsT[i]}[label="BOOL"]\n`
+            }else if(this.parametros[i].tipo.getTipo() == tipoD.VOID){
+                resultado += `${paramsT[i]}[label="VOID"]\n`
+            }else if(this.parametros[i].tipo.getTipo() == tipoD.CHAR){
+                resultado += `${paramsT[i]}[label="CHAR"]\n`
+            }
+            
+            resultado += `${params[i]}[label="${this.parametros[i].id}"]\n`
+        }
+
+        resultado += `${nodoP2}[label=")"]\n`
+        resultado += `${nodoL1}[label="{"]\n`
+        resultado += `${nodoPIns}[label="INSTRUCCIONES"]\n`
+        for(let i = 0; i < this.instrucciones.length; i++){
+            resultado += `${instru[i]}[label="INSTRUCCION"]\n`
+        }
+        resultado += `${nodoL2}[label="}"]\n`
+
+        resultado += `${nodoP} -> ${nodoT}\n`
+        resultado += `${nodoP} -> ${nodoPI}\n`
+        resultado += `${nodoPI} -> ${nodoID}\n`
+        resultado += `${nodoP} -> ${nodoP1}\n`
+        resultado += `${nodoP} -> ${nodoPar}\n`
+
+        for(let i = 0; i < this.parametros.length; i++){
+            resultado += `${nodoPar} -> ${paramsT[i]}\n`
+            resultado += `${nodoPar} -> ${params[i]}\n`
+        }
+
+        resultado += `${nodoP} -> ${nodoP2}\n`
+
+        resultado += `${nodoP} -> ${nodoL1}\n`
+
+        resultado += `${nodoP} -> ${nodoPIns}\n`
+
+        for(let i = 0; i < this.instrucciones.length; i++){
+            resultado += `${nodoPIns} -> ${instru[i]}\n`
+        }
+
+        resultado += `${nodoP} -> ${nodoL2}\n`
+
+        resultado += `${anterior} -> ${nodoP}\n`
+
+        for(let i = 0; i < this.instrucciones.length; i++){
+            resultado += this.instrucciones[i].nodo(instru[i])
+        }
+
+
+        return resultado
     }
 
 }

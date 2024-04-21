@@ -109,6 +109,7 @@ const Content = ({archivos, setArchivos, cantidad, setCantidad, actual, setActua
         .then(data => {
             consolaRef.current.setValue(data.respuesta)
             setDot(data.ast)
+            console.log(data.ast)
             // setErrores(data.lista_errores)
         })
         .catch((error) => {
@@ -203,7 +204,7 @@ const Content = ({archivos, setArchivos, cantidad, setCantidad, actual, setActua
                             >Tabla de errores</button>
                             <button className='hover:bg-gris h-8'>Tabla de símbolos</button>
                             <button className='hover:bg-gris h-8'
-                                onClick={() => {changeView("ast") }}
+                                onClick={() => {changeView("ast"); setReportes(false) }}
                             >AST</button>
                         </div>
                     )

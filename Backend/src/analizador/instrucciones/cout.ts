@@ -48,6 +48,8 @@ export default class Cout extends Instruccion {
         resultado += `${nodoCout}->${nodoM1}\n`
         resultado += `${nodoCout}->${nodoE}\n`
         resultado += `${nodoCout}->${nodoPC}\n`
+
+        resultado += this.expresion.nodo(nodoE)
         
         return resultado
     }

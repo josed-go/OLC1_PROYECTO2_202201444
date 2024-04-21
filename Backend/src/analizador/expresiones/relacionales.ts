@@ -859,8 +859,8 @@ export default class Relacionales extends Instruccion {
         resultado += `${anterior}->${nodoE1}\n`
         resultado += `${anterior}->${nodooP}\n`
         resultado += `${anterior}->${nodoE2}\n`
-        resultado += this.condicion1.nodo(anterior)
-        resultado += this.condicion2.nodo(anterior)
+        resultado += this.condicion1.nodo(nodoE1)
+        resultado += this.condicion2.nodo(nodoE2)
 
         return resultado
 
