@@ -10,6 +10,7 @@ class router {
     config(): void {
         this.router.post('/analizar', indexController.analizar)
         this.router.get('/obtenerErrores', indexController.getErrores)
+        this.router.get('/getAST', indexController.getAST)
     }
 }
 

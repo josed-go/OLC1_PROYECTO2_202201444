@@ -45,4 +45,8 @@ export default class Default extends Instruccion {
             // AGREGAR ERRORES
         }
     }
+
+    nodo(anterior: string): string {
+        return ""
+    }
 }

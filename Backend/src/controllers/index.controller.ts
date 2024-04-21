@@ -126,7 +126,7 @@ class Controller {
 
             console.log(tabla)
 
-            res.json({"respuesta": ast.getConsola(), "lista_errores": lista_errores})
+            res.json({"respuesta": ast.getConsola(), "lista_errores": lista_errores, "ast": dot})
             console.log(lista_errores)
             console.log(ast.getFunciones())
         } catch (error:any) {

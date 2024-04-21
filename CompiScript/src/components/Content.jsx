@@ -5,6 +5,7 @@ import ArrowUp from './ArrowUp';
 import { saveAs } from 'file-saver';
 import ModalG from './ModalG'
 import Errores from './Errores';
+import AST from './AST';
 
 const Content = ({archivos, setArchivos, cantidad, setCantidad, actual, setActual, editorRef, consolaRef}) => {
 
@@ -19,10 +20,12 @@ const Content = ({archivos, setArchivos, cantidad, setCantidad, actual, setActua
     const [reportes, setReportes] = useState(false)
     const [open, setOpen] = useState(false)
     const [ nombre, setNombre ] = useState("")
+    const [ dot, setDot ] = useState("")
     const [ errores, setErrores ] = useState([])
     const [ contenido, setContenido ] = useState("editor")
     const [ isEditor, setIsEditor ] = useState(true)
     const [ isErrores, setIsErrores ] = useState(false)
+    const [ isAST, setIsAST ] = useState(false)
     // const editorRef = useRef(null)
     // const consolaRef = useRef(null)
 
@@ -105,6 +108,7 @@ const Content = ({archivos, setArchivos, cantidad, setCantidad, actual, setActua
         }).then(response => response.json())
         .then(data => {
             consolaRef.current.setValue(data.respuesta)
+            setDot(data.ast)
             // setErrores(data.lista_errores)
         })
         .catch((error) => {
@@ -129,14 +133,37 @@ const Content = ({archivos, setArchivos, cantidad, setCantidad, actual, setActua
         })
     }
 
+    const getAST = () => {
+        fetch('http://localhost:4000/getAST', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }).then(response => response.json())
+        .then(data => {
+            setDot(data.ast)
+            console.log(data.ast)
+        })
+        .catch((error) => {
+            alert("Error al obtener ast")
+            console.error('Error:', error)
+        })
+    }
+
     const changeView = (view) => {
         if(view == "editor"){
             setIsEditor(true)
             setIsErrores(false)
+            setIsAST(false)
         } else if(view == "errores") {
             setIsEditor(false)
             setIsErrores(true)
+            setIsAST(false)
 
+        }else if(view == "ast") {
+            setIsAST(true)
+            setIsEditor(false)
+            setIsErrores(false)
         }
     }
     
@@ -175,7 +202,9 @@ const Content = ({archivos, setArchivos, cantidad, setCantidad, actual, setActua
                                 onClick={() => {changeView("errores"); setReportes(false); getErrores()}}
                             >Tabla de errores</button>
                             <button className='hover:bg-gris h-8'>Tabla de símbolos</button>
-                            <button className='hover:bg-gris h-8'>AST</button>
+                            <button className='hover:bg-gris h-8'
+                                onClick={() => {changeView("ast") }}
+                            >AST</button>
                         </div>
                     )
                 }
@@ -213,6 +242,12 @@ const Content = ({archivos, setArchivos, cantidad, setCantidad, actual, setActua
                 {
                     isErrores && (
                         <Errores errores={errores} setView={changeView} />
+                    )
+                }
+
+                {
+                    isAST && (
+                        <AST dot={dot} setView={changeView} />
                     )
                 }
             </div>

@@ -90,5 +90,8 @@ export default class Funcion extends Instruccion {
         // if(!bandera) return new Errores("Semantico", "Debe de retornar un valor", this.linea, this.columna)
     }
 
+    nodo(anterior: string): string {
+        return ""
+    }
 
 }

@@ -45,4 +45,8 @@ export default class ModificarVector1D extends Instruccion {
         }
         
     }
+
+    nodo(anterior: string): string {
+        return ""
+    }
 }

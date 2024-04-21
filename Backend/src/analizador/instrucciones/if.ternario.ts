@@ -39,4 +39,8 @@ export default class Ternario extends Instruccion {
             return expresion2
         }
     }
+
+    nodo(anterior: string): string {
+        return ""
+    }
 }

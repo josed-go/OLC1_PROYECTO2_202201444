@@ -23,4 +23,8 @@ export default class Return extends Instruccion {
         }
         return this
     }
+
+    nodo(anterior: string): string {
+        return ""
+    }
 }

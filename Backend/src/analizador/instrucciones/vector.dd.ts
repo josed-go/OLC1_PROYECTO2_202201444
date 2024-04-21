@@ -114,5 +114,8 @@ export default class Vector2D extends Instruccion {
         }
     }
 
+    nodo(anterior: string): string {
+        return ""
+    }
 
 }

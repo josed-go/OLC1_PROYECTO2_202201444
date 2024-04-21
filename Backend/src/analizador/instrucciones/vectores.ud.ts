@@ -125,4 +125,8 @@ export default class Vector1D extends Instruccion {
         }
     }
 
+    nodo(anterior: string): string {
+        return ""
+    }
+
 }

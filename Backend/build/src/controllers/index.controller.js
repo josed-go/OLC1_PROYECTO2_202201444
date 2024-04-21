@@ -110,7 +110,7 @@ class Controller {
             // }
             exports.dot += "\n}";
             console.log(tabla);
-            res.json({ "respuesta": ast.getConsola(), "lista_errores": exports.lista_errores });
+            res.json({ "respuesta": ast.getConsola(), "lista_errores": exports.lista_errores, "ast": exports.dot });
             console.log(exports.lista_errores);
             console.log(ast.getFunciones());
         }
