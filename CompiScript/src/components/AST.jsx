@@ -11,7 +11,7 @@ const AST = ({dot, setView}) => {
                 >Regresar</button>
                 <Graphviz className='w-full'
                     dot={dot}
-                    options={{zoom:true}}
+                    options={{zoom:true, height: 1000, width: 1600}}
                 />
             </div>
         </>
