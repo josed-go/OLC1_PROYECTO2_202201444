@@ -1,6 +1,7 @@
 import { Instruccion } from "../abstracto/instruccion";
 import Errores from "../errores/errores";
 import Arbol from "../simbolo/arbol";
+import Cont from "../simbolo/cont";
 import TablaSimbolos from "../simbolo/tabla.simbolos";
 import Tipo, { tipoD } from "../simbolo/tipo";
 
@@ -158,6 +159,199 @@ export default class FuncionesN extends Instruccion {
             default:
                 return new Errores('Semantico', 'No se puede usar la funcion c_str con ese tipo de dato', this.linea, this.columna )
         }
+    }
+
+    nodo(anterior: string): string {
+        let cont = Cont.getInstancia()
+        let resultado = ""
+
+        if(this.operacion == Operadores.LOWER){
+
+            let nodoN = `n${cont.get()}`
+            let nodoOU = `n${cont.get()}`
+            let nodoP1 = `n${cont.get()}`
+            let nodoE = `n${cont.get()}`
+            let nodoP2 = `n${cont.get()}`
+            let nodoPC = `n${cont.get()}`
+    
+            resultado += `${nodoN}[label="NATIVO"]\n`
+            resultado += `${nodoOU}[label="toLower"]\n`
+            resultado += `${nodoP1}[label="("]\n`
+            resultado += `${nodoE}[label="EXPRESION"]\n`
+            resultado += `${nodoP2}[label=")"]\n`
+            resultado += `${nodoPC}[label=";"]\n`
+    
+            resultado += `${anterior} -> ${nodoN}\n`
+            resultado += `${nodoN} -> ${nodoOU}\n`
+            resultado += `${nodoN} -> ${nodoP1}\n`
+            resultado += `${nodoN} -> ${nodoE}\n`
+            resultado += `${nodoN} -> ${nodoP2}\n`
+            resultado += `${nodoN} -> ${nodoPC}\n`
+    
+            resultado += this.valor1?.nodo(nodoE);
+        }
+            
+        if(this.operacion == Operadores.UPPER) {
+
+            let nodoN = `n${cont.get()}`
+            let nodoOU = `n${cont.get()}`
+            let nodoP1 = `n${cont.get()}`
+            let nodoE = `n${cont.get()}`
+            let nodoP2 = `n${cont.get()}`
+            let nodoPC = `n${cont.get()}`
+    
+            resultado += `${nodoN}[label="NATIVO"]\n`
+            resultado += `${nodoOU}[label="toUpper"]\n`
+            resultado += `${nodoP1}[label="("]\n`
+            resultado += `${nodoE}[label="EXPRESION"]\n`
+            resultado += `${nodoP2}[label=")"]\n`
+            resultado += `${nodoPC}[label=";"]\n`
+    
+            resultado += `${anterior} -> ${nodoN}\n`
+            resultado += `${nodoN} -> ${nodoOU}\n`
+            resultado += `${nodoN} -> ${nodoP1}\n`
+            resultado += `${nodoN} -> ${nodoE}\n`
+            resultado += `${nodoN} -> ${nodoP2}\n`
+            resultado += `${nodoN} -> ${nodoPC}\n`
+    
+            resultado += this.valor1?.nodo(nodoE);
+        }
+
+        if(this.operacion == Operadores.TYPEOF) {
+
+            let nodoN = `n${cont.get()}`
+            let nodoOU = `n${cont.get()}`
+            let nodoP1 = `n${cont.get()}`
+            let nodoE = `n${cont.get()}`
+            let nodoP2 = `n${cont.get()}`
+            let nodoPC = `n${cont.get()}`
+    
+            resultado += `${nodoN}[label="NATIVO"]\n`
+            resultado += `${nodoOU}[label="typeOf"]\n`
+            resultado += `${nodoP1}[label="("]\n`
+            resultado += `${nodoE}[label="EXPRESION"]\n`
+            resultado += `${nodoP2}[label=")"]\n`
+            resultado += `${nodoPC}[label=";"]\n`
+    
+            resultado += `${anterior} -> ${nodoN}\n`
+            resultado += `${nodoN} -> ${nodoOU}\n`
+            resultado += `${nodoN} -> ${nodoP1}\n`
+            resultado += `${nodoN} -> ${nodoE}\n`
+            resultado += `${nodoN} -> ${nodoP2}\n`
+            resultado += `${nodoN} -> ${nodoPC}\n`
+    
+            resultado += this.valor1?.nodo(nodoE);
+        }
+
+        if(this.operacion == Operadores.TOSTRING) {
+
+            let nodoN = `n${cont.get()}`
+            let nodoSTD = `n${cont.get()}`
+            let nodoOU = `n${cont.get()}`
+            let nodoP1 = `n${cont.get()}`
+            let nodoE = `n${cont.get()}`
+            let nodoP2 = `n${cont.get()}`
+            let nodoPC = `n${cont.get()}`
+    
+            resultado += `${nodoN}[label="NATIVO"]\n`
+            resultado += `${nodoSTD}[label="std::string"]\n`
+            resultado += `${nodoOU}[label="toString"]\n`
+            resultado += `${nodoP1}[label="("]\n`
+            resultado += `${nodoE}[label="EXPRESION"]\n`
+            resultado += `${nodoP2}[label=")"]\n`
+            resultado += `${nodoPC}[label=";"]\n`
+    
+            resultado += `${anterior} -> ${nodoN}\n`
+            resultado += `${nodoN} -> ${nodoSTD}\n`
+            resultado += `${nodoN} -> ${nodoOU}\n`
+            resultado += `${nodoN} -> ${nodoP1}\n`
+            resultado += `${nodoN} -> ${nodoE}\n`
+            resultado += `${nodoN} -> ${nodoP2}\n`
+            resultado += `${nodoN} -> ${nodoPC}\n`
+    
+            resultado += this.valor1?.nodo(nodoE);
+        }
+        
+        if(this.operacion == Operadores.ROUND) {
+
+            let nodoN = `n${cont.get()}`
+            let nodoOU = `n${cont.get()}`
+            let nodoP1 = `n${cont.get()}`
+            let nodoE = `n${cont.get()}`
+            let nodoP2 = `n${cont.get()}`
+            let nodoPC = `n${cont.get()}`
+    
+            resultado += `${nodoN}[label="NATIVO"]\n`
+            resultado += `${nodoOU}[label="round"]\n`
+            resultado += `${nodoP1}[label="("]\n`
+            resultado += `${nodoE}[label="EXPRESION"]\n`
+            resultado += `${nodoP2}[label=")"]\n`
+            resultado += `${nodoPC}[label=";"]\n`
+    
+            resultado += `${anterior} -> ${nodoN}\n`
+            resultado += `${nodoN} -> ${nodoOU}\n`
+            resultado += `${nodoN} -> ${nodoP1}\n`
+            resultado += `${nodoN} -> ${nodoE}\n`
+            resultado += `${nodoN} -> ${nodoP2}\n`
+            resultado += `${nodoN} -> ${nodoPC}\n`
+    
+            resultado += this.valor1?.nodo(nodoE);
+        }
+
+        if(this.operacion == Operadores.LENGTH) {
+
+            let nodoN = `n${cont.get()}`
+            let nodoOU = `n${cont.get()}`
+            let nodoP1 = `n${cont.get()}`
+            let nodoE = `n${cont.get()}`
+            let nodoP2 = `n${cont.get()}`
+            let nodoPC = `n${cont.get()}`
+    
+            resultado += `${nodoN}[label="NATIVO"]\n`
+            resultado += `${nodoOU}[label=".length"]\n`
+            resultado += `${nodoP1}[label="("]\n`
+            resultado += `${nodoE}[label="EXPRESION"]\n`
+            resultado += `${nodoP2}[label=")"]\n`
+            resultado += `${nodoPC}[label=";"]\n`
+    
+            resultado += `${anterior} -> ${nodoN}\n`
+            resultado += `${nodoN} -> ${nodoOU}\n`
+            resultado += `${nodoN} -> ${nodoP1}\n`
+            resultado += `${nodoN} -> ${nodoE}\n`
+            resultado += `${nodoN} -> ${nodoP2}\n`
+            resultado += `${nodoN} -> ${nodoPC}\n`
+    
+            resultado += this.valor1?.nodo(nodoE);
+        }
+
+        if(this.operacion == Operadores.CSTR) {
+
+            let nodoN = `n${cont.get()}`
+            let nodoOU = `n${cont.get()}`
+            let nodoP1 = `n${cont.get()}`
+            let nodoE = `n${cont.get()}`
+            let nodoP2 = `n${cont.get()}`
+            let nodoPC = `n${cont.get()}`
+    
+            resultado += `${nodoN}[label="NATIVO"]\n`
+            resultado += `${nodoOU}[label=".c_str"]\n`
+            resultado += `${nodoP1}[label="("]\n`
+            resultado += `${nodoE}[label="EXPRESION"]\n`
+            resultado += `${nodoP2}[label=")"]\n`
+            resultado += `${nodoPC}[label=";"]\n`
+    
+            resultado += `${anterior} -> ${nodoN}\n`
+            resultado += `${nodoN} -> ${nodoOU}\n`
+            resultado += `${nodoN} -> ${nodoP1}\n`
+            resultado += `${nodoN} -> ${nodoE}\n`
+            resultado += `${nodoN} -> ${nodoP2}\n`
+            resultado += `${nodoN} -> ${nodoPC}\n`
+    
+            resultado += this.valor1?.nodo(nodoE);
+        }
+
+        return resultado
+
     }
 }
 

@@ -1,6 +1,7 @@
 import { Instruccion } from "../abstracto/instruccion";
 import Errores from "../errores/errores";
 import Arbol from "../simbolo/arbol";
+import Cont from "../simbolo/cont";
 import TablaSimbolos from "../simbolo/tabla.simbolos";
 import Tipo, { tipoD } from "../simbolo/tipo";
 
@@ -35,5 +36,31 @@ export default class IncreDecre extends Instruccion{
             }
         }
         
+    }
+
+    nodo(anterior: string): string {
+        let cont = Cont.getInstancia()
+        let resultado = ""
+
+        let nodoI = `n${cont.get()}`
+        let nodoN = `n${cont.get()}`
+        let nodoMA = `n${cont.get()}`
+        let nodoME = `n${cont.get()}`
+
+        resultado += ` ${nodoI}[label="ID"]\n`
+        resultado += ` ${nodoN}[label="${this.id}"]\n`
+
+        if(this.accion == "mas"){
+            resultado += ` ${nodoMA}[label="++"]\n`
+        }else{
+            resultado += ` ${nodoME}[label="--"]\n`
+        }
+
+        resultado += ` ${anterior} -> ${nodoI}\n`
+        resultado += ` ${nodoI} -> ${nodoN}\n`
+        resultado += `${anterior} -> ${nodoMA}\n`
+        resultado += `${anterior} -> ${nodoME}\n`
+
+        return resultado
     }
 }

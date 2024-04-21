@@ -132,5 +132,14 @@ class Controller {
             res.json({ message: "Ya no sale" });
         }
     }
+    getAST(req, res) {
+        try {
+            res.json({ "ast": exports.dot });
+        }
+        catch (error) {
+            console.log(error);
+            res.json({ message: "Ya no sale" });
+        }
+    }
 }
 exports.indexController = new Controller();

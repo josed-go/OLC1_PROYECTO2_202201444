@@ -148,6 +148,16 @@ class Controller {
             res.json({message: "Ya no sale"})
         }
     }
+
+    public getAST(req: Request, res:Response) {
+
+        try {
+            res.json({ "ast": dot })
+        } catch (error) {
+            console.log(error)
+            res.json({message: "Ya no sale"})
+        }
+    }
 }
 
 export const indexController = new Controller()
