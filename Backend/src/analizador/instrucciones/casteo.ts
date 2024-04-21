@@ -1,6 +1,8 @@
+import AST from "../abstracto/ast";
 import { Instruccion } from "../abstracto/instruccion";
 import Errores from "../errores/errores";
 import Arbol from "../simbolo/arbol";
+import Cont from "../simbolo/cont";
 import Simbolo from "../simbolo/simbolo";
 import TablaSimbolos from "../simbolo/tabla.simbolos";
 import Tipo, { tipoD } from "../simbolo/tipo";
@@ -97,6 +99,51 @@ export default class Casteo extends Instruccion {
             default:
                 return new Errores("Semantico", "No es posible castear el valor", this.linea, this.columna)
         }
+    }
+
+    nodo(anterior: string): string {
+        let cont = Cont.getInstancia()
+
+        let resultado = ""
+
+        let nodoP = `n${cont.get()}`
+        let nodoP1 = `n${cont.get()}`
+        let nodoT = `n${cont.get()}`
+        let nodoP2 = `n${cont.get()}`
+        let nodoV = `n${cont.get()}`
+        let nodoPC = `n${cont.get()}`
+
+        resultado += `${nodoP}[label="CASTEO"]\n`
+        resultado += `${nodoP1}[label="("]\n`
+
+        switch (this.tipo.getTipo()) {
+            case tipoD.INT:
+                resultado += `${nodoT}[label="int"]\n`
+
+            case tipoD.DOUBLE:
+                resultado += `${nodoT}[label="double"]\n`
+
+            case tipoD.CADENA:
+                resultado += `${nodoT}[label="std::string"]\n`
+
+            case tipoD.CHAR:
+                resultado += `${nodoT}[label="char"]\n`
+        
+        }
+
+        resultado += `${nodoP2}[label=")"]\n`
+        resultado += `${nodoV}[label="EXPRESION"]\n`
+        resultado += `${nodoPC}[label=";"]\n`
+
+
+        resultado += `${anterior} -> ${nodoP};\n`
+        resultado += `${nodoP} -> ${nodoP1};\n`
+        resultado += `${nodoP} -> ${nodoT};\n`
+        resultado += `${nodoP} -> ${nodoP2};\n`
+        resultado += `${nodoP} -> ${nodoV};\n`
+        resultado += `${nodoP} -> ${nodoPC};\n`
+
+        return resultado
     }
 
 

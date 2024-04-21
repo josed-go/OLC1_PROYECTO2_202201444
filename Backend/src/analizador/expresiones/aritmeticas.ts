@@ -1,6 +1,8 @@
+import AST from "../abstracto/ast";
 import { Instruccion } from "../abstracto/instruccion";
 import Errores from "../errores/errores";
 import Arbol from "../simbolo/arbol";
+import Cont from "../simbolo/cont";
 import TablaSimbolos from "../simbolo/tabla.simbolos";
 import Tipo, { tipoD } from "../simbolo/tipo";
 
@@ -405,6 +407,59 @@ export default class Aritmeticas extends Instruccion {
                 }
             default:
                 return new Errores('Semantico', 'No se puede hacer '+tipo1+" % "+tipo2, this.linea, this.columna )
+        }
+    }
+
+    public nodo(anterior: string): string {
+        let cont = Cont.getInstancia()
+        let resultado = ""
+        if(this.opU != undefined){
+            let nodoN = `N${cont.get()}`
+            let nodoExp = `N${cont.get()}`
+            resultado += `${nodoN}[label=\"-\"]\n`
+            resultado += `${nodoExp}[label=\"EXPRESION\"]\n`
+            resultado += `${anterior}->${nodoN}\n`
+            resultado += `${anterior}->${nodoExp}\n`
+            resultado += this.opU?.nodo(nodoExp)
+            return resultado
+        }
+
+        let nodoE1 = `n${cont.get()}`
+        let nodoop = `n${cont.get()}`
+        let nodoE2 = `n${cont.get()}`
+
+        resultado += `${nodoE1}[label=\"EXPRESION\"]\n`
+        resultado += `${nodoop}[label=\"${this.getOperacion(this.operacion)}\"]\n`
+        resultado += `${nodoE2}[label=\"EXPRESION\"]\n`
+        resultado += `${anterior}->${nodoE1}\n`
+        resultado += `${anterior}->${nodoop}\n`
+        resultado += `${anterior}->${nodoE2}\n`
+        resultado += this.valor1?.nodo(anterior)
+        resultado += this.valor2?.nodo(anterior)
+        
+        return resultado
+    }
+
+    getOperacion(num: any){
+        switch (num) {
+            case 0:
+                return '+'
+
+            case 1:
+                return '-'
+                
+            case 2:
+                return '-'
+                
+            case 3:
+                return '*'
+                
+            case 4:
+                return '/'
+                
+            case 6:
+                return '%'
+                
         }
     }
 }

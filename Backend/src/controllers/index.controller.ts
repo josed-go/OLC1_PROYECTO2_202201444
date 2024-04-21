@@ -13,8 +13,10 @@ import ModificarVector1D from "../analizador/instrucciones/modificar.vectorud"
 import ModificarVector2D from "../analizador/instrucciones/modificar.vectordd"
 // import Metodo from "../analizador/instrucciones/metodo.funciones"
 import Funcion from "../analizador/instrucciones/funcion"
+import Cont from "../analizador/simbolo/cont"
 
 export let lista_errores: Array<Errores> = []
+export let dot: string = ""
 
 class Controller {
 
@@ -29,7 +31,12 @@ class Controller {
             ast.setConsola("")
             let execute = null
 
+            let contador = Cont.getInstancia()
 
+            dot = "digraph ast{\n"
+            dot += "nINICIO[label=\"INICIO\"];\n"
+            dot += "nINSTRUCCIONES[label=\"INSTRUCCIONES\"];\n"
+            dot += "nINICIO->nINSTRUCCIONES;\n"
 
             for (let error of lista_errores) {
                 ast.actualizarConsola((<Errores>error).obtenerError())
@@ -43,6 +50,12 @@ class Controller {
             }
 
             for(let i of ast.getInstrucciones()) {
+
+                let nodo = `n${contador.get()}`
+                dot += `${nodo}[label=\"INSTRUCCION\"];\n`
+                dot += `nINSTRUCCIONES->${nodo};\n`
+                dot += i.nodo(nodo)
+
                 if(i instanceof Errores){
                     lista_errores.push(i)
                     ast.actualizarConsola((<Errores>i).obtenerError())
@@ -108,6 +121,9 @@ class Controller {
             //         ast.actualizarConsola((<Errores>resultado).obtenerError())
             //     } 
             // }
+
+            dot += "\n}"
+
             console.log(tabla)
 
             res.json({"respuesta": ast.getConsola(), "lista_errores": lista_errores})

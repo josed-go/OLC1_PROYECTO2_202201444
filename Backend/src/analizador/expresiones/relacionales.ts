@@ -1,6 +1,8 @@
+import AST from "../abstracto/ast";
 import { Instruccion } from "../abstracto/instruccion";
 import Errores from "../errores/errores";
 import Arbol from "../simbolo/arbol";
+import Cont from "../simbolo/cont";
 import Simbolo from "../simbolo/simbolo";
 import TablaSimbolos from "../simbolo/tabla.simbolos";
 import Tipo, { tipoD } from "../simbolo/tipo";
@@ -837,6 +839,47 @@ export default class Relacionales extends Instruccion {
                 }
             default:
                 return new Errores("Semantico", "Relacional invalida6", this.linea, this.columna)
+        }
+    }
+
+    nodo(anterior: string): string {
+        let cont = Cont.getInstancia()
+        // let nodoR = `${cont.get()}`
+        let nodoE1 = `n${cont.get()}`
+        let nodoE2 = `n${cont.get()}`
+        let nodooP = `n${cont.get()}`
+        // let nodoC1 = `${cont.get()}`
+        // let nodoC2 = `${cont.get()}`
+        
+        // let resultado = `n${nodoR}[label="RELACIONAL"]\n`
+        let resultado = ""
+        resultado += `${nodoE1}[label="EXPRESION"]\n`
+        resultado += `${nodooP}[label="${this.getRelacional(this.relacional)}"]\n`
+        resultado += `${nodoE2}[label="EXPRESION"]\n`
+        resultado += `${anterior}->${nodoE1}\n`
+        resultado += `${anterior}->${nodooP}\n`
+        resultado += `${anterior}->${nodoE2}\n`
+        resultado += this.condicion1.nodo(anterior)
+        resultado += this.condicion2.nodo(anterior)
+
+        return resultado
+
+    }
+
+    getRelacional(op:any){
+        switch (op) {
+            case 0:
+                return '<'
+            case 1:
+                return '>'
+            case 2:
+                return '=='
+            case 3:
+                return '!='
+            case 4:
+                return '<='
+            case 5:
+                return '>='
         }
     }
 }

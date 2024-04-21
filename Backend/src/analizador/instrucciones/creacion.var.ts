@@ -1,6 +1,7 @@
 import { Instruccion } from "../abstracto/instruccion";
 import Errores from "../errores/errores";
 import Arbol from "../simbolo/arbol";
+import Cont from "../simbolo/cont";
 import Simbolo from "../simbolo/simbolo";
 import TablaSimbolos from "../simbolo/tabla.simbolos";
 import Tipo, { tipoD } from "../simbolo/tipo";
@@ -51,6 +52,44 @@ export default class Creacion extends Instruccion {
                 return new Errores("Semantico", "No se puede declarar variable que ya existe", this.linea, this.columna)
             }
         });
+
+    }
+
+    nodo(anterior: string): string {
+        let cont = Cont.getInstancia()
+        let resultado = ""
+
+        let nodoD = `n${cont.get()}`
+        let nodoID = `n${cont.get()}`
+        let nodoPC = `n${cont.get()}`
+
+        let ids = []
+
+        for (let i = 0; i < this.id.length; i++) {
+            ids.push(`n${cont.get()}`)   
+        }
+
+        resultado += `${nodoD}[label="DECLARACION"]\n`
+        resultado += `${nodoID}[label="ID"]\n`
+
+        for (let i = 0; i < this.id.length; i++) {
+            resultado += `${ids[i]}[label="${this.id[i]}"]\n`
+            
+        }
+
+        resultado += `${nodoPC}[label=";"];\n`;
+
+        resultado += `${anterior} -> ${nodoD};\n`;
+        resultado += `${nodoD} -> ${nodoID};\n`;
+
+        for(let i= 0; i < this.id.length; i++){
+            resultado += `${nodoID} -> ${ids[i]};\n`;
+        }
+
+        resultado += `${nodoD} -> ${nodoPC};\n`;
+
+        return resultado;
+
 
     }
 }

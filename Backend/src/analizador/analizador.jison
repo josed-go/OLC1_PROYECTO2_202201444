@@ -189,8 +189,8 @@
 inicio : instrucciones EOF { return $1 }
 ;
 
-instrucciones : instrucciones sentencias { $1.push($2); $$ = $1 }
-                | sentencias { $$ = [$1] }
+instrucciones : instrucciones sentencias { if($2 != false) $1.push($2); $$ = $1 }
+                | sentencias { $$ = ($1!= false) ? [$1] : []}
 ;
 
 sentencias : declaracion { $$ = $1 }
@@ -213,6 +213,8 @@ sentencias : declaracion { $$ = $1 }
             | execute_s { $$ = $1 }
             | llamada_s PYC { $$ = $1 }
             | return_s { $$ = $1 }
+            | error PYC { index.lista_errores.push(new Errores.default("Sintactico", "Se esperaba \"" + yytext + "\" y se obtuvo otra cosa",this._$.first_line, this._$.first_column )); $$ = false}
+            // | error LLAVEIN { index.lista_errores.push(new Errores.default("Sintactico", "Se esperaba \"" + yytext + "\" y se obtuvo otra cosa",this._$.first_line, this._$.first_column )); $$ = false}
 ;
 
 declaracion : tipos l_id fin_declaracion { 

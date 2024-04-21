@@ -1,6 +1,8 @@
+import AST from "../abstracto/ast";
 import { Instruccion } from "../abstracto/instruccion";
 import Errores from "../errores/errores";
 import Arbol from "../simbolo/arbol";
+import Cont from "../simbolo/cont";
 import Simbolo from "../simbolo/simbolo";
 import TablaSimbolos from "../simbolo/tabla.simbolos";
 import Tipo, { tipoD } from "../simbolo/tipo";
@@ -108,6 +110,39 @@ export default class Logicas extends Instruccion {
         // console.log("HJOALAAL",cond1)
         // this.tipoD = new Tipo(tipoD.BOOL)
         // return !cond1
+    }
+
+    nodo(anterior: string): string {
+        let cont = Cont.getInstancia()
+        let resultado = ""
+
+        let nodoE1 = `n${cont.get()}`
+        let nodoE2 = `n${cont.get()}`
+        let nodoOp = `n${cont.get()}`
+        
+        resultado += `${nodoE1}[label="EXPRESION"]\n`
+        resultado += `${nodoE2}[label="EXPRESION"]\n`
+        resultado += `${nodoOp}[label="${this.getLogic(this.logico)}"]\n`
+
+        resultado += `${anterior}->${nodoE1}\n`
+        resultado += `${anterior}->${nodoOp}\n`
+        resultado += `${anterior}->${nodoE2}\n`
+
+        resultado += this.condicion1?.nodo(nodoE1)
+        resultado += this.condicion2?.nodo(nodoE2)
+
+        return resultado
+    }
+
+    getLogic(op:any){
+        switch (op) {
+            case 0:
+                return '||'
+            case 1:
+                return '&&'
+            case 2:
+                return '!'
+        }
     }
 }
 

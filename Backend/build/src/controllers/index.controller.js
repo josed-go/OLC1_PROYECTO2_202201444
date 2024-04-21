@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.indexController = exports.lista_errores = void 0;
+exports.indexController = exports.dot = exports.lista_errores = void 0;
 const arbol_1 = __importDefault(require("../analizador/simbolo/arbol"));
 const tabla_simbolos_1 = __importDefault(require("../analizador/simbolo/tabla.simbolos"));
 const errores_1 = __importDefault(require("../analizador/errores/errores"));
@@ -16,7 +16,9 @@ const vector_dd_1 = __importDefault(require("../analizador/instrucciones/vector.
 const creacion_var_1 = __importDefault(require("../analizador/instrucciones/creacion.var"));
 // import Metodo from "../analizador/instrucciones/metodo.funciones"
 const funcion_1 = __importDefault(require("../analizador/instrucciones/funcion"));
+const cont_1 = __importDefault(require("../analizador/simbolo/cont"));
 exports.lista_errores = [];
+exports.dot = "";
 class Controller {
     analizar(req, res) {
         exports.lista_errores = new Array;
@@ -28,6 +30,11 @@ class Controller {
             ast.setTablaGlobal(tabla);
             ast.setConsola("");
             let execute = null;
+            let contador = cont_1.default.getInstancia();
+            exports.dot = "digraph ast{\n";
+            exports.dot += "nINICIO[label=\"INICIO\"];\n";
+            exports.dot += "nINSTRUCCIONES[label=\"INSTRUCCIONES\"];\n";
+            exports.dot += "nINICIO->nINSTRUCCIONES;\n";
             for (let error of exports.lista_errores) {
                 ast.actualizarConsola(error.obtenerError());
             }
@@ -38,6 +45,10 @@ class Controller {
                 }
             }
             for (let i of ast.getInstrucciones()) {
+                let nodo = `n${contador.get()}`;
+                exports.dot += `${nodo}[label=\"INSTRUCCION\"];\n`;
+                exports.dot += `nINSTRUCCIONES->${nodo};\n`;
+                exports.dot += i.nodo(nodo);
                 if (i instanceof errores_1.default) {
                     exports.lista_errores.push(i);
                     ast.actualizarConsola(i.obtenerError());
@@ -97,6 +108,7 @@ class Controller {
             //         ast.actualizarConsola((<Errores>resultado).obtenerError())
             //     } 
             // }
+            exports.dot += "\n}";
             console.log(tabla);
             res.json({ "respuesta": ast.getConsola(), "lista_errores": exports.lista_errores });
             console.log(exports.lista_errores);

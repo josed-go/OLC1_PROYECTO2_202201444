@@ -1,6 +1,8 @@
+import AST from "../abstracto/ast";
 import { Instruccion } from "../abstracto/instruccion";
 import Errores from "../errores/errores";
 import Arbol from "../simbolo/arbol";
+import Cont from "../simbolo/cont";
 import Simbolo from "../simbolo/simbolo";
 import TablaSimbolos from "../simbolo/tabla.simbolos";
 import Tipo, { tipoD } from "../simbolo/tipo";
@@ -26,5 +28,32 @@ export default class Asignacion extends Instruccion {
         this.tipoD = valor.getTipo()
         
         valor.setValor(valorN)
+    }
+
+    nodo(anterior: string): string {
+        let cont = Cont.getInstancia()
+
+        let resultado = ""
+
+        let nodoP = `n${cont.get()}`
+        let nodoV = `n${cont.get()}`
+        let nodoN = `n${cont.get()}`
+        let nodoI = `n${cont.get()}`
+        let nodoA = `n${cont.get()}`
+
+        resultado += `${nodoP}[label="ASIGNACION"]\n`
+        resultado += `${nodoV}[label="ID"]\n`
+        resultado += `${nodoN}[label="${this.id}"]\n`
+        resultado += `${nodoI}[label="="]\n`
+        resultado += `${nodoA}[label="EXPRESION"]\n`
+
+        resultado += `${anterior}->${nodoP}\n`
+        resultado += `${nodoP}->${nodoV}\n`
+        resultado += `${nodoV}->${nodoN}\n`
+        resultado += `${nodoP}->${nodoI}\n`
+        resultado += `${nodoP}->${nodoA}\n`
+
+        resultado += this.expresion.nodo(nodoA)
+        return resultado
     }
 }
