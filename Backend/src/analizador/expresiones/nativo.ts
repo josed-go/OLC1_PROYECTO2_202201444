@@ -1,4 +1,3 @@
-import AST from "../abstracto/ast";
 import { Instruccion } from "../abstracto/instruccion";
 import Arbol from "../simbolo/arbol";
 import Cont from "../simbolo/cont";
