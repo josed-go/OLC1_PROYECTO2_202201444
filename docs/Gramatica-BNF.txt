@@ -1,0 +1,198 @@
+terminales = { NEW, IF, ELSE, SWITCH, CASE, DEFAULT, WHILE, FOR, DO, BREAK, CONTINUE, RETURN, COUT, ENDL, TOLOWER, TOUPPER, ROUND, LENGTH, TYPEOF, 
+TOSTRING, CSTR, EXECUTE, r_DOUBLE, r_STRING, r_INT, r_BOOL, r_CHAR, r_VOID, POT, NUM, DOUBLE, CADENA, CARACTER, TRUE, FALSE, ID }
+
+no terminales = { inicio, instrucciones, sentencias, declaracion, imprimir, asignacion, incre_decre, if_s, while_s, break_s, continue_s, 
+do_while_s, for_s, switch_s, vector_ud, modificar_vud, vector_dd, modificar_vdd, funcion, metodo_fun, execute_s, llamada_s, return_s,
+l_id, fin_declaracion, expresion, final_imp, bloque_ins, cases_list, default_c, caso, for_pri, actualizacion, accion, lower_upper, round,
+longitud, typeof, astring, f_cstr, casteo, lista_valores, lista, lista_expresion, acceso_vud, acceso_vdd, params, lista_params, parametros,
+params_call, lista_paramsC, tipos }
+
+<inicio> ::= <instrucciones>
+
+<instrucciones> ::= <instrucciones> <sentencias>
+                | <sentencias>
+
+<sentencias> ::= <declaracion>
+            | <imprimir>
+            | <asignacion> ";"
+            | <incre_decre> ";"
+            | <if_s>
+            | <while_s>
+            | <break_s>
+            | <continue_s>
+            | <do_while_s>
+            | <for_s>
+            | <switch_s>
+            | <vector_ud>
+            | <modificar_vud>
+            | <vector_dd>
+            | <modificar_vdd>
+            | <funcion>
+            | <metodo_fun>
+            | <execute_s>
+            | <llamada_s> ";"
+            | <return_s>
+
+<declaracion> ::= <tipos> <l_id> <fin_declaracion>
+
+<l_id> ::= <l_id> "," ID
+    | ID
+
+<fin_declaracion> ::= ";"
+                | "=" <expresion> ";"
+
+<imprimir> ::= COUT "<<" <expresion> <final_imp>
+
+<final_imp> ::= "<<" ENDL ";"
+            | ";"
+
+<asignacion> ::= ID "=" <expresion>
+
+<if_s> ::= IF "(" <expresion> ")" <bloque_ins>
+    | IF "(" <expresion> ")" <bloque_ins> ELSE <bloque_ins>
+    | IF "(" <expresion> ")" <bloque_ins> ELSE if_s
+
+<bloque_ins> ::= "{" <instrucciones> "}"
+            | "{"  "}"
+
+<switch_s>::= SWITCH "(" <expresion> ")" "{" <cases_list> <default_c> "}"
+        | SWITCH "(" <expresion> ")" "{" <cases_list> "}"
+        | SWITCH "(" <expresion> ")" "{" <default_c> "}"
+
+<cases_list> ::= <cases_list> <caso>
+            | <caso>
+
+<caso> ::= CASE <expresion> ":" <instrucciones>
+
+<default_c> ::= DEFAULT ":" <instrucciones>
+
+<if_t_s> ::= <expresion> "?" <expresion> ":" <expresion>
+
+<while_s> ::= WHILE "(" <expresion> ")" "{" <instrucciones> "}"
+
+<do_while_s> ::= DO "{" <instrucciones> "}" WHILE  "(" <expresion> ")" ";"
+
+<for_s> ::= FOR "(" for_pri <expresion> ";" <actualizacion> ")" "{" <instrucciones> "}"
+
+<for_pri> ::= <asignacion> ";"
+        | <declaracion>
+
+<actualizacion> ::= <asignacion>
+                | <incre_decre>
+
+<break_s> ::= BREAK ";"
+
+<continue_s> ::= CONTINUE ";"
+
+<incre_decre> ::= ID <accion>
+
+<accion> ::= INCRE
+        | DECRE
+
+<lower_upper> ::= TOLOWER "(" <expresion> ")"
+            | TOUPPER "(" <expresion> ")" 
+
+<round> ::= ROUND "(" <expresion> ")" 
+
+<longitud> ::= "." LENGTH "(" ")" 
+
+<typeof> ::= TYPEOF "(" <expresion> ")" 
+
+<astring> ::= STD ":" ":" TOSTRING "(" <expresion> ")"
+
+
+<f_cstr> ::= <expresion> "." CSTR "(" ")"
+
+
+<casteo> ::= "(" <tipos> ")" <expresion>
+
+<vector_ud> ::= <tipos> ID "[" "]" "=" NEW <tipos> "[" <expresion> "]" ";"
+            | <tipos> ID "[" "]" "=" <lista> ";" 
+            | tipos ID "[" "]" "=" <f_cstr> ";"
+
+<vector_dd> ::= <tipos> ID "[" "]" "[" "]" "=" NEW <tipos> "[" <expresion> "]" "[" <expresion> "]" ";"
+            | <tipos> ID "[" "]" "[" "]" "=" "[" <lista_valores> "]" ";"
+
+<lista_valores> ::= <lista_valores> "," <lista>
+                | <lista>
+
+<lista> ::= "[" <lista_expresion> "]"
+
+<lista_expresion> ::= <lista_expresion> "," <expresion>
+                    | <expresion>
+
+<acceso_vud> ::= ID "[" <expresion> "]"
+
+<modificar_vud> ::= ID "[" <expresion> "]" "=" <expresion> ";"
+
+<acceso_vdd> ::= ID "[" <expresion> "]" "[" <expresion> "]"
+
+<modificar_vdd> ::= ID "[" <expresion> "]" "[" <expresion> "]" "=" <expresion> ";"
+
+<metodo_fun> ::= r_VOID ID "(" <params> "{" <instrucciones> "}"   
+
+
+<funcion> ::= <tipos> ID "(" <params> "{" <instrucciones> "}"
+
+<params> ::= <lista_params> ")"
+        | ")"
+
+<lista_params> ::= <lista_params> "," <parametros>
+                | <parametros>
+<parametros> ::= <tipos> ID
+            | <tipos> ID "[" "]"
+
+<execute_s> ::= EXECUTE ID "(" <params_call> ";"
+
+<llamada_s> ::= ID "(" <params_call>
+
+<params_call> ::= <lista_paramsC> ")"
+                | ")"
+
+<lista_paramsC> ::= <lista_paramsC> "," <expresion>
+                | <expresion>
+
+
+<return_s> ::= RETURN ";"
+        | RETURN <expresion> ";"
+
+<expresion> ::= <expresion> "+" <expresion>
+        | <expresion> "-" <expresion>
+        | <expresion> "*" <expresion>
+        | <expresion> "/" <expresion>
+        | <expresion> "%" <expresion>
+        | <expresion> "<" <expresion>
+        | <expresion> ">" <expresion>
+        | <expresion> "=""=" <expresion>
+        | <expresion> "!=" <expresion>
+        | <expresion> "<" "=" <expresion>
+        | <expresion> ">" "=" <expresion>
+        | <expresion> "||" <expresion>
+        | <expresion> "&&" <expresion> 
+        | "!" <expresion> 
+        | POT "(" <expresion> "," <expresion> ")" 
+        | "(" <expresion> ")"
+        | "-" <expresion>
+        | <expresion> <longitud> 
+        | NUM 
+        | DOUBLE 
+        | CADENA 
+        | CARACTER 
+        | TRUE 
+        | FALSE 
+        | ID
+        | <lower_upper> 
+        | <round> 
+        | <typeof>
+        | <astring>
+        | <if_t_s> 
+        | <casteo>
+        | <acceso_vud>
+        | <acceso_vdd>
+        | <llamada_s>
+
+<tipos> ::= STD ":" ":" r_STRING
+        | r_INT
+        | r_DOUBLE
+        | r_BOOL
+        | r_CHAR
