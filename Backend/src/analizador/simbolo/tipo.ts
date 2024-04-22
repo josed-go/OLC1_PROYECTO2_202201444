@@ -13,24 +13,24 @@ export default class Tipo {
         return this.tipo
     }
 
-    public getTipoD(tipo: string): any {
-        switch (tipo.toLocaleLowerCase()) {
-            case 'int':
+    public getTipoD(tipo: any): any {
+        switch (tipo) {
+            case tipoD.INT:
                 
-                return tipoD.INT
-            case 'double':
+                return 'int'
+            case tipoD.DOUBLE:
             
-                return tipoD.DOUBLE
-            case 'string':
+                return 'double'
+            case tipoD.CADENA:
             
-                return tipoD.CADENA
-            case 'bool':
+                return 'std::string'
+            case tipoD.BOOL:
             
-                return tipoD.BOOL
+                return 'bool'
 
-            case 'char':
+            case tipoD.CHAR:
             
-                return tipoD.CHAR
+                return 'char'
         
             default:
                 break;

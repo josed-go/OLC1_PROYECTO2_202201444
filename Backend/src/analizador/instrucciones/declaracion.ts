@@ -3,6 +3,7 @@ import { Instruccion } from "../abstracto/instruccion";
 import Errores from "../errores/errores";
 import Arbol from "../simbolo/arbol";
 import Cont from "../simbolo/cont";
+import { Reporte } from "../simbolo/reporte";
 import Simbolo from "../simbolo/simbolo";
 import TablaSimbolos from "../simbolo/tabla.simbolos";
 import Tipo, { tipoD } from "../simbolo/tipo";
@@ -31,7 +32,12 @@ export default class Declaracion extends Instruccion {
                     lista_errores.push(error)
                     arbol.actualizarConsola((<Errores>error).obtenerError())
                     return new Errores("Semantico", "No se puede declarar variable "+id+" porque ya existe", this.linea, this.columna)
-                }   
+                }else{
+                    if(!arbol.tablaSimbolos(id, valorf, this.linea.toString(), tabla.getNombre().toString(), this.columna.toString())) {
+                        let simboloN = new Reporte(id, valorf, this.tipoD.getTipoD(this.tipoD.getTipo()), tabla.getNombre().toString(), this.linea.toString(), this.columna.toString(), "variable")
+                        arbol.simbolos.push(simboloN)
+                    }
+                }
             })
         }else{
             
@@ -45,6 +51,11 @@ export default class Declaracion extends Instruccion {
                     lista_errores.push(error)
                     arbol.actualizarConsola((<Errores>error).obtenerError())
                     return new Errores("Semantico", "No se puede declarar variable "+id+" porque ya existe", this.linea, this.columna)
+                }else{
+                    if(!arbol.tablaSimbolos(id, valorf, this.linea.toString(), tabla.getNombre().toString(), this.columna.toString())) {
+                        let simboloN = new Reporte(id, valorf, this.tipoD.getTipoD(this.tipoD.getTipo()), tabla.getNombre().toString(), this.linea.toString(), this.columna.toString(), "variable")
+                        arbol.simbolos.push(simboloN)
+                    }
                 }
             });
         }

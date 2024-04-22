@@ -5,6 +5,8 @@ import Errores from "../errores/errores";
 import Metodo from "../instrucciones/metodo";
 // import MetodoFunciones from "../instrucciones/metodo.funciones";
 import Funcion from "../instrucciones/funcion";
+import { Reporte } from "./reporte";
+import Tipo, { tipoD } from "./tipo";
 
 export default class Arbol {
     private instrucciones: Array<Instruccion>
@@ -12,6 +14,7 @@ export default class Arbol {
     private tablaGlobal: TablaSimbolos
     private errores: Array<Errores>
     private funciones: Array<Instruccion>
+    public simbolos: Array<Reporte>
 
     constructor(instrucciones: Array<Instruccion>) {
         this.instrucciones = instrucciones
@@ -19,6 +22,7 @@ export default class Arbol {
         this.tablaGlobal = new TablaSimbolos()
         this.errores = new Array<Errores>
         this.funciones = new Array<Instruccion>
+        this.simbolos = new Array<Reporte>
     }
 
     public getConsola(): string {
@@ -71,15 +75,56 @@ export default class Arbol {
     }
 
     public getFuncion(id: string) {
+        
         for(let i of this.instrucciones) {
             if(i instanceof Metodo) {
-                if(i.id.toLocaleLowerCase() == id.toLocaleLowerCase()) return i
+                if(i.id.toLocaleLowerCase() == id.toLocaleLowerCase()) {
+                    if(!this.tablaSimbolos(i.id.toString(), '', i.linea.toString(), '', i.columna.toString())){
+                        let simboloN = new Reporte(i.id, '', "Metodo", "void", '', i.linea.toString(), i.columna.toString())
+                        this.simbolos.push(simboloN)
+                    }
+                    return i
+                }
             }
             else if(i instanceof Funcion) {
-                if(i.id.toLocaleLowerCase() == id.toLocaleLowerCase()) return i
+                // const tipoo = new Tipo(tipoD.VOID)
+                if(i.id.toLocaleLowerCase() == id.toLocaleLowerCase()) {
+                    if(!this.tablaSimbolos(i.id.toString(), '', i.linea.toString(), '', i.columna.toString())){
+                        let simboloN = new Reporte(i.id, '', "Funcion", i.tipoD.getTipoD(i.tipoD.getTipo()), '', i.linea.toString(), i.columna.toString())
+                        this.simbolos.push(simboloN)
+                    }
+                    return i
+                }
             }
         }
         return null
+    }
+
+    public tablaSimbolos(id: string, valor: string, linea: string, entorno: string, columna: string) : boolean{
+        for(let ele of this.simbolos){
+            if(ele.getId().toString() == id.toLocaleLowerCase() && ele.getEntorno().toString() == entorno.toString()){
+
+                ele.setValor(valor)
+                ele.setLinea(linea)
+                ele.setValor(columna)
+                return true
+            }
+        }
+
+        return false
+    }
+
+    public getTipoS(id:string): string{
+        for(let ele of this.simbolos){
+            if(ele.getId().toString() == id.toLocaleLowerCase()){
+                return ele.getTipoS().toString()
+            }
+        }
+        return "none"
+    }
+
+    public getSimbolos(): Array<Reporte> {
+        return this.simbolos
     }
 
 }

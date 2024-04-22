@@ -6,6 +6,7 @@ import { saveAs } from 'file-saver';
 import ModalG from './ModalG'
 import Errores from './Errores';
 import AST from './AST';
+import Simbolos from './Simbolos';
 
 const Content = ({archivos, setArchivos, cantidad, setCantidad, actual, setActual, editorRef, consolaRef}) => {
 
@@ -22,10 +23,12 @@ const Content = ({archivos, setArchivos, cantidad, setCantidad, actual, setActua
     const [ nombre, setNombre ] = useState("")
     const [ dot, setDot ] = useState("")
     const [ errores, setErrores ] = useState([])
+    const [ simbolos, setSimbolos ] = useState([])
     const [ contenido, setContenido ] = useState("editor")
     const [ isEditor, setIsEditor ] = useState(true)
     const [ isErrores, setIsErrores ] = useState(false)
     const [ isAST, setIsAST ] = useState(false)
+    const [ isSimb, setIsSimb ] = useState(false)
     // const editorRef = useRef(null)
     // const consolaRef = useRef(null)
 
@@ -109,7 +112,9 @@ const Content = ({archivos, setArchivos, cantidad, setCantidad, actual, setActua
         .then(data => {
             consolaRef.current.setValue(data.respuesta)
             setDot(data.ast)
+            setSimbolos(data.simbolos)
             console.log(data.ast)
+            console.log(data.simbolos)
             // setErrores(data.lista_errores)
         })
         .catch((error) => {
@@ -156,13 +161,21 @@ const Content = ({archivos, setArchivos, cantidad, setCantidad, actual, setActua
             setIsEditor(true)
             setIsErrores(false)
             setIsAST(false)
+            setIsSimb(false)
         } else if(view == "errores") {
             setIsEditor(false)
             setIsErrores(true)
             setIsAST(false)
+            setIsSimb(false)
 
         }else if(view == "ast") {
             setIsAST(true)
+            setIsEditor(false)
+            setIsErrores(false)
+            setIsSimb(false)
+        }else if(view == "simb") {
+            setIsSimb(true)
+            setIsAST(false)
             setIsEditor(false)
             setIsErrores(false)
         }
@@ -202,7 +215,9 @@ const Content = ({archivos, setArchivos, cantidad, setCantidad, actual, setActua
                             <button className='hover:bg-gris h-8'
                                 onClick={() => {changeView("errores"); setReportes(false); getErrores()}}
                             >Tabla de errores</button>
-                            <button className='hover:bg-gris h-8'>Tabla de símbolos</button>
+                            <button className='hover:bg-gris h-8'
+                                onClick={() => { changeView("simb"); setReportes(false) }}
+                            >Tabla de símbolos</button>
                             <button className='hover:bg-gris h-8'
                                 onClick={() => {changeView("ast"); setReportes(false) }}
                             >AST</button>
@@ -249,6 +264,12 @@ const Content = ({archivos, setArchivos, cantidad, setCantidad, actual, setActua
                 {
                     isAST && (
                         <AST dot={dot} setView={changeView} />
+                    )
+                }
+
+                {
+                    isSimb && (
+                        <Simbolos simbolos={simbolos} setView={changeView} />
                     )
                 }
             </div>

@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.indexController = exports.dot = exports.lista_errores = void 0;
+exports.indexController = exports.tablaS = exports.dot = exports.lista_errores = void 0;
 const arbol_1 = __importDefault(require("../analizador/simbolo/arbol"));
 const tabla_simbolos_1 = __importDefault(require("../analizador/simbolo/tabla.simbolos"));
 const errores_1 = __importDefault(require("../analizador/errores/errores"));
@@ -19,6 +19,7 @@ const funcion_1 = __importDefault(require("../analizador/instrucciones/funcion")
 const cont_1 = __importDefault(require("../analizador/simbolo/cont"));
 exports.lista_errores = [];
 exports.dot = "";
+exports.tablaS = new Array;
 class Controller {
     analizar(req, res) {
         exports.lista_errores = new Array;
@@ -109,8 +110,12 @@ class Controller {
             //     } 
             // }
             exports.dot += "\n}";
+            exports.tablaS.length = 0;
+            for (let i = 0; i < ast.getSimbolos().length; i++) {
+                exports.tablaS.push(ast.getSimbolos()[i]);
+            }
             console.log(tabla);
-            res.json({ "respuesta": ast.getConsola(), "lista_errores": exports.lista_errores, "ast": exports.dot });
+            res.json({ "respuesta": ast.getConsola(), "lista_errores": exports.lista_errores, "ast": exports.dot, "simbolos": exports.tablaS });
             console.log(exports.lista_errores);
             console.log(ast.getFunciones());
         }

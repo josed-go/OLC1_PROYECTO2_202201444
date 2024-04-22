@@ -1,6 +1,7 @@
 import { Instruccion } from "../abstracto/instruccion";
 import Errores from "../errores/errores";
 import Arbol from "../simbolo/arbol";
+import { Reporte } from "../simbolo/reporte";
 import Simbolo from "../simbolo/simbolo";
 import TablaSimbolos from "../simbolo/tabla.simbolos";
 import Tipo, { tipoD } from "../simbolo/tipo";
@@ -63,6 +64,11 @@ export default class Vector1D extends Instruccion {
                         // lista_errores.push(error)
                         // arbol.actualizarConsola((<Errores>error).obtenerError())
                         return new Errores("Semantico", "No se puede declarar el vector, porque ya existe el ID "+this.id, this.linea, this.columna)
+                    }else {
+                        if(!arbol.tablaSimbolos(this.id, valores, this.linea.toString(), tabla.getNombre().toString(), this.columna.toString())) {
+                            let simboloN = new Reporte(this.id, valores, this.tipoD.getTipoD(this.tipoD.getTipo()), tabla.getNombre().toString(), this.linea.toString(), this.columna.toString(), "vector 1 dimension")
+                            arbol.simbolos.push(simboloN)
+                        }
                     }
                 }else {
                     // if(this.tipo1.getTipo() != tipoD.CHAR) return new Errores("Semantico", "El arreglo debe de ser de tipo char", this.linea, this.columna)
@@ -75,6 +81,11 @@ export default class Vector1D extends Instruccion {
                         // lista_errores.push(error)
                         // arbol.actualizarConsola((<Errores>error).obtenerError())
                         return new Errores("Semantico", "No se puede declarar el vector, porque ya existe el ID "+this.id, this.linea, this.columna)
+                    }else {
+                        if(!arbol.tablaSimbolos(this.id, valores, this.linea.toString(), tabla.getNombre().toString(), this.columna.toString())) {
+                            let simboloN = new Reporte(this.id, valores, this.tipoD.getTipoD(this.tipoD.getTipo()), tabla.getNombre().toString(), this.linea.toString(), this.columna.toString(), "vector 1 dimension")
+                            arbol.simbolos.push(simboloN)
+                        }
                     }
                 }
             }
@@ -100,6 +111,11 @@ export default class Vector1D extends Instruccion {
                 // lista_errores.push(error)
                 // arbol.actualizarConsola((<Errores>error).obtenerError())
                 return new Errores("Semantico", "No se puede declarar el vector, porque ya existe el ID "+this.id, this.linea, this.columna)
+            }else {
+                if(!arbol.tablaSimbolos(this.id, arreglo.toString(), this.linea.toString(), tabla.getNombre().toString(), this.columna.toString())) {
+                    let simboloN = new Reporte(this.id, arreglo.toString(), this.tipoD.getTipoD(this.tipoD.getTipo()), tabla.getNombre().toString(), this.linea.toString(), this.columna.toString(), "vector 1 dimension")
+                    arbol.simbolos.push(simboloN)
+                }
             }
         }
     }

@@ -14,9 +14,12 @@ import ModificarVector2D from "../analizador/instrucciones/modificar.vectordd"
 // import Metodo from "../analizador/instrucciones/metodo.funciones"
 import Funcion from "../analizador/instrucciones/funcion"
 import Cont from "../analizador/simbolo/cont"
+import { Reporte } from "../analizador/simbolo/reporte"
 
 export let lista_errores: Array<Errores> = []
 export let dot: string = ""
+export let tablaS: Array<Reporte>
+tablaS = new Array<Reporte>
 
 class Controller {
 
@@ -124,9 +127,16 @@ class Controller {
 
             dot += "\n}"
 
+            tablaS.length = 0
+
+            for (let i = 0; i < ast.getSimbolos().length; i++) {
+                tablaS.push(ast.getSimbolos()[i])
+                
+            }
+
             console.log(tabla)
 
-            res.json({"respuesta": ast.getConsola(), "lista_errores": lista_errores, "ast": dot})
+            res.json({"respuesta": ast.getConsola(), "lista_errores": lista_errores, "ast": dot, "simbolos": tablaS})
             console.log(lista_errores)
             console.log(ast.getFunciones())
         } catch (error:any) {

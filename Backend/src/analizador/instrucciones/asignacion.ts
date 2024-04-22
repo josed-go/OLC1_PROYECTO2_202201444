@@ -23,10 +23,17 @@ export default class Asignacion extends Instruccion {
         let valor = tabla.getVariable(this.id.toLocaleLowerCase())
         if(valor == null) return new Errores('Semantico', 'Variable '+this.id+' no existe', this.linea, this.columna)
         
-        if(this.expresion.tipoD.getTipo() != valor.getTipo().getTipo()) return new Errores('Semantico', 'Asignacion de diferentes tipos', this.linea, this.columna)
-        this.tipoD = valor.getTipo()
-        
-        valor.setValor(valorN)
+        if(this.expresion.tipoD.getTipo() != valor.getTipo().getTipo()){
+
+            return new Errores('Semantico', 'Asignacion de diferentes tipos', this.linea, this.columna)
+        } else {
+            this.tipoD = valor.getTipo()
+            
+            valor.setValor(valorN)
+
+            arbol.tablaSimbolos(this.id, valor.getValor(), this.linea.toString(), tabla.getNombre().toString(), this.columna.toString())
+
+        }
     }
 
     nodo(anterior: string): string {
