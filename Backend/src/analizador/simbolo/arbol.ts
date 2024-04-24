@@ -80,7 +80,7 @@ export default class Arbol {
             if(i instanceof Metodo) {
                 if(i.id.toLocaleLowerCase() == id.toLocaleLowerCase()) {
                     if(!this.tablaSimbolos(i.id.toString(), '', i.linea.toString(), '', i.columna.toString())){
-                        let simboloN = new Reporte(i.id, '', "Metodo", "void", '', i.linea.toString(), i.columna.toString())
+                        let simboloN = new Reporte(i.id, '', "void", '', i.linea.toString(), i.columna.toString(), "Metodo")
                         this.simbolos.push(simboloN)
                     }
                     return i
@@ -90,7 +90,7 @@ export default class Arbol {
                 // const tipoo = new Tipo(tipoD.VOID)
                 if(i.id.toLocaleLowerCase() == id.toLocaleLowerCase()) {
                     if(!this.tablaSimbolos(i.id.toString(), '', i.linea.toString(), '', i.columna.toString())){
-                        let simboloN = new Reporte(i.id, '', "Funcion", i.tipoD.getTipoD(i.tipoD.getTipo()), '', i.linea.toString(), i.columna.toString())
+                        let simboloN = new Reporte(i.id, '', i.tipoD.getTipoD(i.tipoD.getTipo()), '', i.linea.toString(), i.columna.toString(), "Funcion")
                         this.simbolos.push(simboloN)
                     }
                     return i
