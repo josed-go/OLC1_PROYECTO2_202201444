@@ -79,8 +79,8 @@ export default class Arbol {
         for(let i of this.instrucciones) {
             if(i instanceof Metodo) {
                 if(i.id.toLocaleLowerCase() == id.toLocaleLowerCase()) {
-                    if(!this.tablaSimbolos(i.id.toString(), '', i.linea.toString(), '', i.columna.toString())){
-                        let simboloN = new Reporte(i.id, '', "void", '', i.linea.toString(), i.columna.toString(), "Metodo")
+                    if(!this.tablaSimbolos(i.id.toString(), '', i.linea.toString(), "Global", i.columna.toString())){
+                        let simboloN = new Reporte(i.id, '', "void",  "Global", i.linea.toString(), i.columna.toString(), "Metodo")
                         this.simbolos.push(simboloN)
                     }
                     return i
@@ -89,8 +89,8 @@ export default class Arbol {
             else if(i instanceof Funcion) {
                 // const tipoo = new Tipo(tipoD.VOID)
                 if(i.id.toLocaleLowerCase() == id.toLocaleLowerCase()) {
-                    if(!this.tablaSimbolos(i.id.toString(), '', i.linea.toString(), '', i.columna.toString())){
-                        let simboloN = new Reporte(i.id, '', i.tipoD.getTipoD(i.tipoD.getTipo()), '', i.linea.toString(), i.columna.toString(), "Funcion")
+                    if(!this.tablaSimbolos(i.id.toString(), '', i.linea.toString(), "Global", i.columna.toString())){
+                        let simboloN = new Reporte(i.id, '', i.tipoD.getTipoD(i.tipoD.getTipo()),  "Global", i.linea.toString(), i.columna.toString(), "Funcion")
                         this.simbolos.push(simboloN)
                     }
                     return i

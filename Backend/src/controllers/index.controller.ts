@@ -29,7 +29,7 @@ class Controller {
             let parser = require('../analizador/analizador.js')
             let ast = new Arbol(parser.parse(req.body.entrada))
             let tabla = new TablaSimbolos()
-            tabla.setNombre("Tabla simbolos")
+            tabla.setNombre("Global")
             ast.setTablaGlobal(tabla)
             ast.setConsola("")
             let execute = null
