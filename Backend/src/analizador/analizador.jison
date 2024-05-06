@@ -403,7 +403,7 @@ lista_params : lista_params COMA parametros { $1.push($3); $$ = $1 }
 
 parametros : tipos ID { $$ = {tipo: $1, id: [$2], accion: 1} }
             | tipos ID CORCHIN CORCHFIN { $$ = {tipo: $1, id: [$2], accion: 2} }
-            // | tipos ID CORCHIN CORCHFIN CORCHIN CORCHFIN { $$ = {tipo: $1, id: [$2], vdd: true} }
+            | tipos ID CORCHIN CORCHFIN CORCHIN CORCHFIN { $$ = {tipo: $1, id: [$2], accion: 3} }
 ;
 
 execute_s : EXECUTE ID PARIN params_call PYC { $$ = new Execute.default($2, @1.first_line, @1.first_column, $4) }

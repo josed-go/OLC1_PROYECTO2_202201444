@@ -14,9 +14,9 @@ export default class Vector2D extends Instruccion {
     private expresion : Instruccion[] | Instruccion
     private expresion2 : Instruccion[] | Instruccion
     // private lista: Array<Array<Instruccion>>
-    private lista: Instruccion[][]
+    private lista: Instruccion[][] | Instruccion
 
-    constructor(linea: number, columna: number, tipo1: Tipo, id: string, expresion: Instruccion[] | Instruccion, expresion2: Instruccion[] | Instruccion, lista: Instruccion[][], tipo2?: Tipo, new_?: boolean) {
+    constructor(linea: number, columna: number, tipo1: Tipo, id: string, expresion: Instruccion[] | Instruccion, expresion2: Instruccion[] | Instruccion, lista: Instruccion[][] | Instruccion, tipo2?: Tipo, new_?: boolean) {
         super(tipo1, linea, columna)
         this.tipo1 = tipo1
         this.tipo2 = tipo2
@@ -67,7 +67,7 @@ export default class Vector2D extends Instruccion {
                     arbol.simbolos.push(simboloN)
                 }
             }
-        }else if(this.lista.length > 0) {
+        }else if(Array.isArray(this.lista)) {
             let arreglo = new Array(this.lista.length)
 
             for (let i = 0; i < this.lista.length; i++) {
@@ -75,7 +75,6 @@ export default class Vector2D extends Instruccion {
                 if(Array.isArray(this.lista[i])) {
 
                     arreglo[i] = new Array(this.lista[i].length)
-                    
                     for (let j = 0; j < this.lista[i].length; j++) {
                         
                         let valor = this.lista[i][j].interpretar(arbol, tabla)
@@ -101,6 +100,19 @@ export default class Vector2D extends Instruccion {
                 }
             }
 
+        }else if(!Array.isArray(this.lista)) {
+            let arreglo = this.lista.interpretar(arbol, tabla)
+
+            if(!Array.isArray(arreglo)) return  new Errores("Semantico", "Debe de ser un vector", this.linea, this.columna)
+
+            if(!tabla.setVariable(new Simbolo(this.tipoD, this.id, arreglo))) {
+                return new Errores("Semantico", "No se puede declarar el vector, porque ya existe el ID "+this.id, this.linea, this.columna)
+            }else {
+                if(!arbol.tablaSimbolos(this.id, arreglo.toString(), this.linea.toString(), tabla.getNombre().toString(), this.columna.toString())) {
+                    let simboloN = new Reporte(this.id, arreglo.toString(), this.tipoD.getTipoD(this.tipoD.getTipo()), tabla.getNombre().toString(), this.linea.toString(), this.columna.toString(), "vector 2 dimensiones")
+                    arbol.simbolos.push(simboloN)
+                }
+            }
         }
     }
 

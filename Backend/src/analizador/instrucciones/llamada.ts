@@ -44,8 +44,8 @@ export default class Llamada extends Instruccion {
                 let decla
                 if(metodo.parametros[i].accion == 2) {
                     decla = new Vector1D(this.linea, this.columna, metodo.parametros[i].tipo, metodo.parametros[i].id[0], this.params[i], false, undefined, false)
-                // }else if (metodo.parametros[i].vdd && Array.isArray(this.params[i])){
-                //     decla = new Vector2D(metodo.linea, metodo.columna, metodo.parametros[i].tipoD, metodo.parametros[i].id[0], [], [], this.params[i] ,null, false )
+                }else if (metodo.parametros[i].accion == 3){
+                    decla = new Vector2D(metodo.linea, metodo.columna, metodo.parametros[i].tipo, metodo.parametros[i].id[0], [], [], this.params[i] ,undefined, false )
                 }else{
                     decla = new Declaracion(metodo.parametros[i].tipo, this.linea, this.columna, metodo.parametros[i].id, this.params[i])
                 }
@@ -84,8 +84,9 @@ export default class Llamada extends Instruccion {
 
                 if(funcion.parametros[i].accion == 2) {
                     decla = new Vector1D(this.linea, this.columna, funcion.parametros[i].tipo, funcion.parametros[i].id[0], this.params[i], false, undefined, false)
-                // }else if (metodo.parametros[i].vdd && Array.isArray(this.params[i])){
-                //     decla = new Vector2D(metodo.linea, metodo.columna, metodo.parametros[i].tipoD, metodo.parametros[i].id[0], [], [], this.params[i] ,null, false )
+                }else if (funcion.parametros[i].accion == 3){
+                    // console.log("hereeeeeeee2", this.params[i].interpretar(arbol, tabla))
+                    decla = new Vector2D(funcion.linea, funcion.columna, funcion.parametros[i].tipo, funcion.parametros[i].id[0], [], [], this.params[i] ,undefined, false )
                 }else{
                     decla = new Declaracion(funcion.parametros[i].tipo, this.linea, this.columna, funcion.parametros[i].id, this.params[i])
                 }
