@@ -61,7 +61,7 @@ class Controller {
                 if(i instanceof Metodo || i instanceof Funcion || i instanceof Execute) continue
 
                 if(i instanceof Declaracion || i instanceof Asignacion || i instanceof Vector1D || i instanceof Vector2D
-                    || i instanceof Creacion
+                    || i instanceof Creacion || i instanceof ModificarVector1D || i instanceof ModificarVector2D
                 ) {
                     let resultado = i.interpretar(ast, tabla)
                     if(resultado instanceof Errores){

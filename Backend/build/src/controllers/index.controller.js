@@ -14,6 +14,8 @@ const asignacion_1 = __importDefault(require("../analizador/instrucciones/asigna
 const vectores_ud_1 = __importDefault(require("../analizador/instrucciones/vectores.ud"));
 const vector_dd_1 = __importDefault(require("../analizador/instrucciones/vector.dd"));
 const creacion_var_1 = __importDefault(require("../analizador/instrucciones/creacion.var"));
+const modificar_vectorud_1 = __importDefault(require("../analizador/instrucciones/modificar.vectorud"));
+const modificar_vectordd_1 = __importDefault(require("../analizador/instrucciones/modificar.vectordd"));
 // import Metodo from "../analizador/instrucciones/metodo.funciones"
 const funcion_1 = __importDefault(require("../analizador/instrucciones/funcion"));
 const cont_1 = __importDefault(require("../analizador/simbolo/cont"));
@@ -53,7 +55,7 @@ class Controller {
                 if (i instanceof metodo_1.default || i instanceof funcion_1.default || i instanceof execute_1.default)
                     continue;
                 if (i instanceof declaracion_1.default || i instanceof asignacion_1.default || i instanceof vectores_ud_1.default || i instanceof vector_dd_1.default
-                    || i instanceof creacion_var_1.default) {
+                    || i instanceof creacion_var_1.default || i instanceof modificar_vectorud_1.default || i instanceof modificar_vectordd_1.default) {
                     let resultado = i.interpretar(ast, tabla);
                     if (resultado instanceof errores_1.default) {
                         exports.lista_errores.push(resultado);
