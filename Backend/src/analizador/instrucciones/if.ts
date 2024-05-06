@@ -36,8 +36,8 @@ export default class If extends Instruccion {
             tablaN.setNombre("Sentencia if")
 
             for(let i of this.instrucciones) {
-                // if(i instanceof Break) return i;
-                // if(i instanceof Continue) return i;
+                if(i instanceof Break) return i;
+                if(i instanceof Continue) return i;
                 // if(i instanceof Return) return i
                 let resultado = i.interpretar(arbol, tablaN)
                 if( resultado instanceof Errores) {
@@ -55,8 +55,8 @@ export default class If extends Instruccion {
                 tablaN.setNombre("Sentencia else")
                 
                 for(let i of this.instrucciones_else) {
-                    // if(i instanceof Break) return i;
-                    // if(i instanceof Continue) return i;
+                    if(i instanceof Break) return i;
+                    if(i instanceof Continue) return i;
                     // if(i instanceof Return) return i;
                     let resultado = i.interpretar(arbol, tablaN)
                     // if( resultado instanceof Errores) return resultado
