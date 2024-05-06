@@ -143,7 +143,7 @@
 ([0-9]+)([0-9]+)* return "NUM";
 "true" return "TRUE";
 "false" return "FALSE";
-\'[^'\r\n]*\' return "CARACTER";
+\'[^'\r\n]*\' { yytext=yytext.substr(1,yyleng-2); return "CARACTER"; }
 // \"[^\"]*\" return "STRING";
 ["]						{ texto = ''; this.begin("string"); }
 <string>[^"\\]+			{ texto += yytext; }
